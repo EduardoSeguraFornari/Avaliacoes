@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_avaliacoes"
+            android:title="Avaliações" />
+        <item
+            android:id="@+id/nav_disciplinas"
+            android:title="Disciplinas" />
+        <item
+            android:id="@+id/nav_tipos_avaliacao"
+            android:title="Tipos de Avaliação" />
+    </group>
+
+    <!--<item android:title="Disciplinas">-->
+        <!--<menu>-->
+            <!--&lt;!&ndash;<item&ndash;&gt;-->
+                <!--&lt;!&ndash;android:id="@+id/nav_disciplinas"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:icon="@drawable/ic_menu_camera"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:title="Disciplinas" />&ndash;&gt;-->
+        <!--</menu>-->
+    <!--</item>-->
+
+</menu>
