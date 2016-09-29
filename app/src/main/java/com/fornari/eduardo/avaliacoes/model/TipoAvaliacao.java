@@ -1,7 +1,7 @@
 package com.fornari.eduardo.avaliacoes.model;
 
 /**
- * Created by dufor on 10/09/2016.
+ * Created by Eduardo Segura Fornari on 10/09/2016.
  */
 public class TipoAvaliacao {
 
@@ -11,6 +11,7 @@ public class TipoAvaliacao {
 
     private int id;
     private String nome;
+
     public TipoAvaliacao(String nome){
         this.nome = nome;
     }

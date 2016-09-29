@@ -4,7 +4,7 @@ import java.text.DateFormat;
 import java.util.Date;
 
 /**
- * Created by dufor on 10/09/2016.
+ * Created by Eduardo Segura Fornari on 10/09/2016.
  */
 public class Avaliacao {
 

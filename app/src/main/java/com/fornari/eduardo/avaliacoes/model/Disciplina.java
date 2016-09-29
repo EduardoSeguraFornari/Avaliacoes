@@ -3,7 +3,7 @@ package com.fornari.eduardo.avaliacoes.model;
 import java.util.List;
 
 /**
- * Created by dufor on 10/09/2016.
+ * Created by Eduardo Segura Fornari on 10/09/2016.
  */
 public class Disciplina implements Comparable<Disciplina>{
     public static final String DISCIPLINA = "DISCIPLINA";
