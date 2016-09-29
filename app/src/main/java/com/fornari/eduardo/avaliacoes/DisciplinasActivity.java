@@ -41,7 +41,7 @@ public class DisciplinasActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        listViewDisciplinas = (ListView)findViewById(R.id.listViewDisciplinas);
+        listViewDisciplinas = (ListView) findViewById(R.id.listViewDisciplinas);
         preencheAdapterDisciplinas(carregaDisciplinas());
         sortArrayAdapterDisciplinas(arrayAdapterDisciplinas);
         listViewDisciplinas.setAdapter(arrayAdapterDisciplinas);
@@ -61,50 +61,48 @@ public class DisciplinasActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    final Dialog dialog = new Dialog(DisciplinasActivity.this);
-                    dialog.setContentView(R.layout.add_disciplina);
+                final Dialog dialog = new Dialog(DisciplinasActivity.this);
+                dialog.setContentView(R.layout.add_disciplina);
 
-                    dialog.setTitle("ADICIONAR DISCIPLINA");
+                dialog.setTitle("ADICIONAR DISCIPLINA");
 
-                    ImageButton cancelar = (ImageButton) dialog.findViewById(R.id.imageButton_cancelarDisciplina);
-                    cancelar.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            dialog.cancel();
-                        }
-                    });
+                ImageButton cancelar = (ImageButton) dialog.findViewById(R.id.imageButton_cancelarDisciplina);
+                cancelar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.cancel();
+                    }
+                });
 
-                    ImageButton adicionar = (ImageButton) dialog.findViewById(R.id.imageButton_addDisciplina);
-                    adicionar.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view){
-                            EditText editTextNomeDisciplina = (EditText)dialog.findViewById(R.id.editTextNomeDaDiciplina);
-                            String nomeDiciplina = editTextNomeDisciplina.getText().toString();
-                            if(nomeDiciplina.trim().isEmpty()){
-                                Toast.makeText(DisciplinasActivity.this, "O nome da disciplina não pode ficar em branco!", Toast.LENGTH_LONG).show();
-                            }
-                            else {
-                                DataBase dataBase = new DataBase(DisciplinasActivity.this);
-                                SQLiteDatabase connection = dataBase.getReadableDatabase();
-                                DisciplinaDAO disciplinaDAO = new DisciplinaDAO(DisciplinasActivity.this);
-                                if(disciplinaDAO.buscaDisciplinaPorNome(nomeDiciplina)==null){
-                                    Disciplina disciplina = new Disciplina(nomeDiciplina);
-                                    int novaDisciplinaId = disciplinaDAO.inserir(disciplina);
-                                    disciplina.setId(novaDisciplinaId);
-                                    arrayAdapterDisciplinas.add(disciplina);
+                ImageButton adicionar = (ImageButton) dialog.findViewById(R.id.imageButton_addDisciplina);
+                adicionar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        EditText editTextNomeDisciplina = (EditText) dialog.findViewById(R.id.editTextNomeDaDiciplina);
+                        String nomeDiciplina = editTextNomeDisciplina.getText().toString();
+                        if (nomeDiciplina.trim().isEmpty()) {
+                            Toast.makeText(DisciplinasActivity.this, "O nome da disciplina não pode ficar em branco!", Toast.LENGTH_LONG).show();
+                        } else {
+                            DataBase dataBase = new DataBase(DisciplinasActivity.this);
+                            SQLiteDatabase connection = dataBase.getReadableDatabase();
+                            DisciplinaDAO disciplinaDAO = new DisciplinaDAO(DisciplinasActivity.this);
+                            if (disciplinaDAO.buscaDisciplinaPorNome(nomeDiciplina) == null) {
+                                Disciplina disciplina = new Disciplina(nomeDiciplina);
+                                int novaDisciplinaId = disciplinaDAO.inserir(disciplina);
+                                disciplina.setId(novaDisciplinaId);
+                                arrayAdapterDisciplinas.add(disciplina);
 
-                                    sortArrayAdapterDisciplinas(arrayAdapterDisciplinas);
+                                sortArrayAdapterDisciplinas(arrayAdapterDisciplinas);
 
-                                    listViewDisciplinas.setAdapter(arrayAdapterDisciplinas);
-                                    dialog.cancel();
-                                }
-                                else{
-                                    Toast.makeText(DisciplinasActivity.this, "Está disciplina ja existe!", Toast.LENGTH_LONG).show();
-                                }
+                                listViewDisciplinas.setAdapter(arrayAdapterDisciplinas);
+                                dialog.cancel();
+                            } else {
+                                Toast.makeText(DisciplinasActivity.this, "Está disciplina ja existe!", Toast.LENGTH_LONG).show();
                             }
                         }
-                    });
-                    dialog.show();
+                    }
+                });
+                dialog.show();
             }
         });
 
@@ -169,12 +167,11 @@ public class DisciplinasActivity extends AppCompatActivity
         Intent intent;
 
         if (id == R.id.nav_avaliacoes) {
-            intent = new Intent(DisciplinasActivity.this,AvaliacoesActivity.class);
-            startActivityForResult(intent,0);
-        }
-        else if (id == R.id.nav_tipos_avaliacao) {
-            intent = new Intent(DisciplinasActivity.this,TiposDeAvaliacaoActivity.class);
-            startActivityForResult(intent,0);
+            intent = new Intent(DisciplinasActivity.this, AvaliacoesActivity.class);
+            startActivityForResult(intent, 0);
+        } else if (id == R.id.nav_tipos_avaliacao) {
+            intent = new Intent(DisciplinasActivity.this, TiposDeAvaliacaoActivity.class);
+            startActivityForResult(intent, 0);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -182,16 +179,16 @@ public class DisciplinasActivity extends AppCompatActivity
         return true;
     }
 
-    public List<Disciplina> carregaDisciplinas(){
+    public List<Disciplina> carregaDisciplinas() {
         DisciplinaDAO disciplinaDAO = new DisciplinaDAO(this);
         List<Disciplina> disciplinas = disciplinaDAO.buscaDisciplinas(this);
         return disciplinas;
     }
 
-    public  void preencheAdapterDisciplinas(List<Disciplina> disciplinas){
+    public void preencheAdapterDisciplinas(List<Disciplina> disciplinas) {
         int layoutAdapter = android.R.layout.simple_list_item_1;
-        arrayAdapterDisciplinas = new ArrayAdapter<Disciplina>(DisciplinasActivity.this,layoutAdapter);
-        for(int i = 0; i<disciplinas.size(); i++){
+        arrayAdapterDisciplinas = new ArrayAdapter<Disciplina>(DisciplinasActivity.this, layoutAdapter);
+        for (int i = 0; i < disciplinas.size(); i++) {
             arrayAdapterDisciplinas.add(disciplinas.get(i));
         }
     }

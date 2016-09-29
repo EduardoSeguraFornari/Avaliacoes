@@ -38,17 +38,17 @@ public class DisciplinaActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         Bundle bundle = getIntent().getExtras();
-        if(bundle!=null && bundle.containsKey("DISCIPLINA_ID")){
-            disciplinaId = (int)bundle.getSerializable("DISCIPLINA_ID");
+        if (bundle != null && bundle.containsKey("DISCIPLINA_ID")) {
+            disciplinaId = (int) bundle.getSerializable("DISCIPLINA_ID");
         }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent it = new Intent(DisciplinaActivity.this,AvaliacaoActivity.class);
+                Intent it = new Intent(DisciplinaActivity.this, AvaliacaoActivity.class);
                 it.putExtra("DISCIPLINA_ID", disciplinaId);
-                startActivityForResult(it,0);
+                startActivityForResult(it, 0);
             }
         });
 
@@ -61,7 +61,7 @@ public class DisciplinaActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        listViewAvaliacoesDisciplina = (ListView)findViewById(R.id.listViewAvaliacoesDisciplina);
+        listViewAvaliacoesDisciplina = (ListView) findViewById(R.id.listViewAvaliacoesDisciplina);
         preencheAdapterDisciplinas(carregaAvaliacoesDisciplina());
         sortArrayAdapterAvaliacoesDisciplina(arrayAdapterAvaliacoesDisciplina);
         listViewAvaliacoesDisciplina.setAdapter(arrayAdapterAvaliacoesDisciplina);
@@ -120,15 +120,14 @@ public class DisciplinaActivity extends AppCompatActivity
         Intent intent;
 
         if (id == R.id.nav_avaliacoes) {
-            intent = new Intent(DisciplinaActivity.this,AvaliacoesActivity.class);
-            startActivityForResult(intent,0);
+            intent = new Intent(DisciplinaActivity.this, AvaliacoesActivity.class);
+            startActivityForResult(intent, 0);
         } else if (id == R.id.nav_disciplinas) {
-            intent = new Intent(DisciplinaActivity.this,DisciplinasActivity.class);
-            startActivityForResult(intent,0);
-        }
-        else if (id == R.id.nav_tipos_avaliacao) {
-            intent = new Intent(DisciplinaActivity.this,TiposDeAvaliacaoActivity.class);
-            startActivityForResult(intent,0);
+            intent = new Intent(DisciplinaActivity.this, DisciplinasActivity.class);
+            startActivityForResult(intent, 0);
+        } else if (id == R.id.nav_tipos_avaliacao) {
+            intent = new Intent(DisciplinaActivity.this, TiposDeAvaliacaoActivity.class);
+            startActivityForResult(intent, 0);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -136,15 +135,15 @@ public class DisciplinaActivity extends AppCompatActivity
         return true;
     }
 
-    public  void preencheAdapterDisciplinas(List<Avaliacao> avaliacoes){
+    public void preencheAdapterDisciplinas(List<Avaliacao> avaliacoes) {
         int layoutAdapter = android.R.layout.simple_list_item_1;
-        arrayAdapterAvaliacoesDisciplina = new ArrayAdapter<Avaliacao>(DisciplinaActivity.this,layoutAdapter);
-        for(int i = 0; i<avaliacoes.size(); i++){
+        arrayAdapterAvaliacoesDisciplina = new ArrayAdapter<Avaliacao>(DisciplinaActivity.this, layoutAdapter);
+        for (int i = 0; i < avaliacoes.size(); i++) {
             arrayAdapterAvaliacoesDisciplina.add(avaliacoes.get(i));
         }
     }
 
-    public List<Avaliacao> carregaAvaliacoesDisciplina(){
+    public List<Avaliacao> carregaAvaliacoesDisciplina() {
         AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(this);
         List<Avaliacao> avaliacoes = avaliacaoDAO.buscaAvaliacoesDisciplina(disciplinaId);
         return avaliacoes;

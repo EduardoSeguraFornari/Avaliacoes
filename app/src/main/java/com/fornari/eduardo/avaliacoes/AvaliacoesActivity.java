@@ -73,10 +73,9 @@ public class AvaliacoesActivity extends AppCompatActivity
         if (id == R.id.nav_disciplinas) {
             Intent it = new Intent(AvaliacoesActivity.this, DisciplinasActivity.class);
             startActivityForResult(it, 0);
-        }
-        else if (id == R.id.nav_tipos_avaliacao) {
-            Intent it = new Intent(AvaliacoesActivity.this,TiposDeAvaliacaoActivity.class);
-            startActivityForResult(it,0);
+        } else if (id == R.id.nav_tipos_avaliacao) {
+            Intent it = new Intent(AvaliacoesActivity.this, TiposDeAvaliacaoActivity.class);
+            startActivityForResult(it, 0);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

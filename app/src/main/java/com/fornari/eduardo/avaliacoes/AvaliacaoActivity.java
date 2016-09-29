@@ -52,9 +52,9 @@ public class AvaliacaoActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        spinnerTiposAvaliacao = (Spinner)findViewById(R.id.spinnerTiposAvaliacao);
-        editTextObservacao = (EditText)findViewById(R.id.editTextObservacao);
-        textViewDataAvaliacao = (TextView)findViewById(R.id.textViewDataAvaliacao);
+        spinnerTiposAvaliacao = (Spinner) findViewById(R.id.spinnerTiposAvaliacao);
+        editTextObservacao = (EditText) findViewById(R.id.editTextObservacao);
+        textViewDataAvaliacao = (TextView) findViewById(R.id.textViewDataAvaliacao);
 
         //Busca e mostra na tela os tipos de avaliações cadastrados no banco de dados em ordem alfabetica
         preencheAdapterTiposAvaliacao(carregaTiposAvaliacao());
@@ -63,12 +63,12 @@ public class AvaliacaoActivity extends AppCompatActivity
         spinnerTiposAvaliacao.setAdapter(arrayAdapterTiposAvaliacao);
 
         Bundle bundle = getIntent().getExtras();
-        if(bundle!=null){
-            if(bundle.containsKey("DISCIPLINA_ID")){
-                disciplinaId = (int)bundle.getSerializable("DISCIPLINA_ID");
+        if (bundle != null) {
+            if (bundle.containsKey("DISCIPLINA_ID")) {
+                disciplinaId = (int) bundle.getSerializable("DISCIPLINA_ID");
             }
-            if(bundle.containsKey("AVALIACAO_ID")){
-                int avaliacaoId = (int)bundle.getSerializable("AVALIACAO_ID");
+            if (bundle.containsKey("AVALIACAO_ID")) {
+                int avaliacaoId = (int) bundle.getSerializable("AVALIACAO_ID");
                 AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(this);
                 avaliacao = avaliacaoDAO.buscaAvaliacaoID(avaliacaoId);
                 setAvaliacao(avaliacao);
@@ -99,9 +99,9 @@ public class AvaliacaoActivity extends AppCompatActivity
     }
 
     private void setAvaliacao(Avaliacao avaliacao) {
-        for(int i=0; i<arrayAdapterTiposAvaliacao.getCount(); i++){
+        for (int i = 0; i < arrayAdapterTiposAvaliacao.getCount(); i++) {
             TipoAvaliacao tipoAvaliacao = arrayAdapterTiposAvaliacao.getItem(i);
-            if(tipoAvaliacao.getId()==avaliacao.getTipoAvaliacao().getId()){
+            if (tipoAvaliacao.getId() == avaliacao.getTipoAvaliacao().getId()) {
                 spinnerTiposAvaliacao.setSelection(i);
                 break;
             }
@@ -141,14 +141,12 @@ public class AvaliacaoActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_salvar_avaliacao) {
-            String tipoSelecionado =  ((TipoAvaliacao)spinnerTiposAvaliacao.getSelectedItem()).getNome();
-            if(tipoSelecionado.equalsIgnoreCase("Selecionar")) {
+            String tipoSelecionado = ((TipoAvaliacao) spinnerTiposAvaliacao.getSelectedItem()).getNome();
+            if (tipoSelecionado.equalsIgnoreCase("Selecionar")) {
                 Toast.makeText(AvaliacaoActivity.this, "Selecione um tipo de avaliação!", Toast.LENGTH_LONG).show();
-            }
-            else if(textViewDataAvaliacao.getText().toString().equalsIgnoreCase("__ /__ /__")){
+            } else if (textViewDataAvaliacao.getText().toString().equalsIgnoreCase("__ /__ /__")) {
                 Toast.makeText(AvaliacaoActivity.this, "Selecione uma data!", Toast.LENGTH_LONG).show();
-            }
-            else{
+            } else {
                 Date data = new Date();
                 SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy");
                 try {
@@ -158,21 +156,20 @@ public class AvaliacaoActivity extends AppCompatActivity
                 }
                 int tipoAvaliacaoId = arrayAdapterTiposAvaliacao.getItem(spinnerTiposAvaliacao.getSelectedItemPosition()).getId();
 
-                String observacao =  editTextObservacao.getText().toString();
+                String observacao = editTextObservacao.getText().toString();
 
-                Avaliacao avaliacaoAUX = new Avaliacao(tipoAvaliacaoId,data, observacao, disciplinaId);
+                Avaliacao avaliacaoAUX = new Avaliacao(tipoAvaliacaoId, data, observacao, disciplinaId);
                 AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(this);
 
-                if(avaliacao!=null){
+                if (avaliacao != null) {
                     avaliacaoDAO.atualizaAvaliacao(avaliacao.getId(), avaliacaoAUX);
-                }
-                else{
+                } else {
                     avaliacaoDAO.inserir(avaliacaoAUX);
                 }
 
-                Intent intent = new Intent(AvaliacaoActivity.this,DisciplinaActivity.class);
+                Intent intent = new Intent(AvaliacaoActivity.this, DisciplinaActivity.class);
                 intent.putExtra("DISCIPLINA_ID", disciplinaId);
-                startActivityForResult(intent,0);
+                startActivityForResult(intent, 0);
             }
             return true;
         }
@@ -189,15 +186,14 @@ public class AvaliacaoActivity extends AppCompatActivity
         Intent intent;
 
         if (id == R.id.nav_avaliacoes) {
-            intent = new Intent(AvaliacaoActivity.this,AvaliacoesActivity.class);
-            startActivityForResult(intent,0);
+            intent = new Intent(AvaliacaoActivity.this, AvaliacoesActivity.class);
+            startActivityForResult(intent, 0);
         } else if (id == R.id.nav_disciplinas) {
-            intent = new Intent(AvaliacaoActivity.this,DisciplinasActivity.class);
-            startActivityForResult(intent,0);
-        }
-        else if (id == R.id.nav_tipos_avaliacao) {
-            intent = new Intent(AvaliacaoActivity.this,TiposDeAvaliacaoActivity.class);
-            startActivityForResult(intent,0);
+            intent = new Intent(AvaliacaoActivity.this, DisciplinasActivity.class);
+            startActivityForResult(intent, 0);
+        } else if (id == R.id.nav_tipos_avaliacao) {
+            intent = new Intent(AvaliacaoActivity.this, TiposDeAvaliacaoActivity.class);
+            startActivityForResult(intent, 0);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -205,22 +201,21 @@ public class AvaliacaoActivity extends AppCompatActivity
         return true;
     }
 
-    private class SelecionaDataListener implements DatePickerDialog.OnDateSetListener{
+    private class SelecionaDataListener implements DatePickerDialog.OnDateSetListener {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             Calendar calendar = Calendar.getInstance();
-            calendar.set(year,monthOfYear,dayOfMonth);
+            calendar.set(year, monthOfYear, dayOfMonth);
             Date date = calendar.getTime();
             DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT);
             String format = dateFormat.format(date);
-            if(date.compareTo(new Date())>=0){
+            if (date.compareTo(new Date()) >= 0) {
                 textViewDataAvaliacao.setText(format);
-            }
-            else textViewDataAvaliacao.setText("__ /__ /__");
+            } else textViewDataAvaliacao.setText("__ /__ /__");
         }
     }
 
-    public class ExibeDataListener implements View.OnClickListener, View.OnFocusChangeListener{
+    public class ExibeDataListener implements View.OnClickListener, View.OnFocusChangeListener {
         @Override
         public void onClick(View v) {
             exibeData();
@@ -228,7 +223,7 @@ public class AvaliacaoActivity extends AppCompatActivity
 
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
-            if (hasFocus)exibeData();
+            if (hasFocus) exibeData();
         }
     }
 
@@ -238,7 +233,7 @@ public class AvaliacaoActivity extends AppCompatActivity
         dia = calendar.get(Calendar.DAY_OF_MONTH);
         mes = calendar.get(Calendar.MONTH);
         ano = calendar.get(Calendar.YEAR);
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this,new SelecionaDataListener(),ano,mes,dia);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new SelecionaDataListener(), ano, mes, dia);
         datePickerDialog.show();
     }
 
@@ -246,23 +241,23 @@ public class AvaliacaoActivity extends AppCompatActivity
         Comparator<TipoAvaliacao> porNome = new Comparator<TipoAvaliacao>() {
             @Override
             public int compare(TipoAvaliacao avaliacao1, TipoAvaliacao avaliacao2) {
-                if(avaliacao1.getNome().equalsIgnoreCase("Selecionar"))return -1;
-                if(avaliacao2.getNome().equalsIgnoreCase("Selecionar"))return 1;
+                if (avaliacao1.getNome().equalsIgnoreCase("Selecionar")) return -1;
+                if (avaliacao2.getNome().equalsIgnoreCase("Selecionar")) return 1;
                 return avaliacao1.getNome().compareTo(avaliacao2.getNome());
             }
         };
         arrayAdapterTiposAvaliacao.sort(porNome);
     }
 
-    public  void preencheAdapterTiposAvaliacao(List<TipoAvaliacao> tiposAvaliacao){
+    public void preencheAdapterTiposAvaliacao(List<TipoAvaliacao> tiposAvaliacao) {
         int layoutAdapter = android.R.layout.simple_list_item_1;
-        arrayAdapterTiposAvaliacao = new ArrayAdapter<TipoAvaliacao>(AvaliacaoActivity.this,layoutAdapter);
-        for(TipoAvaliacao tipoAvaliacao : tiposAvaliacao){
+        arrayAdapterTiposAvaliacao = new ArrayAdapter<TipoAvaliacao>(AvaliacaoActivity.this, layoutAdapter);
+        for (TipoAvaliacao tipoAvaliacao : tiposAvaliacao) {
             arrayAdapterTiposAvaliacao.add(tipoAvaliacao);
         }
     }
 
-    public List<TipoAvaliacao> carregaTiposAvaliacao(){
+    public List<TipoAvaliacao> carregaTiposAvaliacao() {
         TipoAvaliacaoDAO disciplinaDAO = new TipoAvaliacaoDAO(this);
         List<TipoAvaliacao> tiposAvaliacao = disciplinaDAO.buscaTiposDeAvaliacao();
         return tiposAvaliacao;

@@ -22,11 +22,11 @@ public class DisciplinaDAO {
 
     private Context context;
 
-    public DisciplinaDAO(Context context){
+    public DisciplinaDAO(Context context) {
         this.context = context;
     }
 
-    public  int inserir(Disciplina disciplina){
+    public int inserir(Disciplina disciplina) {
 
         DataBase dataBase = new DataBase(context);
         SQLiteDatabase connection = dataBase.getWritableDatabase();
@@ -35,30 +35,30 @@ public class DisciplinaDAO {
 
         values.put(Disciplina.DISCIPLINA_NOME, disciplina.getNome());
 
-        int disciplinaId = (int)connection.insertOrThrow("DISCIPLINA",null,values);
+        int disciplinaId = (int) connection.insertOrThrow("DISCIPLINA", null, values);
 
         connection.close();
 
         return disciplinaId;
     }
 
-    public List<Disciplina> buscaDisciplinas(Context context){
+    public List<Disciplina> buscaDisciplinas(Context context) {
         DataBase dataBase = new DataBase(context);
         SQLiteDatabase connection = dataBase.getWritableDatabase();
 
         List<Disciplina> disciplinas = new ArrayList<Disciplina>();
 
-        Cursor cursor = connection.query("DISCIPLINA",null,null,null,null,null,null);
+        Cursor cursor = connection.query("DISCIPLINA", null, null, null, null, null, null);
 
-        if(cursor.getCount()>0){
+        if (cursor.getCount() > 0) {
             cursor.moveToFirst();
-            do{
+            do {
                 Disciplina disciplina = new Disciplina(
                         cursor.getInt(cursor.getColumnIndex(Disciplina.DISCIPLINA_ID)),
                         cursor.getString(cursor.getColumnIndex(Disciplina.DISCIPLINA_NOME))
                 );
                 disciplinas.add(disciplina);
-            }while (cursor.moveToNext());
+            } while (cursor.moveToNext());
         }
 
         connection.close();
@@ -66,22 +66,22 @@ public class DisciplinaDAO {
         return disciplinas;
     }
 
-    public Disciplina buscaDisciplinaPorNome(String nome){
+    public Disciplina buscaDisciplinaPorNome(String nome) {
         DataBase dataBase = new DataBase(context);
         SQLiteDatabase connection = dataBase.getWritableDatabase();
 
-        String[] campos =  {Disciplina.DISCIPLINA_ID, Disciplina.DISCIPLINA_NOME};
-        String where = Disciplina.DISCIPLINA_NOME + "='" + nome+"'";
+        String[] campos = {Disciplina.DISCIPLINA_ID, Disciplina.DISCIPLINA_NOME};
+        String where = Disciplina.DISCIPLINA_NOME + "='" + nome + "'";
 
-        Cursor cursor = connection.query("DISCIPLINA",campos,where, null, null, null, null, null);
+        Cursor cursor = connection.query("DISCIPLINA", campos, where, null, null, null, null, null);
 
         Disciplina disciplina = null;
 
-        if(cursor.getCount()>0){
+        if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             disciplina = new Disciplina(
-                cursor.getInt(cursor.getColumnIndex(Disciplina.DISCIPLINA_ID)),
-                cursor.getString(cursor.getColumnIndex(Disciplina.DISCIPLINA_NOME))
+                    cursor.getInt(cursor.getColumnIndex(Disciplina.DISCIPLINA_ID)),
+                    cursor.getString(cursor.getColumnIndex(Disciplina.DISCIPLINA_NOME))
             );
         }
 
