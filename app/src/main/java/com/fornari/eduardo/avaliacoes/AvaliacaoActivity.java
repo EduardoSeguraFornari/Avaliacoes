@@ -164,10 +164,10 @@ public class AvaliacaoActivity extends AppCompatActivity
                 AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(this);
 
                 if(avaliacao!=null){
-                    avaliacaoDAO.updateAvaliacao(avaliacao.getId(), avaliacaoAUX);
+                    avaliacaoDAO.atualizaAvaliacao(avaliacao.getId(), avaliacaoAUX);
                 }
                 else{
-                    avaliacaoDAO.insert(avaliacaoAUX);
+                    avaliacaoDAO.inserir(avaliacaoAUX);
                 }
 
                 Intent intent = new Intent(AvaliacaoActivity.this,DisciplinaActivity.class);

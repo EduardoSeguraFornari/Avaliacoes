@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by dufor on 10/09/2016.
+ * Created by Eduardo Segura Fornari on 10/09/2016.
  */
 public class DisciplinaDAO {
 
@@ -26,23 +26,30 @@ public class DisciplinaDAO {
         this.context = context;
     }
 
-    public  int insert(Disciplina disciplina){
+    public  int inserir(Disciplina disciplina){
 
         DataBase dataBase = new DataBase(context);
-        SQLiteDatabase conn = dataBase.getWritableDatabase();
+        SQLiteDatabase connection = dataBase.getWritableDatabase();
 
         ContentValues values = new ContentValues();
 
         values.put(Disciplina.DISCIPLINA_NOME, disciplina.getNome());
 
-        return (int) conn.insertOrThrow("DISCIPLINA",null,values);
+        int disciplinaId = (int)connection.insertOrThrow("DISCIPLINA",null,values);
+
+        connection.close();
+
+        return disciplinaId;
     }
 
     public List<Disciplina> buscaDisciplinas(Context context){
         DataBase dataBase = new DataBase(context);
-        SQLiteDatabase conn = dataBase.getWritableDatabase();
+        SQLiteDatabase connection = dataBase.getWritableDatabase();
+
         List<Disciplina> disciplinas = new ArrayList<Disciplina>();
-        Cursor cursor = conn.query("DISCIPLINA",null,null,null,null,null,null);
+
+        Cursor cursor = connection.query("DISCIPLINA",null,null,null,null,null,null);
+
         if(cursor.getCount()>0){
             cursor.moveToFirst();
             do{
@@ -53,17 +60,23 @@ public class DisciplinaDAO {
                 disciplinas.add(disciplina);
             }while (cursor.moveToNext());
         }
+
+        connection.close();
+
         return disciplinas;
     }
 
     public Disciplina buscaDisciplinaPorNome(String nome){
         DataBase dataBase = new DataBase(context);
-        SQLiteDatabase conn = dataBase.getWritableDatabase();
-        Cursor cursor;
+        SQLiteDatabase connection = dataBase.getWritableDatabase();
+
         String[] campos =  {Disciplina.DISCIPLINA_ID, Disciplina.DISCIPLINA_NOME};
         String where = Disciplina.DISCIPLINA_NOME + "='" + nome+"'";
-        cursor = conn.query("DISCIPLINA",campos,where, null, null, null, null, null);
+
+        Cursor cursor = connection.query("DISCIPLINA",campos,where, null, null, null, null, null);
+
         Disciplina disciplina = null;
+
         if(cursor.getCount()>0){
             cursor.moveToFirst();
             disciplina = new Disciplina(
@@ -71,7 +84,9 @@ public class DisciplinaDAO {
                 cursor.getString(cursor.getColumnIndex(Disciplina.DISCIPLINA_NOME))
             );
         }
-        conn.close();
+
+        connection.close();
+
         return disciplina;
     }
 }

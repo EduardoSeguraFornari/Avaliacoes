@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by dufor on 14/09/2016.
+ * Created by Eduardo Segura Fornari on 14/09/2016.
  */
 public class TipoAvaliacaoDAO {
     private Context context;
@@ -22,23 +22,30 @@ public class TipoAvaliacaoDAO {
         this.context = context;
     }
 
-    public  void  create(TipoAvaliacao tipoAvaliacao){
+    public  int inserir(TipoAvaliacao tipoAvaliacao){
 
         DataBase dataBase = new DataBase(context);
-        SQLiteDatabase conn = dataBase.getWritableDatabase();
+        SQLiteDatabase connection = dataBase.getWritableDatabase();
 
         ContentValues values = new ContentValues();
 
         values.put(TipoAvaliacao.TIPO_AVALIACAO_NOME, tipoAvaliacao.getNome());
 
-        conn.insertOrThrow(TipoAvaliacao.TIPO_AVALIACAO, null,values);
+        int tipoAvaliacaoId = (int)connection.insertOrThrow(TipoAvaliacao.TIPO_AVALIACAO, null,values);
+
+        connection.close();
+
+        return tipoAvaliacaoId;
     }
 
     public List<TipoAvaliacao> buscaTiposDeAvaliacao(){
         DataBase dataBase = new DataBase(context);
-        SQLiteDatabase conn = dataBase.getWritableDatabase();
+        SQLiteDatabase connection = dataBase.getWritableDatabase();
+
         List<TipoAvaliacao> tipoAvaliacoes = new ArrayList<TipoAvaliacao>();
-        Cursor cursor = conn.query(TipoAvaliacao.TIPO_AVALIACAO,null,null,null,null,null,null);
+
+        Cursor cursor = connection.query(TipoAvaliacao.TIPO_AVALIACAO,null,null,null,null,null,null);
+
         if(cursor.getCount()>0){
             cursor.moveToFirst();
             do{
@@ -50,17 +57,23 @@ public class TipoAvaliacaoDAO {
                 tipoAvaliacoes.add(tipoAvaliacao);
             }while (cursor.moveToNext());
         }
+
+        connection.close();
+
         return tipoAvaliacoes;
     }
 
     public TipoAvaliacao buscaTipoAvaliacaoPorNome(String nome){
         DataBase dataBase = new DataBase(context);
-        SQLiteDatabase conn = dataBase.getWritableDatabase();
-        Cursor cursor;
+        SQLiteDatabase connection = dataBase.getWritableDatabase();
+
         String[] campos =  {TipoAvaliacao.TIPO_AVALIACAO__ID,TipoAvaliacao.TIPO_AVALIACAO_NOME};
         String where = TipoAvaliacao.TIPO_AVALIACAO_NOME + "='" + nome+"'";
-        cursor = conn.query(TipoAvaliacao.TIPO_AVALIACAO,campos,where, null, null, null, null, null);
+
+        Cursor cursor = connection.query(TipoAvaliacao.TIPO_AVALIACAO,campos,where, null, null, null, null, null);
+
         TipoAvaliacao tipoAvaliacao = null;
+
         if(cursor.getCount()>0){
             cursor.moveToFirst();
             tipoAvaliacao = new TipoAvaliacao(
@@ -68,7 +81,9 @@ public class TipoAvaliacaoDAO {
                     cursor.getString(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO_NOME))
             );
         }
-        conn.close();
+
+        connection.close();
+
         return tipoAvaliacao;
     }
 }

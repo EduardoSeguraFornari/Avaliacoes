@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by dufor on 17/09/2016.
+ * Created by Eduardo Segura Fornari on 17/09/2016.
  */
 public class AvaliacaoDAO {
 
@@ -25,21 +25,29 @@ public class AvaliacaoDAO {
         this.context = context;
     }
 
-    public  int  insert(Avaliacao avaliacao){
+    public  int inserir(Avaliacao avaliacao){
         DataBase dataBase = new DataBase(context);
-        SQLiteDatabase conn = dataBase.getWritableDatabase();
+        SQLiteDatabase connection = dataBase.getWritableDatabase();
+
         ContentValues values = new ContentValues();
         values.put(Avaliacao.AVALIACAO_DATA,avaliacao.getData().getTime());
         values.put(Avaliacao.AVALIACAO_TIPO_AVALIACAO__ID,avaliacao.getTipoAvaliacaoId());
         values.put(Avaliacao.AVALIACAO_DISCIPLINA__ID,avaliacao.getDisciplinaId());
         values.put(Avaliacao.AVALIACAO_OBSERVACAO,avaliacao.getObservacao());
-        return (int) conn.insertOrThrow(Avaliacao.AVALIACAO,null,values);
+
+        int avaliacaoId = (int) connection.insertOrThrow(Avaliacao.AVALIACAO,null,values);
+
+        connection.close();
+
+        return avaliacaoId;
     }
 
     public List<Avaliacao> buscaAvaliacoesDisciplina(int disciplinaId){
         DataBase dataBase = new DataBase(context);
-        SQLiteDatabase conn = dataBase.getWritableDatabase();
+        SQLiteDatabase connection = dataBase.getWritableDatabase();
+
         List<Avaliacao> avaliacaos = new ArrayList<Avaliacao>();
+
         String query =
                 "SELECT A."+Avaliacao.AVALIACAO_ID+", A."+Avaliacao.AVALIACAO_TIPO_AVALIACAO__ID+", A."+Avaliacao.AVALIACAO_DISCIPLINA__ID+", A."+Avaliacao.AVALIACAO_DATA+", A."+Avaliacao.AVALIACAO_OBSERVACAO+","+
                         " T."+TipoAvaliacao.TIPO_AVALIACAO__ID+", T."+TipoAvaliacao.TIPO_AVALIACAO_NOME+","+
@@ -51,7 +59,8 @@ public class AvaliacaoDAO {
                         " on A."+Avaliacao.AVALIACAO_DISCIPLINA__ID+" = D."+Disciplina.DISCIPLINA_ID+
                         " WHERE A."+Avaliacao.AVALIACAO_DISCIPLINA__ID+" = "+disciplinaId;
 
-        Cursor cursor =  conn.rawQuery(query,null);
+        Cursor cursor =  connection.rawQuery(query,null);
+
         if(cursor.getCount()>0){
             cursor.moveToFirst();
             do{
@@ -65,6 +74,7 @@ public class AvaliacaoDAO {
                 Disciplina disciplina = new Disciplina(disciplinaId, nomeDisciplina);
 
                 int avaliacaoId = cursor.getInt(cursor.getColumnIndex("A."+Avaliacao.AVALIACAO_ID));
+
                 String avaliacaoObservacao = cursor.getString(cursor.getColumnIndex("A."+Avaliacao.AVALIACAO_OBSERVACAO));
 
                 Avaliacao avaliacao = new Avaliacao(avaliacaoId, tipoAvaliacao, dataAvaliacao, avaliacaoObservacao, disciplina);
@@ -72,7 +82,9 @@ public class AvaliacaoDAO {
                 avaliacaos.add(avaliacao);
             }while (cursor.moveToNext());
         }
-        conn.close();
+
+        connection.close();
+
         return avaliacaos;
     }
 
@@ -80,8 +92,10 @@ public class AvaliacaoDAO {
 
     public Avaliacao buscaAvaliacaoID(int id){
         DataBase dataBase = new DataBase(context);
-        SQLiteDatabase conn = dataBase.getWritableDatabase();
-        List<Avaliacao> avaliacaos = new ArrayList<Avaliacao>();
+        SQLiteDatabase connection = dataBase.getWritableDatabase();
+
+        List<Avaliacao> avaliacoes = new ArrayList<Avaliacao>();
+
         String query =
                 "SELECT A."+Avaliacao.AVALIACAO_ID+", A."+Avaliacao.AVALIACAO_TIPO_AVALIACAO__ID+", A."+Avaliacao.AVALIACAO_DISCIPLINA__ID+", A."+Avaliacao.AVALIACAO_DATA+", A."+Avaliacao.AVALIACAO_OBSERVACAO+","+
                         " T."+TipoAvaliacao.TIPO_AVALIACAO__ID+", T."+TipoAvaliacao.TIPO_AVALIACAO_NOME+","+
@@ -93,10 +107,13 @@ public class AvaliacaoDAO {
                         " on A."+Avaliacao.AVALIACAO_DISCIPLINA__ID+" = D."+Disciplina.DISCIPLINA_ID+
                         " WHERE A."+Avaliacao.AVALIACAO_ID+" = "+id;
 
-        Cursor cursor =  conn.rawQuery(query,null);
+        Cursor cursor =  connection.rawQuery(query,null);
+
         Avaliacao avaliacao = null;
+
         if(cursor.getCount()>0){
             cursor.moveToFirst();
+
             int tipoAvaliacaoId = cursor.getInt(cursor.getColumnIndex("T."+TipoAvaliacao.TIPO_AVALIACAO__ID));
             String nomeTipoAvaliacao = cursor.getString(cursor.getColumnIndex("T."+TipoAvaliacao.TIPO_AVALIACAO_NOME));
             TipoAvaliacao tipoAvaliacao = new TipoAvaliacao(tipoAvaliacaoId, nomeTipoAvaliacao);
@@ -111,13 +128,15 @@ public class AvaliacaoDAO {
 
             avaliacao = new Avaliacao(id, tipoAvaliacao, dataAvaliacao, avaliacaoObservacao, disciplina);
         }
-        conn.close();
+
+        connection.close();
+
         return avaliacao;
     }
 
-    public void updateAvaliacao(int id, Avaliacao avaliacao){
+    public void atualizaAvaliacao(int id, Avaliacao avaliacao){
         DataBase dataBase = new DataBase(context);
-        SQLiteDatabase conn = dataBase.getWritableDatabase();
+        SQLiteDatabase connection = dataBase.getWritableDatabase();
 
         String where = Avaliacao.AVALIACAO_ID + "=" + id;
 
@@ -127,8 +146,8 @@ public class AvaliacaoDAO {
         valores.put(Avaliacao.AVALIACAO_OBSERVACAO, avaliacao.getObservacao());
         valores.put(Avaliacao.AVALIACAO_DISCIPLINA__ID, avaliacao.getDisciplinaId());
 
-        conn.update(Avaliacao.AVALIACAO,valores,where,null);
+        connection.update(Avaliacao.AVALIACAO,valores,where,null);
 
-        conn.close();
+        connection.close();
     }
 }

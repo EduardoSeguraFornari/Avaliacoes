@@ -79,7 +79,7 @@ public class TiposDeAvaliacaoActivity extends AppCompatActivity
                                 TipoAvaliacaoDAO tipoAvaliacaoDAO = new TipoAvaliacaoDAO(TiposDeAvaliacaoActivity.this);
                                 if(tipoAvaliacaoDAO.buscaTipoAvaliacaoPorNome(nomeDiciplina)==null){
                                     TipoAvaliacao tipoAvaliacao = new TipoAvaliacao(nomeDiciplina);
-                                    tipoAvaliacaoDAO.create(tipoAvaliacao);
+                                    tipoAvaliacaoDAO.inserir(tipoAvaliacao);
                                     arrayAdapterTiposDeAvaliacao.add(tipoAvaliacao);
 
                                     sortArrayAdapterTiposDeAvaliacao(arrayAdapterTiposDeAvaliacao);

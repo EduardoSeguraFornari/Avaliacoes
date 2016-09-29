@@ -89,7 +89,7 @@ public class DisciplinasActivity extends AppCompatActivity
                                 DisciplinaDAO disciplinaDAO = new DisciplinaDAO(DisciplinasActivity.this);
                                 if(disciplinaDAO.buscaDisciplinaPorNome(nomeDiciplina)==null){
                                     Disciplina disciplina = new Disciplina(nomeDiciplina);
-                                    int novaDisciplinaId = disciplinaDAO.insert(disciplina);
+                                    int novaDisciplinaId = disciplinaDAO.inserir(disciplina);
                                     disciplina.setId(novaDisciplinaId);
                                     arrayAdapterDisciplinas.add(disciplina);
 

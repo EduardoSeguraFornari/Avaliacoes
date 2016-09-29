@@ -9,7 +9,7 @@ import com.fornari.eduardo.avaliacoes.model.Disciplina;
 import com.fornari.eduardo.avaliacoes.model.TipoAvaliacao;
 
 /**
- * Created by dufor on 10/09/2016.
+ * Created by Eduardo Segura Fornari on 10/09/2016.
  */
 public class ScriptSQL {
 
