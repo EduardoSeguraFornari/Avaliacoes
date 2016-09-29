@@ -19,7 +19,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fornari.eduardo.avaliacoes.dao.DisciplinaDAO;
@@ -67,7 +66,7 @@ public class DisciplinasActivity extends AppCompatActivity
 
                     dialog.setTitle("ADICIONAR DISCIPLINA");
 
-                    ImageButton cancelar = (ImageButton) dialog.findViewById(R.id.imageButton_cancelar);
+                    ImageButton cancelar = (ImageButton) dialog.findViewById(R.id.imageButton_cancelarDisciplina);
                     cancelar.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -79,33 +78,28 @@ public class DisciplinasActivity extends AppCompatActivity
                     adicionar.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view){
-                            EditText textViewNomeDisciplina = (EditText)dialog.findViewById(R.id.editTextNomeDaDiciplina);
-                            String nomeDiciplina = textViewNomeDisciplina.getText().toString();
+                            EditText editTextNomeDisciplina = (EditText)dialog.findViewById(R.id.editTextNomeDaDiciplina);
+                            String nomeDiciplina = editTextNomeDisciplina.getText().toString();
                             if(nomeDiciplina.trim().isEmpty()){
                                 Toast.makeText(DisciplinasActivity.this, "O nome da disciplina não pode ficar em branco!", Toast.LENGTH_LONG).show();
                             }
                             else {
-                                try {
-                                    DataBase dataBase = new DataBase(DisciplinasActivity.this);
-                                    SQLiteDatabase conn = dataBase.getReadableDatabase();
-                                    DisciplinaDAO disciplinaDAO = new DisciplinaDAO(DisciplinasActivity.this);
-                                    if(disciplinaDAO.buscaDisciplinaPorNome(nomeDiciplina)==null){
-                                        Disciplina disciplina = new Disciplina(nomeDiciplina);
-                                        int idNovaDisciplina = disciplinaDAO.insert(disciplina);
-                                        disciplina.setId(idNovaDisciplina);
-                                        arrayAdapterDisciplinas.add(disciplina);
+                                DataBase dataBase = new DataBase(DisciplinasActivity.this);
+                                SQLiteDatabase connection = dataBase.getReadableDatabase();
+                                DisciplinaDAO disciplinaDAO = new DisciplinaDAO(DisciplinasActivity.this);
+                                if(disciplinaDAO.buscaDisciplinaPorNome(nomeDiciplina)==null){
+                                    Disciplina disciplina = new Disciplina(nomeDiciplina);
+                                    int novaDisciplinaId = disciplinaDAO.insert(disciplina);
+                                    disciplina.setId(novaDisciplinaId);
+                                    arrayAdapterDisciplinas.add(disciplina);
 
-                                        sortArrayAdapterDisciplinas(arrayAdapterDisciplinas);
+                                    sortArrayAdapterDisciplinas(arrayAdapterDisciplinas);
 
-                                        listViewDisciplinas.setAdapter(arrayAdapterDisciplinas);
-                                        dialog.cancel();
-                                    }
-                                    else{
-                                        Toast.makeText(DisciplinasActivity.this, "Está disciplina ja existe!", Toast.LENGTH_LONG).show();
-                                    }
-                                }catch (Exception e){
-                                    TextView textViewDisciplina = (TextView) findViewById(R.id.disciplina);
-                                    textViewDisciplina.setText("#ERRO#"+e.getMessage());
+                                    listViewDisciplinas.setAdapter(arrayAdapterDisciplinas);
+                                    dialog.cancel();
+                                }
+                                else{
+                                    Toast.makeText(DisciplinasActivity.this, "Está disciplina ja existe!", Toast.LENGTH_LONG).show();
                                 }
                             }
                         }
@@ -172,13 +166,15 @@ public class DisciplinasActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        Intent intent;
+
         if (id == R.id.nav_avaliacoes) {
-            Intent it = new Intent(DisciplinasActivity.this,AvaliacoesActivity.class);
-            startActivityForResult(it,0);
+            intent = new Intent(DisciplinasActivity.this,AvaliacoesActivity.class);
+            startActivityForResult(intent,0);
         }
         else if (id == R.id.nav_tipos_avaliacao) {
-            Intent it = new Intent(DisciplinasActivity.this,TiposDeAvaliacaoActivity.class);
-            startActivityForResult(it,0);
+            intent = new Intent(DisciplinasActivity.this,TiposDeAvaliacaoActivity.class);
+            startActivityForResult(intent,0);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -194,10 +190,9 @@ public class DisciplinasActivity extends AppCompatActivity
 
     public  void preencheAdapterDisciplinas(List<Disciplina> disciplinas){
         int layoutAdapter = android.R.layout.simple_list_item_1;
-        ArrayAdapter<Disciplina> adapter = new ArrayAdapter<Disciplina>(DisciplinasActivity.this,layoutAdapter);
+        arrayAdapterDisciplinas = new ArrayAdapter<Disciplina>(DisciplinasActivity.this,layoutAdapter);
         for(int i = 0; i<disciplinas.size(); i++){
-            adapter.add(disciplinas.get(i));
+            arrayAdapterDisciplinas.add(disciplinas.get(i));
         }
-        arrayAdapterDisciplinas = adapter;
     }
 }

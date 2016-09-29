@@ -51,7 +51,7 @@
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/imageButton_cancelar"
+                android:id="@+id/imageButton_cancelarDisciplina"
                 android:src="@drawable/ic_clear_black_24dp"
                 android:layout_gravity="center_horizontal" />
         </LinearLayout>

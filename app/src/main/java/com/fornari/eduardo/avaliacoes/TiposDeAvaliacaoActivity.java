@@ -55,7 +55,7 @@ public class TiposDeAvaliacaoActivity extends AppCompatActivity
 
                 dialog.setTitle("ADICIONAR DISCIPLINA");
 
-                ImageButton cancelar = (ImageButton) dialog.findViewById(R.id.imageButton_cancelar);
+                ImageButton cancelar = (ImageButton) dialog.findViewById(R.id.imageButton_cancelarDisciplina);
                 cancelar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
