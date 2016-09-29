@@ -33,7 +33,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 public class AvaliacaoActivity extends AppCompatActivity
@@ -45,7 +44,6 @@ public class AvaliacaoActivity extends AppCompatActivity
     private ArrayAdapter<TipoAvaliacao> arrayAdapterTiposAvaliacao;
 
     private int disciplinaId;
-    private int avaliacaoId;
     private Avaliacao avaliacao;
 
     @Override
@@ -59,9 +57,8 @@ public class AvaliacaoActivity extends AppCompatActivity
         editTextObservacao = (EditText)findViewById(R.id.editTextObservacao);
         textViewDataAvaliacao = (TextView)findViewById(R.id.textViewDataAvaliacao);
 
-
+        //Busca e mostra na tela os tipos de avaliações cadastrados no banco de dados em ordem alfabetica
         preencheAdapterTiposAvaliacao(carregaTiposAvaliacao());
-
         arrayAdapterTiposAvaliacao.add(new TipoAvaliacao("Selecionar"));
         sortArrayAdapterTiposAvaliacao(arrayAdapterTiposAvaliacao);
         spinnerTiposAvaliacao.setAdapter(arrayAdapterTiposAvaliacao);
@@ -70,20 +67,12 @@ public class AvaliacaoActivity extends AppCompatActivity
         if(bundle!=null){
             if(bundle.containsKey("DISCIPLINA_ID")){
                 disciplinaId = (int)bundle.getSerializable("DISCIPLINA_ID");
-                Log.d("AvaliacaoActivity --> ","Tem Id de uma disciplina"+" #######################");
-            }
-            else{
-                Log.d("AvaliacaoActivity --> ","Não tem Id de uma disciplina"+" #######################");
             }
             if(bundle.containsKey("AVALIACAO_ID")){
-                Log.d("AvaliacaoActivity --> ","Tem Id de uma avaliação"+" #######################");
-                avaliacaoId = (int)bundle.getSerializable("AVALIACAO_ID");
+                int avaliacaoId = (int)bundle.getSerializable("AVALIACAO_ID");
                 AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(this);
                 avaliacao = avaliacaoDAO.buscaAvaliacaoID(avaliacaoId);
                 setAvaliacao(avaliacao);
-            }
-            else{
-                Log.d("AvaliacaoActivity --> ","Não tem Id de uma avaliação"+" #######################");
             }
         }
 
@@ -105,8 +94,6 @@ public class AvaliacaoActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
-
         ExibeDataListener exibeDataListener = new ExibeDataListener();
         textViewDataAvaliacao.setOnClickListener(exibeDataListener);
         textViewDataAvaliacao.setOnFocusChangeListener(exibeDataListener);
@@ -122,9 +109,9 @@ public class AvaliacaoActivity extends AppCompatActivity
         }
 
         Date dataAvaliacao = avaliacao.getData();
-        DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT);
-        String dt = format.format(dataAvaliacao);
-        textViewDataAvaliacao.setText(dt);
+        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT);
+        String format = dateFormat.format(dataAvaliacao);
+        textViewDataAvaliacao.setText(format);
 
         editTextObservacao.setText(avaliacao.getObservacao());
     }
@@ -178,15 +165,15 @@ public class AvaliacaoActivity extends AppCompatActivity
                 AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(this);
 
                 if(avaliacao!=null){
-                    avaliacaoDAO.updateAvaliacao(avaliacaoId, avaliacaoAUX);
+                    avaliacaoDAO.updateAvaliacao(avaliacao.getId(), avaliacaoAUX);
                 }
                 else{
                     avaliacaoDAO.insert(avaliacaoAUX);
                 }
 
-                Intent it = new Intent(AvaliacaoActivity.this,DisciplinaActivity.class);
-                it.putExtra("DISCIPLINA_ID", disciplinaId);
-                startActivityForResult(it,0);
+                Intent intent = new Intent(AvaliacaoActivity.this,DisciplinaActivity.class);
+                intent.putExtra("DISCIPLINA_ID", disciplinaId);
+                startActivityForResult(intent,0);
             }
             return true;
         }
@@ -200,16 +187,18 @@ public class AvaliacaoActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        Intent intent;
+
         if (id == R.id.nav_avaliacoes) {
-            Intent it = new Intent(AvaliacaoActivity.this,AvaliacoesActivity.class);
-            startActivityForResult(it,0);
+            intent = new Intent(AvaliacaoActivity.this,AvaliacoesActivity.class);
+            startActivityForResult(intent,0);
         } else if (id == R.id.nav_disciplinas) {
-            Intent it = new Intent(AvaliacaoActivity.this,DisciplinasActivity.class);
-            startActivityForResult(it,0);
+            intent = new Intent(AvaliacaoActivity.this,DisciplinasActivity.class);
+            startActivityForResult(intent,0);
         }
         else if (id == R.id.nav_tipos_avaliacao) {
-            Intent it = new Intent(AvaliacaoActivity.this,TiposDeAvaliacaoActivity.class);
-            startActivityForResult(it,0);
+            intent = new Intent(AvaliacaoActivity.this,TiposDeAvaliacaoActivity.class);
+            startActivityForResult(intent,0);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -223,10 +212,10 @@ public class AvaliacaoActivity extends AppCompatActivity
             Calendar calendar = Calendar.getInstance();
             calendar.set(year,monthOfYear,dayOfMonth);
             Date date = calendar.getTime();
-            DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT);
-            String dt = format.format(date);
+            DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT);
+            String format = dateFormat.format(date);
             if(date.compareTo(new Date())>=0){
-                textViewDataAvaliacao.setText(dt);
+                textViewDataAvaliacao.setText(format);
             }
             else textViewDataAvaliacao.setText("__ /__ /__");
         }
@@ -250,17 +239,17 @@ public class AvaliacaoActivity extends AppCompatActivity
         dia = calendar.get(Calendar.DAY_OF_MONTH);
         mes = calendar.get(Calendar.MONTH);
         ano = calendar.get(Calendar.YEAR);
-        DatePickerDialog dlg = new DatePickerDialog(this,new SelecionaDataListener(),ano,mes,dia);
-        dlg.show();
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,new SelecionaDataListener(),ano,mes,dia);
+        datePickerDialog.show();
     }
 
     private void sortArrayAdapterTiposAvaliacao(ArrayAdapter<TipoAvaliacao> arrayAdapterTiposAvaliacao) {
         Comparator<TipoAvaliacao> porNome = new Comparator<TipoAvaliacao>() {
             @Override
-            public int compare(TipoAvaliacao o1, TipoAvaliacao o2) {
-                if(o1.getNome().equalsIgnoreCase("Selecionar"))return -1;
-                if(o2.getNome().equalsIgnoreCase("Selecionar"))return 1;
-                return o1.getNome().compareTo(o2.getNome());
+            public int compare(TipoAvaliacao avaliacao1, TipoAvaliacao avaliacao2) {
+                if(avaliacao1.getNome().equalsIgnoreCase("Selecionar"))return -1;
+                if(avaliacao2.getNome().equalsIgnoreCase("Selecionar"))return 1;
+                return avaliacao1.getNome().compareTo(avaliacao2.getNome());
             }
         };
         arrayAdapterTiposAvaliacao.sort(porNome);
@@ -268,16 +257,15 @@ public class AvaliacaoActivity extends AppCompatActivity
 
     public  void preencheAdapterTiposAvaliacao(List<TipoAvaliacao> tiposAvaliacao){
         int layoutAdapter = android.R.layout.simple_list_item_1;
-        ArrayAdapter<TipoAvaliacao> adapter = new ArrayAdapter<TipoAvaliacao>(AvaliacaoActivity.this,layoutAdapter);
-        for(int i = 0; i<tiposAvaliacao.size(); i++){
-            adapter.add(tiposAvaliacao.get(i));
+        arrayAdapterTiposAvaliacao = new ArrayAdapter<TipoAvaliacao>(AvaliacaoActivity.this,layoutAdapter);
+        for(TipoAvaliacao tipoAvaliacao : tiposAvaliacao){
+            arrayAdapterTiposAvaliacao.add(tipoAvaliacao);
         }
-        arrayAdapterTiposAvaliacao = adapter;
     }
 
     public List<TipoAvaliacao> carregaTiposAvaliacao(){
         TipoAvaliacaoDAO disciplinaDAO = new TipoAvaliacaoDAO(this);
-        List<TipoAvaliacao> tiposAvaliacao = disciplinaDAO.buscaTiposDeAvaliacao(this);
+        List<TipoAvaliacao> tiposAvaliacao = disciplinaDAO.buscaTiposDeAvaliacao();
         return tiposAvaliacao;
     }
 }

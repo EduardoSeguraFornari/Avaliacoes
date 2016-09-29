@@ -34,7 +34,7 @@ public class TipoAvaliacaoDAO {
         conn.insertOrThrow(TipoAvaliacao.TIPO_AVALIACAO, null,values);
     }
 
-    public List<TipoAvaliacao> buscaTiposDeAvaliacao(Context context){
+    public List<TipoAvaliacao> buscaTiposDeAvaliacao(){
         DataBase dataBase = new DataBase(context);
         SQLiteDatabase conn = dataBase.getWritableDatabase();
         List<TipoAvaliacao> tipoAvaliacoes = new ArrayList<TipoAvaliacao>();

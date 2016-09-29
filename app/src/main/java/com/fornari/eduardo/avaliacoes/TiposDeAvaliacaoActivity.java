@@ -149,13 +149,13 @@ public class TiposDeAvaliacaoActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
+        Intent intent;
         if (id == R.id.nav_avaliacoes) {
-            Intent it = new Intent(TiposDeAvaliacaoActivity.this,AvaliacoesActivity.class);
-            startActivityForResult(it,0);
+            intent = new Intent(TiposDeAvaliacaoActivity.this,AvaliacoesActivity.class);
+            startActivityForResult(intent,0);
         } else if (id == R.id.nav_disciplinas) {
-            Intent it = new Intent(TiposDeAvaliacaoActivity.this,DisciplinasActivity.class);
-            startActivityForResult(it,0);
+            intent = new Intent(TiposDeAvaliacaoActivity.this,DisciplinasActivity.class);
+            startActivityForResult(intent,0);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -184,7 +184,7 @@ public class TiposDeAvaliacaoActivity extends AppCompatActivity
 
     public List<TipoAvaliacao> carregaTiposAvaliacao(){
         TipoAvaliacaoDAO disciplinaDAO = new TipoAvaliacaoDAO(this);
-        List<TipoAvaliacao> tiposAvaliacao = disciplinaDAO.buscaTiposDeAvaliacao(this);
+        List<TipoAvaliacao> tiposAvaliacao = disciplinaDAO.buscaTiposDeAvaliacao();
         return tiposAvaliacao;
     }
 }
