@@ -162,12 +162,13 @@ public class AvaliacaoActivity extends AppCompatActivity
 
                 String observacao = editTextObservacao.getText().toString();
 
-                Avaliacao avaliacaoAUX = new Avaliacao(tipoAvaliacaoId, data, observacao, disciplinaId);
                 AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(this);
 
                 if (avaliacao != null) {
-                    avaliacaoDAO.atualizaAvaliacao(avaliacao.getId(), avaliacaoAUX);
+                    Avaliacao avaliacaoAUX = new Avaliacao(avaliacao.getId(), tipoAvaliacaoId, data, observacao, disciplinaId);
+                    avaliacaoDAO.atualizaAvaliacao(avaliacaoAUX);
                 } else {
+                    Avaliacao avaliacaoAUX = new Avaliacao(tipoAvaliacaoId, data, observacao, disciplinaId);
                     avaliacaoDAO.inserir(avaliacaoAUX);
                 }
 

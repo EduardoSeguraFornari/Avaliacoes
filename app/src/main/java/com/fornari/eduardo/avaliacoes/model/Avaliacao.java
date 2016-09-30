@@ -1,5 +1,8 @@
 package com.fornari.eduardo.avaliacoes.model;
 
+import android.app.Application;
+import android.content.Context;
+
 import java.text.DateFormat;
 import java.util.Date;
 
@@ -15,15 +18,23 @@ public class Avaliacao {
     public static final String AVALIACAO_OBSERVACAO = "AVALIACAO_OBSERVACAO";
     public static final String AVALIACAO_DISCIPLINA__ID = "AVALIACAO_DISCIPLINA__ID";
 
-    private int id;
-    private TipoAvaliacao tipoAvaliacao;
-    private Date data;
-    private String observacao;
-    private Disciplina disciplina;
+    protected int id;
+    protected TipoAvaliacao tipoAvaliacao;
+    protected Date data;
+    protected String observacao;
+    protected Disciplina disciplina;
 
     //foreign keys
     private int tipoAvaliacaoId;
     private int disciplinaId;
+
+    public Avaliacao(int id, int tipoAvaliacaoId, Date data, String observacao, int disciplinaId) {
+        this.id = id;
+        this.tipoAvaliacaoId = tipoAvaliacaoId;
+        this.data = data;
+        this.observacao = observacao;
+        this.disciplinaId = disciplinaId;
+    }
 
     public Avaliacao(int tipoAvaliacaoId, Date data, String observacao, int disciplinaId) {
         this.tipoAvaliacaoId = tipoAvaliacaoId;

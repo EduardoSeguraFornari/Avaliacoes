@@ -133,11 +133,11 @@ public class AvaliacaoDAO {
         return avaliacao;
     }
 
-    public void atualizaAvaliacao(int id, Avaliacao avaliacao) {
+    public void atualizaAvaliacao(Avaliacao avaliacao) {
         DataBase dataBase = new DataBase(context);
         SQLiteDatabase connection = dataBase.getWritableDatabase();
 
-        String where = Avaliacao.AVALIACAO_ID + "=" + id;
+        String where = Avaliacao.AVALIACAO_ID + "=" + avaliacao.getId();
 
         ContentValues valores = new ContentValues();
         valores.put(Avaliacao.AVALIACAO_TIPO_AVALIACAO__ID, avaliacao.getTipoAvaliacaoId());

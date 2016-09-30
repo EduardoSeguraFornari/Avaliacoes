@@ -16,13 +16,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.fornari.eduardo.avaliacoes.dao.AvaliacaoDAO;
 import com.fornari.eduardo.avaliacoes.dao.DisciplinaDAO;
 import com.fornari.eduardo.avaliacoes.database.DataBase;
 import com.fornari.eduardo.avaliacoes.model.Avaliacao;
+import com.fornari.eduardo.avaliacoes.model.Disciplina;
 
 import java.util.Comparator;
 import java.util.List;
@@ -142,6 +145,45 @@ public class DisciplinaActivity extends AppCompatActivity
             });
             dialog.show();
             return true;
+        }
+        else if(id == R.id.action_renomear_disciplina){
+            final Dialog dialog = new Dialog(DisciplinaActivity.this);
+            dialog.setContentView(R.layout.renomear_disciplina);
+
+            dialog.setTitle("ADICIONAR DISCIPLINA");
+
+            ImageButton cancelar = (ImageButton) dialog.findViewById(R.id.imageButton_cancelarRenomearDisciplina);
+            cancelar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.cancel();
+                }
+            });
+
+            ImageButton adicionar = (ImageButton) dialog.findViewById(R.id.imageButton_renomearDisciplina);
+            adicionar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    EditText editTextNomeDisciplina = (EditText) dialog.findViewById(R.id.editTextRenomearDiciplina);
+                    String nomeDiciplina = editTextNomeDisciplina.getText().toString();
+                    if (nomeDiciplina.trim().isEmpty()) {
+                        Toast.makeText(DisciplinaActivity.this, "O nome da disciplina não pode ficar em branco!", Toast.LENGTH_LONG).show();
+                    } else {
+                        DataBase dataBase = new DataBase(DisciplinaActivity.this);
+                        SQLiteDatabase connection = dataBase.getReadableDatabase();
+                        DisciplinaDAO disciplinaDAO = new DisciplinaDAO(DisciplinaActivity.this);
+                        if (disciplinaDAO.buscaDisciplinaPorNome(nomeDiciplina) == null) {
+                            Disciplina disciplina = new Disciplina(disciplinaId,nomeDiciplina);
+                            disciplinaDAO.atualizaDisciplina(disciplina);
+
+                            dialog.cancel();
+                        } else {
+                            Toast.makeText(DisciplinaActivity.this, "Está disciplina ja existe!", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }
+            });
+            dialog.show();
         }
 
         return super.onOptionsItemSelected(item);

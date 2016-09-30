@@ -98,4 +98,18 @@ public class DisciplinaDAO {
         connection.delete(Disciplina.DISCIPLINA, where, null);
         dataBase.close();
     }
+
+    public void atualizaDisciplina(Disciplina disciplina) {
+        DataBase dataBase = new DataBase(context);
+        SQLiteDatabase connection = dataBase.getWritableDatabase();
+
+        String where = Disciplina.DISCIPLINA_ID + "=" + disciplina.getId();
+
+        ContentValues valores = new ContentValues();
+        valores.put(Disciplina.DISCIPLINA_NOME, disciplina.getNome());
+
+        connection.update(Disciplina.DISCIPLINA, valores, where, null);
+
+        connection.close();
+    }
 }

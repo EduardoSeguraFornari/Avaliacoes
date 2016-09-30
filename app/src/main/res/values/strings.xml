@@ -14,11 +14,12 @@
     <string name="label_observacao">Observação</string>
     <string name="label_data">Data</string>
     <string name="label_add_tipo_avaliacao">Informe o nome do tipo de avaliação</string>
-    <string name="action_alterar_nome">Alterar nome</string>
+    <string name="action_renomear">Renomear</string>
     <string name="action_salvar">Salvar</string>
     <string name="action_deletar">Deletar</string>
     <string name="action_selecionar">Selecionar</string>
     <string name="label_deletar_avaliacao">Deletar esta avaliação?</string>
     <string name="label_deletar_disciplina">Deletar esta disciplina?</string>
+    <string name="label_renomear_disciplina">Informe o novo nome da disciplina</string>
 
 </resources>
