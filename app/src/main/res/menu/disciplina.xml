@@ -5,7 +5,13 @@
         android:id="@+id/action_editar"
         android:orderInCategory="100"
         android:icon="@drawable/ic_mode_edit_black_24dp"
-        android:showAsAction="always"
         android:title="@string/action_alterar_nome"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_deletar_disciplina"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_mode_edit_black_24dp"
+        android:title="@string/action_deletar"
         app:showAsAction="never" />
 </menu>

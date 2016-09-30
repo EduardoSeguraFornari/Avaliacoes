@@ -25,11 +25,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fornari.eduardo.avaliacoes.dao.AvaliacaoDAO;
-import com.fornari.eduardo.avaliacoes.dao.DisciplinaDAO;
 import com.fornari.eduardo.avaliacoes.dao.TipoAvaliacaoDAO;
 import com.fornari.eduardo.avaliacoes.database.DataBase;
 import com.fornari.eduardo.avaliacoes.model.Avaliacao;
-import com.fornari.eduardo.avaliacoes.model.Disciplina;
 import com.fornari.eduardo.avaliacoes.model.TipoAvaliacao;
 
 import java.text.DateFormat;

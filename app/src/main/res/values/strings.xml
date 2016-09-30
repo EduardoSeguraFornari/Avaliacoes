@@ -19,5 +19,6 @@
     <string name="action_deletar">Deletar</string>
     <string name="action_selecionar">Selecionar</string>
     <string name="label_deletar_avaliacao">Deletar esta avaliação?</string>
+    <string name="label_deletar_disciplina">Deletar esta disciplina?</string>
 
 </resources>

@@ -1,6 +1,8 @@
 package com.fornari.eduardo.avaliacoes;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
@@ -14,9 +16,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.fornari.eduardo.avaliacoes.dao.AvaliacaoDAO;
+import com.fornari.eduardo.avaliacoes.dao.DisciplinaDAO;
+import com.fornari.eduardo.avaliacoes.database.DataBase;
 import com.fornari.eduardo.avaliacoes.model.Avaliacao;
 
 import java.util.Comparator;
@@ -103,9 +108,41 @@ public class DisciplinaActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
+        if (id == R.id.action_deletar_disciplina) {
+            final Dialog dialog = new Dialog(DisciplinaActivity.this);
+            dialog.setContentView(R.layout.deletar_disciplina);
+
+            dialog.setTitle("DELETAR AVALIAÇÃO");
+
+            ImageButton cancelar = (ImageButton) dialog.findViewById(R.id.imageButton_deletarDisciplina);
+            cancelar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.cancel();
+                }
+            });
+
+            ImageButton adicionar = (ImageButton) dialog.findViewById(R.id.imageButton_deletarDisciplina);
+            adicionar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    DataBase dataBase = new DataBase(DisciplinaActivity.this);
+                    SQLiteDatabase connection = dataBase.getReadableDatabase();
+
+                    AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(DisciplinaActivity.this);
+                    avaliacaoDAO.deletarAvaliacoesDisciplina(disciplinaId);
+
+                    DisciplinaDAO disciplinaDAO = new DisciplinaDAO(DisciplinaActivity.this);
+                    disciplinaDAO.deletarDisciplinaId(disciplinaId);
+
+                    Intent intent = new Intent(DisciplinaActivity.this, DisciplinasActivity.class);
+                    startActivityForResult(intent, 0);
+                }
+            });
+            dialog.show();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }

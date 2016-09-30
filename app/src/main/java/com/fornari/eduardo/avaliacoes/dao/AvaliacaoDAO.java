@@ -204,4 +204,13 @@ public class AvaliacaoDAO {
         connection.delete(Avaliacao.AVALIACAO, where, null);
         dataBase.close();
     }
+
+    public void deletarAvaliacoesDisciplina(int id) {
+        DataBase dataBase = new DataBase(context);
+        SQLiteDatabase connection = dataBase.getWritableDatabase();
+
+        String where = Avaliacao.AVALIACAO_DISCIPLINA__ID + "=" + id;
+        connection.delete(Avaliacao.AVALIACAO, where, null);
+        dataBase.close();
+    }
 }

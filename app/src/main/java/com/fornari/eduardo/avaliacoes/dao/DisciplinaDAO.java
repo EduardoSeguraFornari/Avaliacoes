@@ -89,4 +89,13 @@ public class DisciplinaDAO {
 
         return disciplina;
     }
+
+    public void deletarDisciplinaId(int id) {
+        DataBase dataBase = new DataBase(context);
+        SQLiteDatabase connection = dataBase.getWritableDatabase();
+
+        String where = Disciplina.DISCIPLINA_ID + "=" + id;
+        connection.delete(Disciplina.DISCIPLINA, where, null);
+        dataBase.close();
+    }
 }
