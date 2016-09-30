@@ -19,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fornari.eduardo.avaliacoes.dao.AvaliacaoDAO;
@@ -32,10 +33,11 @@ import java.util.List;
 
 public class DisciplinaActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private int disciplinaId = -1;
 
+    private TextView textViewNomeDisciplina;
     private ListView listViewAvaliacoesDisciplina;
     private ArrayAdapter<Avaliacao> arrayAdapterAvaliacoesDisciplina;
+    private Disciplina disciplina;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,9 @@ public class DisciplinaActivity extends AppCompatActivity
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null && bundle.containsKey("DISCIPLINA_ID")) {
-            disciplinaId = (int) bundle.getSerializable("DISCIPLINA_ID");
+            int disciplinaId = (int) bundle.getSerializable("DISCIPLINA_ID");
+            DisciplinaDAO disciplinaDAO = new DisciplinaDAO(this);
+            disciplina = disciplinaDAO.buscaDisciplinaId(disciplinaId);
         }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -54,7 +58,7 @@ public class DisciplinaActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent it = new Intent(DisciplinaActivity.this, AvaliacaoActivity.class);
-                it.putExtra("DISCIPLINA_ID", disciplinaId);
+                it.putExtra("DISCIPLINA_ID", disciplina.getId());
                 startActivityForResult(it, 0);
             }
         });
@@ -68,6 +72,9 @@ public class DisciplinaActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        textViewNomeDisciplina = (TextView) findViewById(R.id.textViewNomeDisciplina);
+        textViewNomeDisciplina.setText(disciplina.getNome());
+
         listViewAvaliacoesDisciplina = (ListView) findViewById(R.id.listViewAvaliacoesDisciplina);
         preencheArrayAdapterAvaliacoesDisciplinas(carregaAvaliacoesDisciplina());
         sortArrayAdapterAvaliacoesDisciplina(arrayAdapterAvaliacoesDisciplina);
@@ -80,7 +87,7 @@ public class DisciplinaActivity extends AppCompatActivity
                 Avaliacao avaliacao = arrayAdapterAvaliacoesDisciplina.getItem(position);
                 Intent intent = new Intent(DisciplinaActivity.this, AvaliacaoActivity.class);
                 intent.putExtra("AVALIACAO_ID", avaliacao.getId());
-                intent.putExtra("DISCIPLINA_ID", disciplinaId);
+                intent.putExtra("DISCIPLINA_ID", disciplina.getId());
                 startActivity(intent);
             }
         });
@@ -134,10 +141,10 @@ public class DisciplinaActivity extends AppCompatActivity
                     SQLiteDatabase connection = dataBase.getReadableDatabase();
 
                     AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(DisciplinaActivity.this);
-                    avaliacaoDAO.deletarAvaliacoesDisciplina(disciplinaId);
+                    avaliacaoDAO.deletarAvaliacoesDisciplina(disciplina.getId());
 
                     DisciplinaDAO disciplinaDAO = new DisciplinaDAO(DisciplinaActivity.this);
-                    disciplinaDAO.deletarDisciplinaId(disciplinaId);
+                    disciplinaDAO.deletarDisciplinaId(disciplina.getId());
 
                     Intent intent = new Intent(DisciplinaActivity.this, DisciplinasActivity.class);
                     startActivityForResult(intent, 0);
@@ -168,13 +175,20 @@ public class DisciplinaActivity extends AppCompatActivity
                     String nomeDiciplina = editTextNomeDisciplina.getText().toString();
                     if (nomeDiciplina.trim().isEmpty()) {
                         Toast.makeText(DisciplinaActivity.this, "O nome da disciplina não pode ficar em branco!", Toast.LENGTH_LONG).show();
-                    } else {
+                    }
+                    else if(nomeDiciplina.equals(disciplina.getNome())){
+                        dialog.cancel();
+                    }
+                    else {
                         DataBase dataBase = new DataBase(DisciplinaActivity.this);
                         SQLiteDatabase connection = dataBase.getReadableDatabase();
                         DisciplinaDAO disciplinaDAO = new DisciplinaDAO(DisciplinaActivity.this);
                         if (disciplinaDAO.buscaDisciplinaPorNome(nomeDiciplina) == null) {
-                            Disciplina disciplina = new Disciplina(disciplinaId,nomeDiciplina);
-                            disciplinaDAO.atualizaDisciplina(disciplina);
+                            Disciplina disciplinaAUX = new Disciplina(disciplina.getId(),nomeDiciplina);
+                            disciplinaDAO.atualizaDisciplina(disciplinaAUX);
+
+                            disciplina.setNome(nomeDiciplina);
+                            textViewNomeDisciplina.setText(nomeDiciplina);
 
                             dialog.cancel();
                         } else {
@@ -223,7 +237,7 @@ public class DisciplinaActivity extends AppCompatActivity
 
     public List<Avaliacao> carregaAvaliacoesDisciplina() {
         AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(this);
-        List<Avaliacao> avaliacoes = avaliacaoDAO.buscaAvaliacoesDisciplina(disciplinaId);
+        List<Avaliacao> avaliacoes = avaliacaoDAO.buscaAvaliacoesDisciplina(disciplina.getId());
         return avaliacoes;
     }
 

@@ -112,4 +112,28 @@ public class DisciplinaDAO {
 
         connection.close();
     }
+
+    public Disciplina buscaDisciplinaId(int id) {
+        DataBase dataBase = new DataBase(context);
+        SQLiteDatabase connection = dataBase.getWritableDatabase();
+
+        String[] campos = {Disciplina.DISCIPLINA_ID, Disciplina.DISCIPLINA_NOME};
+        String where = Disciplina.DISCIPLINA_ID + "='" + id + "'";
+
+        Cursor cursor = connection.query("DISCIPLINA", campos, where, null, null, null, null, null);
+
+        Disciplina disciplina = null;
+
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            disciplina = new Disciplina(
+                    cursor.getInt(cursor.getColumnIndex(Disciplina.DISCIPLINA_ID)),
+                    cursor.getString(cursor.getColumnIndex(Disciplina.DISCIPLINA_NOME))
+            );
+        }
+
+        connection.close();
+
+        return disciplina;
+    }
 }
