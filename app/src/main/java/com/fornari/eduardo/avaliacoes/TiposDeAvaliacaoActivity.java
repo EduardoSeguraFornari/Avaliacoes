@@ -72,26 +72,20 @@ public class TiposDeAvaliacaoActivity extends AppCompatActivity
                         if (nomeDiciplina.trim().isEmpty()) {
                             Toast.makeText(TiposDeAvaliacaoActivity.this, "O nome do tipo de avaliação não pode ficar em branco!", Toast.LENGTH_LONG).show();
                         } else {
-                            try {
-                                DataBase dataBase = new DataBase(TiposDeAvaliacaoActivity.this);
-                                SQLiteDatabase conn = dataBase.getReadableDatabase();
-                                TipoAvaliacaoDAO tipoAvaliacaoDAO = new TipoAvaliacaoDAO(TiposDeAvaliacaoActivity.this);
-                                if (tipoAvaliacaoDAO.buscaTipoAvaliacaoPorNome(nomeDiciplina) == null) {
-                                    TipoAvaliacao tipoAvaliacao = new TipoAvaliacao(nomeDiciplina);
-                                    tipoAvaliacaoDAO.inserir(tipoAvaliacao);
-                                    arrayAdapterTiposDeAvaliacao.add(tipoAvaliacao);
+                            DataBase dataBase = new DataBase(TiposDeAvaliacaoActivity.this);
+                            SQLiteDatabase conn = dataBase.getReadableDatabase();
+                            TipoAvaliacaoDAO tipoAvaliacaoDAO = new TipoAvaliacaoDAO(TiposDeAvaliacaoActivity.this);
+                            if (tipoAvaliacaoDAO.buscaTipoAvaliacaoPorNome(nomeDiciplina) == null) {
+                                TipoAvaliacao tipoAvaliacao = new TipoAvaliacao(nomeDiciplina);
+                                tipoAvaliacaoDAO.inserir(tipoAvaliacao);
+                                arrayAdapterTiposDeAvaliacao.add(tipoAvaliacao);
 
-                                    sortArrayAdapterTiposDeAvaliacao(arrayAdapterTiposDeAvaliacao);
+                                sortArrayAdapterTiposDeAvaliacao(arrayAdapterTiposDeAvaliacao);
 
-                                    listViewTiposDeAvaliacao.setAdapter(arrayAdapterTiposDeAvaliacao);
-                                    dialog.cancel();
-                                } else {
-                                    Toast.makeText(TiposDeAvaliacaoActivity.this, "Este tipo de avaliação ja existe!", Toast.LENGTH_LONG).show();
-                                }
-                            } catch (Exception e) {
-                                TextView textViewDisciplina = (TextView) findViewById(R.id.disciplina);
-                                textViewDisciplina.setText("#ERRO#" + e.getMessage());
-//                            Toast.makeText(AvaliacoesActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                                listViewTiposDeAvaliacao.setAdapter(arrayAdapterTiposDeAvaliacao);
+                                dialog.cancel();
+                            } else {
+                                Toast.makeText(TiposDeAvaliacaoActivity.this, "Este tipo de avaliação ja existe!", Toast.LENGTH_LONG).show();
                             }
                         }
                     }
