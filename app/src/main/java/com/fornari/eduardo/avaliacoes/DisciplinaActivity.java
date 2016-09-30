@@ -3,7 +3,6 @@ package com.fornari.eduardo.avaliacoes;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -62,7 +61,7 @@ public class DisciplinaActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         listViewAvaliacoesDisciplina = (ListView) findViewById(R.id.listViewAvaliacoesDisciplina);
-        preencheAdapterDisciplinas(carregaAvaliacoesDisciplina());
+        preencheArrayAdapterAvaliacoesDisciplinas(carregaAvaliacoesDisciplina());
         sortArrayAdapterAvaliacoesDisciplina(arrayAdapterAvaliacoesDisciplina);
         listViewAvaliacoesDisciplina.setAdapter(arrayAdapterAvaliacoesDisciplina);
 
@@ -135,7 +134,7 @@ public class DisciplinaActivity extends AppCompatActivity
         return true;
     }
 
-    public void preencheAdapterDisciplinas(List<Avaliacao> avaliacoes) {
+    public void preencheArrayAdapterAvaliacoesDisciplinas(List<Avaliacao> avaliacoes) {
         int layoutAdapter = android.R.layout.simple_list_item_1;
         arrayAdapterAvaliacoesDisciplina = new ArrayAdapter<Avaliacao>(DisciplinaActivity.this, layoutAdapter);
         for (int i = 0; i < avaliacoes.size(); i++) {

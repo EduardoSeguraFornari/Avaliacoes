@@ -8,13 +8,16 @@
     <string name="title_activity_avaliacoes">Avaliações</string>
     <string name="title_activity_disciplina">Disciplina</string>
     <string name="title_activity_avaliacao">Avaliação</string>
+    <string name="title_activity_tipos_de_avaliacao">Tipos de Avaliação</string>
+
     <string name="label_tipo_avaliacao">Tipo</string>
     <string name="label_observacao">Observação</string>
     <string name="label_data">Data</string>
     <string name="label_add_tipo_avaliacao">Informe o nome do tipo de avaliação</string>
-    <string name="title_activity_tipos_de_avaliacao">Tipos de Avaliação</string>
     <string name="action_alterar_nome">Alterar nome</string>
     <string name="action_salvar">Salvar</string>
+    <string name="action_deletar">Deletar</string>
     <string name="action_selecionar">Selecionar</string>
+    <string name="label_deletar_avaliacao">Deletar esta avaliação?</string>
 
 </resources>

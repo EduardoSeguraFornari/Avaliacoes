@@ -6,4 +6,10 @@
         android:orderInCategory="100"
         android:title="@string/action_salvar"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_deletar_avaliacao"
+        android:orderInCategory="100"
+        android:title="@string/action_deletar"
+        app:showAsAction="never" />
 </menu>

@@ -32,7 +32,7 @@ public class Avaliacao {
         this.disciplinaId = disciplinaId;
     }
 
-    public Avaliacao(int id, TipoAvaliacao tipoAvaliacao, Date data, String observacao,Disciplina disciplina) {
+    public Avaliacao(int id, TipoAvaliacao tipoAvaliacao, Date data, String observacao, Disciplina disciplina) {
         this.id = id;
         this.tipoAvaliacao = tipoAvaliacao;
         this.data = data;
@@ -96,9 +96,9 @@ public class Avaliacao {
         this.observacao = observacao;
     }
 
-    public String toString(){
+    public String toString() {
         DateFormat format = DateFormat.getDateInstance(DateFormat.SHORT);
         String dt = format.format(data);
-        return this.tipoAvaliacao.getNome() + " - " + dt;
+        return dt + " - " + this.tipoAvaliacao.getNome() + " - " + this.disciplina.getNome();
     }
 }

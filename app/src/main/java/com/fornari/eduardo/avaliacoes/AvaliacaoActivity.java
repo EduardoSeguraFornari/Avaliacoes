@@ -1,7 +1,9 @@
 package com.fornari.eduardo.avaliacoes;
 
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,13 +19,17 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fornari.eduardo.avaliacoes.dao.AvaliacaoDAO;
+import com.fornari.eduardo.avaliacoes.dao.DisciplinaDAO;
 import com.fornari.eduardo.avaliacoes.dao.TipoAvaliacaoDAO;
+import com.fornari.eduardo.avaliacoes.database.DataBase;
 import com.fornari.eduardo.avaliacoes.model.Avaliacao;
+import com.fornari.eduardo.avaliacoes.model.Disciplina;
 import com.fornari.eduardo.avaliacoes.model.TipoAvaliacao;
 
 import java.text.DateFormat;
@@ -172,6 +178,36 @@ public class AvaliacaoActivity extends AppCompatActivity
                 startActivityForResult(intent, 0);
             }
             return true;
+        } else if (id == R.id.action_deletar_avaliacao) {
+            final Dialog dialog = new Dialog(AvaliacaoActivity.this);
+            dialog.setContentView(R.layout.deletar_avaliacao);
+
+            dialog.setTitle("DELETAR AVALIAÇÃO");
+
+            ImageButton cancelar = (ImageButton) dialog.findViewById(R.id.imageButton_cancelarAvaliacao);
+            cancelar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.cancel();
+                }
+            });
+
+            ImageButton adicionar = (ImageButton) dialog.findViewById(R.id.imageButton_deletarAvaliacao);
+            adicionar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    DataBase dataBase = new DataBase(AvaliacaoActivity.this);
+                    SQLiteDatabase connection = dataBase.getReadableDatabase();
+                    AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(AvaliacaoActivity.this);
+                    avaliacaoDAO.deletarAvaliacaoId(avaliacao.getId());
+
+                    Intent intent = new Intent(AvaliacaoActivity.this, DisciplinaActivity.class);
+                    intent.putExtra("DISCIPLINA_ID", disciplinaId);
+                    startActivityForResult(intent, 0);
+                }
+            });
+            dialog.show();
         }
 
         return super.onOptionsItemSelected(item);

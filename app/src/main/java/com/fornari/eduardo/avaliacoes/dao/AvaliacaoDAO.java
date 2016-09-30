@@ -149,4 +149,59 @@ public class AvaliacaoDAO {
 
         connection.close();
     }
+
+    public List<Avaliacao> buscaAvaliacoes() {
+        DataBase dataBase = new DataBase(context);
+        SQLiteDatabase connection = dataBase.getWritableDatabase();
+
+        List<Avaliacao> avaliacaos = new ArrayList<Avaliacao>();
+
+        String query =
+                "SELECT A." + Avaliacao.AVALIACAO_ID + ", A." + Avaliacao.AVALIACAO_TIPO_AVALIACAO__ID + ", A." + Avaliacao.AVALIACAO_DISCIPLINA__ID + ", A." + Avaliacao.AVALIACAO_DATA + ", A." + Avaliacao.AVALIACAO_OBSERVACAO + "," +
+                        " T." + TipoAvaliacao.TIPO_AVALIACAO__ID + ", T." + TipoAvaliacao.TIPO_AVALIACAO_NOME + "," +
+                        " D." + Disciplina.DISCIPLINA_ID + ", D." + Disciplina.DISCIPLINA_NOME +
+                        " FROM " + Avaliacao.AVALIACAO + " as A" +
+                        " INNER JOIN " + TipoAvaliacao.TIPO_AVALIACAO + " as T" +
+                        " on A." + Avaliacao.AVALIACAO_TIPO_AVALIACAO__ID + " = T." + TipoAvaliacao.TIPO_AVALIACAO__ID +
+                        " INNER JOIN " + Disciplina.DISCIPLINA + " as D" +
+                        " on A." + Avaliacao.AVALIACAO_DISCIPLINA__ID + " = D." + Disciplina.DISCIPLINA_ID;
+
+        Cursor cursor = connection.rawQuery(query, null);
+
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            do {
+                int tipoAvaliacaoId = cursor.getInt(cursor.getColumnIndex("T." + TipoAvaliacao.TIPO_AVALIACAO__ID));
+                String nomeTipoAvaliacao = cursor.getString(cursor.getColumnIndex("T." + TipoAvaliacao.TIPO_AVALIACAO_NOME));
+                TipoAvaliacao tipoAvaliacao = new TipoAvaliacao(tipoAvaliacaoId, nomeTipoAvaliacao);
+
+                Date dataAvaliacao = new Date(cursor.getLong(cursor.getColumnIndex("A." + Avaliacao.AVALIACAO_DATA)));
+
+                String nomeDisciplina = cursor.getString(cursor.getColumnIndex("D." + Disciplina.DISCIPLINA_NOME));
+                int disciplinaId = cursor.getInt(cursor.getColumnIndex("D." + Disciplina.DISCIPLINA_ID));
+                Disciplina disciplina = new Disciplina(disciplinaId, nomeDisciplina);
+
+                int avaliacaoId = cursor.getInt(cursor.getColumnIndex("A." + Avaliacao.AVALIACAO_ID));
+
+                String avaliacaoObservacao = cursor.getString(cursor.getColumnIndex("A." + Avaliacao.AVALIACAO_OBSERVACAO));
+
+                Avaliacao avaliacao = new Avaliacao(avaliacaoId, tipoAvaliacao, dataAvaliacao, avaliacaoObservacao, disciplina);
+
+                avaliacaos.add(avaliacao);
+            } while (cursor.moveToNext());
+        }
+
+        connection.close();
+
+        return avaliacaos;
+    }
+
+    public void deletarAvaliacaoId(int id) {
+        DataBase dataBase = new DataBase(context);
+        SQLiteDatabase connection = dataBase.getWritableDatabase();
+
+        String where = Avaliacao.AVALIACAO_ID + "=" + id;
+        connection.delete(Avaliacao.AVALIACAO, where, null);
+        dataBase.close();
+    }
 }
