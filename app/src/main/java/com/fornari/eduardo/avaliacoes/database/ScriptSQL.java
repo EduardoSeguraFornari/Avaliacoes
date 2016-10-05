@@ -28,7 +28,10 @@ public class ScriptSQL {
         sqlBuilder.append("CREATE TABLE IF NOT EXISTS " + TipoAvaliacao.TIPO_AVALIACAO + " ");
         sqlBuilder.append("( ");
         sqlBuilder.append(" " + TipoAvaliacao.TIPO_AVALIACAO__ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, ");
-        sqlBuilder.append(" " + TipoAvaliacao.TIPO_AVALIACAO_NOME + " VARCHAR (200) ");
+        sqlBuilder.append(" " + TipoAvaliacao.TIPO_AVALIACAO_NOME + " VARCHAR (200), ");
+        sqlBuilder.append(" " + TipoAvaliacao.TIPO_AVALIACAO_NOTIFICAR + " INTEGER, ");
+        sqlBuilder.append(" " + TipoAvaliacao.TIPO_AVALIACAO_ANTECEDENCIA_NOTIFICACAO + " INTEGER, ");
+        sqlBuilder.append(" " + TipoAvaliacao.TIPO_AVALIACAO_DESCRICAO + " VARCHAR (200) ");
         sqlBuilder.append(");");
         return sqlBuilder.toString();
     }

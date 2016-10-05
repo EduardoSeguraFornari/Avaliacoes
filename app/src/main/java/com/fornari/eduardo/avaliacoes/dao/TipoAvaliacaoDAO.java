@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.fornari.eduardo.avaliacoes.database.DataBase;
+import com.fornari.eduardo.avaliacoes.model.Avaliacao;
 import com.fornari.eduardo.avaliacoes.model.Disciplina;
 import com.fornari.eduardo.avaliacoes.model.TipoAvaliacao;
 
@@ -30,6 +31,9 @@ public class TipoAvaliacaoDAO {
         ContentValues values = new ContentValues();
 
         values.put(TipoAvaliacao.TIPO_AVALIACAO_NOME, tipoAvaliacao.getNome());
+        values.put(TipoAvaliacao.TIPO_AVALIACAO_NOTIFICAR, tipoAvaliacao.isNotificar() ? 1 : 0);
+        values.put(TipoAvaliacao.TIPO_AVALIACAO_ANTECEDENCIA_NOTIFICACAO, tipoAvaliacao.getAntecedenciaNotificacao());
+        values.put(TipoAvaliacao.TIPO_AVALIACAO_DESCRICAO, tipoAvaliacao.getDescricao());
 
         int tipoAvaliacaoId = (int) connection.insertOrThrow(TipoAvaliacao.TIPO_AVALIACAO, null, values);
 
@@ -52,7 +56,10 @@ public class TipoAvaliacaoDAO {
 
                 TipoAvaliacao tipoAvaliacao = new TipoAvaliacao(
                         cursor.getInt(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO__ID)),
-                        cursor.getString(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO_NOME))
+                        cursor.getString(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO_NOME)),
+                        cursor.getInt(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO_NOTIFICAR)) == 1,
+                        cursor.getInt(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO_ANTECEDENCIA_NOTIFICACAO)),
+                        cursor.getString(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO_DESCRICAO))
                 );
                 tipoAvaliacoes.add(tipoAvaliacao);
             } while (cursor.moveToNext());
@@ -67,7 +74,7 @@ public class TipoAvaliacaoDAO {
         DataBase dataBase = new DataBase(context);
         SQLiteDatabase connection = dataBase.getWritableDatabase();
 
-        String[] campos = {TipoAvaliacao.TIPO_AVALIACAO__ID, TipoAvaliacao.TIPO_AVALIACAO_NOME};
+        String[] campos = {TipoAvaliacao.TIPO_AVALIACAO__ID, TipoAvaliacao.TIPO_AVALIACAO_NOME, TipoAvaliacao.TIPO_AVALIACAO_NOTIFICAR, TipoAvaliacao.TIPO_AVALIACAO_ANTECEDENCIA_NOTIFICACAO, TipoAvaliacao.TIPO_AVALIACAO_DESCRICAO};
         String where = TipoAvaliacao.TIPO_AVALIACAO_NOME + "='" + nome + "'";
 
         Cursor cursor = connection.query(TipoAvaliacao.TIPO_AVALIACAO, campos, where, null, null, null, null, null);
@@ -78,12 +85,60 @@ public class TipoAvaliacaoDAO {
             cursor.moveToFirst();
             tipoAvaliacao = new TipoAvaliacao(
                     cursor.getInt(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO__ID)),
-                    cursor.getString(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO_NOME))
+                    cursor.getString(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO_NOME)),
+                    cursor.getInt(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO_NOTIFICAR)) == 1,
+                    cursor.getInt(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO_ANTECEDENCIA_NOTIFICACAO)),
+                    cursor.getString(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO_DESCRICAO))
             );
         }
 
         connection.close();
 
         return tipoAvaliacao;
+    }
+
+    public TipoAvaliacao buscaTipoAvaliacaoId(int id) {
+        DataBase dataBase = new DataBase(context);
+        SQLiteDatabase connection = dataBase.getWritableDatabase();
+
+        String[] campos = {TipoAvaliacao.TIPO_AVALIACAO__ID, TipoAvaliacao.TIPO_AVALIACAO_NOME, TipoAvaliacao.TIPO_AVALIACAO_NOTIFICAR, TipoAvaliacao.TIPO_AVALIACAO_ANTECEDENCIA_NOTIFICACAO, TipoAvaliacao.TIPO_AVALIACAO_DESCRICAO};
+        String where = TipoAvaliacao.TIPO_AVALIACAO__ID + "='" + id + "'";
+
+        Cursor cursor = connection.query(TipoAvaliacao.TIPO_AVALIACAO, campos, where, null, null, null, null, null);
+
+        TipoAvaliacao tipoAvaliacao = null;
+
+        if (cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            tipoAvaliacao = new TipoAvaliacao(
+                    cursor.getInt(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO__ID)),
+                    cursor.getString(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO_NOME)),
+                    cursor.getInt(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO_NOTIFICAR)) == 1,
+                    cursor.getInt(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO_ANTECEDENCIA_NOTIFICACAO)),
+                    cursor.getString(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO_DESCRICAO))
+            );
+        }
+
+        connection.close();
+
+        return tipoAvaliacao;
+    }
+
+    public void atualizaTipoAvaliacao(TipoAvaliacao tipoAvaliacao) {
+        DataBase dataBase = new DataBase(context);
+        SQLiteDatabase connection = dataBase.getWritableDatabase();
+
+        String where = TipoAvaliacao.TIPO_AVALIACAO__ID + "=" + tipoAvaliacao.getId();
+
+        ContentValues valores = new ContentValues();
+        valores.put(TipoAvaliacao.TIPO_AVALIACAO__ID, tipoAvaliacao.getId());
+        valores.put(TipoAvaliacao.TIPO_AVALIACAO_NOME, tipoAvaliacao.getNome());
+        valores.put(TipoAvaliacao.TIPO_AVALIACAO_NOTIFICAR, tipoAvaliacao.isNotificar() ? 1 : 0);
+        valores.put(TipoAvaliacao.TIPO_AVALIACAO_ANTECEDENCIA_NOTIFICACAO, tipoAvaliacao.getAntecedenciaNotificacao());
+        valores.put(TipoAvaliacao.TIPO_AVALIACAO_DESCRICAO, tipoAvaliacao.getDescricao());
+
+        connection.update(TipoAvaliacao.TIPO_AVALIACAO, valores, where, null);
+
+        connection.close();
     }
 }

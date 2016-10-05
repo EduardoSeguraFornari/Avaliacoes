@@ -1,8 +1,6 @@
 package com.fornari.eduardo.avaliacoes;
 
-import android.app.Dialog;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
@@ -14,15 +12,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fornari.eduardo.avaliacoes.dao.TipoAvaliacaoDAO;
-import com.fornari.eduardo.avaliacoes.database.DataBase;
+import com.fornari.eduardo.avaliacoes.model.Avaliacao;
 import com.fornari.eduardo.avaliacoes.model.TipoAvaliacao;
 
 import java.util.Comparator;
@@ -32,7 +27,7 @@ public class TiposDeAvaliacaoActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private ListView listViewTiposDeAvaliacao;
-    private ArrayAdapter<TipoAvaliacao> arrayAdapterTiposDeAvaliacao;
+    private ArrayAdapter<TipoAvaliacao> arrayAdapterTiposAvaliacao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,54 +38,67 @@ public class TiposDeAvaliacaoActivity extends AppCompatActivity
 
         listViewTiposDeAvaliacao = (ListView) findViewById(R.id.listViewTiposDeAvaliacao);
         preencheAdapterDisciplinas(carregaTiposAvaliacao());
-        sortArrayAdapterTiposDeAvaliacao(arrayAdapterTiposDeAvaliacao);
-        listViewTiposDeAvaliacao.setAdapter(arrayAdapterTiposDeAvaliacao);
+        sortArrayAdapterTiposDeAvaliacao(arrayAdapterTiposAvaliacao);
+        listViewTiposDeAvaliacao.setAdapter(arrayAdapterTiposAvaliacao);
+
+        listViewTiposDeAvaliacao.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
+                TipoAvaliacao tipoAvaliacao = arrayAdapterTiposAvaliacao.getItem(position);
+                Intent intent = new Intent(TiposDeAvaliacaoActivity.this, TipoAvaliacaoActivity.class);
+                intent.putExtra("TIPO_AVALIACAO_ID", tipoAvaliacao.getId());
+                startActivity(intent);
+            }
+        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final Dialog dialog = new Dialog(TiposDeAvaliacaoActivity.this);
-                dialog.setContentView(R.layout.add_tipo_avaliacao);
-
-                dialog.setTitle("ADICIONAR DISCIPLINA");
-
-                ImageButton cancelar = (ImageButton) dialog.findViewById(R.id.imageButton_cancelarDisciplina);
-                cancelar.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        dialog.cancel();
-                    }
-                });
-
-                ImageButton adicionar = (ImageButton) dialog.findViewById(R.id.imageButton_addTipoAvaliacao);
-                adicionar.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        EditText textViewNomeDisciplina = (EditText) dialog.findViewById(R.id.editTextNomeTipoAvaliacao);
-                        String nomeDiciplina = textViewNomeDisciplina.getText().toString();
-                        if (nomeDiciplina.trim().isEmpty()) {
-                            Toast.makeText(TiposDeAvaliacaoActivity.this, "O nome do tipo de avaliação não pode ficar em branco!", Toast.LENGTH_LONG).show();
-                        } else {
-                            DataBase dataBase = new DataBase(TiposDeAvaliacaoActivity.this);
-                            SQLiteDatabase conn = dataBase.getReadableDatabase();
-                            TipoAvaliacaoDAO tipoAvaliacaoDAO = new TipoAvaliacaoDAO(TiposDeAvaliacaoActivity.this);
-                            if (tipoAvaliacaoDAO.buscaTipoAvaliacaoPorNome(nomeDiciplina) == null) {
-                                TipoAvaliacao tipoAvaliacao = new TipoAvaliacao(nomeDiciplina);
-                                tipoAvaliacaoDAO.inserir(tipoAvaliacao);
-                                arrayAdapterTiposDeAvaliacao.add(tipoAvaliacao);
-
-                                sortArrayAdapterTiposDeAvaliacao(arrayAdapterTiposDeAvaliacao);
-
-                                listViewTiposDeAvaliacao.setAdapter(arrayAdapterTiposDeAvaliacao);
-                                dialog.cancel();
-                            } else {
-                                Toast.makeText(TiposDeAvaliacaoActivity.this, "Este tipo de avaliação ja existe!", Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    }
-                });
-                dialog.show();
+                Intent intent = new Intent(TiposDeAvaliacaoActivity.this, TipoAvaliacaoActivity.class);
+                startActivityForResult(intent, 0);
+//                final Dialog dialog = new Dialog(TiposDeAvaliacaoActivity.this);
+//                dialog.setContentView(R.layout.add_tipo_avaliacao);
+//
+//                dialog.setTitle("ADICIONAR DISCIPLINA");
+//
+//                ImageButton cancelar = (ImageButton) dialog.findViewById(R.id.imageButton_cancelarDisciplina);
+//                cancelar.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        dialog.cancel();
+//                    }
+//                });
+//
+//                ImageButton adicionar = (ImageButton) dialog.findViewById(R.id.imageButton_addTipoAvaliacao);
+//                adicionar.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        EditText textViewNomeDisciplina = (EditText) dialog.findViewById(R.id.editTextNomeTipoAvaliacao);
+//                        String nomeDiciplina = textViewNomeDisciplina.getText().toString();
+//                        if (nomeDiciplina.trim().isEmpty()) {
+//                            Toast.makeText(TiposDeAvaliacaoActivity.this, "O nome do tipo de avaliação não pode ficar em branco!", Toast.LENGTH_LONG).show();
+//                        } else {
+//                            DataBase dataBase = new DataBase(TiposDeAvaliacaoActivity.this);
+//                            SQLiteDatabase conn = dataBase.getReadableDatabase();
+//                            TipoAvaliacaoDAO tipoAvaliacaoDAO = new TipoAvaliacaoDAO(TiposDeAvaliacaoActivity.this);
+//                            if (tipoAvaliacaoDAO.buscaTipoAvaliacaoPorNome(nomeDiciplina) == null) {
+//                                TipoAvaliacao tipoAvaliacao = new TipoAvaliacao(nomeDiciplina);
+//                                tipoAvaliacaoDAO.inserir(tipoAvaliacao);
+//                                arrayAdapterTiposAvaliacao.add(tipoAvaliacao);
+//
+//                                sortArrayAdapterTiposDeAvaliacao(arrayAdapterTiposAvaliacao);
+//
+//                                listViewTiposDeAvaliacao.setAdapter(arrayAdapterTiposAvaliacao);
+//                                dialog.cancel();
+//                            } else {
+//                                Toast.makeText(TiposDeAvaliacaoActivity.this, "Este tipo de avaliação ja existe!", Toast.LENGTH_LONG).show();
+//                            }
+//                        }
+//                    }
+//                });
+//                dialog.show();
             }
         });
 
@@ -171,7 +179,7 @@ public class TiposDeAvaliacaoActivity extends AppCompatActivity
         for (int i = 0; i < tiposAvaliacao.size(); i++) {
             adapter.add(tiposAvaliacao.get(i));
         }
-        arrayAdapterTiposDeAvaliacao = adapter;
+        arrayAdapterTiposAvaliacao = adapter;
     }
 
     public List<TipoAvaliacao> carregaTiposAvaliacao() {

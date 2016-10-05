@@ -50,7 +50,7 @@ public class AvaliacaoDAO {
 
         String query =
                 "SELECT A." + Avaliacao.AVALIACAO_ID + ", A." + Avaliacao.AVALIACAO_TIPO_AVALIACAO__ID + ", A." + Avaliacao.AVALIACAO_DISCIPLINA__ID + ", A." + Avaliacao.AVALIACAO_DATA + ", A." + Avaliacao.AVALIACAO_OBSERVACAO + "," +
-                        " T." + TipoAvaliacao.TIPO_AVALIACAO__ID + ", T." + TipoAvaliacao.TIPO_AVALIACAO_NOME + "," +
+                        " T." + TipoAvaliacao.TIPO_AVALIACAO__ID + ", T." + TipoAvaliacao.TIPO_AVALIACAO_NOME + ", T." + TipoAvaliacao.TIPO_AVALIACAO_NOTIFICAR + ", T." + TipoAvaliacao.TIPO_AVALIACAO_ANTECEDENCIA_NOTIFICACAO + ", T." + TipoAvaliacao.TIPO_AVALIACAO_DESCRICAO + "," +
                         " D." + Disciplina.DISCIPLINA_ID + ", D." + Disciplina.DISCIPLINA_NOME +
                         " FROM " + Avaliacao.AVALIACAO + " as A" +
                         " INNER JOIN " + TipoAvaliacao.TIPO_AVALIACAO + " as T" +
@@ -66,7 +66,10 @@ public class AvaliacaoDAO {
             do {
                 int tipoAvaliacaoId = cursor.getInt(cursor.getColumnIndex("T." + TipoAvaliacao.TIPO_AVALIACAO__ID));
                 String nomeTipoAvaliacao = cursor.getString(cursor.getColumnIndex("T." + TipoAvaliacao.TIPO_AVALIACAO_NOME));
-                TipoAvaliacao tipoAvaliacao = new TipoAvaliacao(tipoAvaliacaoId, nomeTipoAvaliacao);
+                boolean notificarTipoAvaliacao = cursor.getInt(cursor.getColumnIndex("T." + TipoAvaliacao.TIPO_AVALIACAO_NOTIFICAR)) == 1;
+                int antecedenciaNotificacaoTipoAvaliacao = cursor.getInt(cursor.getColumnIndex("T." + TipoAvaliacao.TIPO_AVALIACAO_ANTECEDENCIA_NOTIFICACAO));
+                String descricaoTipoAvaliacao = cursor.getString(cursor.getColumnIndex("T." + TipoAvaliacao.TIPO_AVALIACAO_DESCRICAO));
+                TipoAvaliacao tipoAvaliacao = new TipoAvaliacao(tipoAvaliacaoId, nomeTipoAvaliacao, notificarTipoAvaliacao, antecedenciaNotificacaoTipoAvaliacao, descricaoTipoAvaliacao);
 
                 Date dataAvaliacao = new Date(cursor.getLong(cursor.getColumnIndex("A." + Avaliacao.AVALIACAO_DATA)));
 
@@ -97,7 +100,7 @@ public class AvaliacaoDAO {
 
         String query =
                 "SELECT A." + Avaliacao.AVALIACAO_ID + ", A." + Avaliacao.AVALIACAO_TIPO_AVALIACAO__ID + ", A." + Avaliacao.AVALIACAO_DISCIPLINA__ID + ", A." + Avaliacao.AVALIACAO_DATA + ", A." + Avaliacao.AVALIACAO_OBSERVACAO + "," +
-                        " T." + TipoAvaliacao.TIPO_AVALIACAO__ID + ", T." + TipoAvaliacao.TIPO_AVALIACAO_NOME + "," +
+                        " T." + TipoAvaliacao.TIPO_AVALIACAO__ID + ", T." + TipoAvaliacao.TIPO_AVALIACAO_NOME + ", T." + TipoAvaliacao.TIPO_AVALIACAO_NOTIFICAR + ", T." + TipoAvaliacao.TIPO_AVALIACAO_ANTECEDENCIA_NOTIFICACAO + ", T." + TipoAvaliacao.TIPO_AVALIACAO_DESCRICAO + "," +
                         " D." + Disciplina.DISCIPLINA_ID + ", D." + Disciplina.DISCIPLINA_NOME +
                         " FROM " + Avaliacao.AVALIACAO + " as A" +
                         " INNER JOIN " + TipoAvaliacao.TIPO_AVALIACAO + " as T" +
@@ -115,7 +118,10 @@ public class AvaliacaoDAO {
 
             int tipoAvaliacaoId = cursor.getInt(cursor.getColumnIndex("T." + TipoAvaliacao.TIPO_AVALIACAO__ID));
             String nomeTipoAvaliacao = cursor.getString(cursor.getColumnIndex("T." + TipoAvaliacao.TIPO_AVALIACAO_NOME));
-            TipoAvaliacao tipoAvaliacao = new TipoAvaliacao(tipoAvaliacaoId, nomeTipoAvaliacao);
+            boolean notificarTipoAvaliacao = cursor.getInt(cursor.getColumnIndex("T." + TipoAvaliacao.TIPO_AVALIACAO_NOTIFICAR)) == 1;
+            int antecedenciaNotificacaoTipoAvaliacao = cursor.getInt(cursor.getColumnIndex("T." + TipoAvaliacao.TIPO_AVALIACAO_ANTECEDENCIA_NOTIFICACAO));
+            String descricaoTipoAvaliacao = cursor.getString(cursor.getColumnIndex("T." + TipoAvaliacao.TIPO_AVALIACAO_DESCRICAO));
+            TipoAvaliacao tipoAvaliacao = new TipoAvaliacao(tipoAvaliacaoId, nomeTipoAvaliacao, notificarTipoAvaliacao, antecedenciaNotificacaoTipoAvaliacao, descricaoTipoAvaliacao);
 
             Date dataAvaliacao = new Date(cursor.getLong(cursor.getColumnIndex("A." + Avaliacao.AVALIACAO_DATA)));
 
@@ -158,7 +164,7 @@ public class AvaliacaoDAO {
 
         String query =
                 "SELECT A." + Avaliacao.AVALIACAO_ID + ", A." + Avaliacao.AVALIACAO_TIPO_AVALIACAO__ID + ", A." + Avaliacao.AVALIACAO_DISCIPLINA__ID + ", A." + Avaliacao.AVALIACAO_DATA + ", A." + Avaliacao.AVALIACAO_OBSERVACAO + "," +
-                        " T." + TipoAvaliacao.TIPO_AVALIACAO__ID + ", T." + TipoAvaliacao.TIPO_AVALIACAO_NOME + "," +
+                        " T." + TipoAvaliacao.TIPO_AVALIACAO__ID + ", T." + TipoAvaliacao.TIPO_AVALIACAO_NOME + ", T." + TipoAvaliacao.TIPO_AVALIACAO_NOTIFICAR + ", T." + TipoAvaliacao.TIPO_AVALIACAO_ANTECEDENCIA_NOTIFICACAO + ", T." + TipoAvaliacao.TIPO_AVALIACAO_DESCRICAO + "," +
                         " D." + Disciplina.DISCIPLINA_ID + ", D." + Disciplina.DISCIPLINA_NOME +
                         " FROM " + Avaliacao.AVALIACAO + " as A" +
                         " INNER JOIN " + TipoAvaliacao.TIPO_AVALIACAO + " as T" +
@@ -173,7 +179,10 @@ public class AvaliacaoDAO {
             do {
                 int tipoAvaliacaoId = cursor.getInt(cursor.getColumnIndex("T." + TipoAvaliacao.TIPO_AVALIACAO__ID));
                 String nomeTipoAvaliacao = cursor.getString(cursor.getColumnIndex("T." + TipoAvaliacao.TIPO_AVALIACAO_NOME));
-                TipoAvaliacao tipoAvaliacao = new TipoAvaliacao(tipoAvaliacaoId, nomeTipoAvaliacao);
+                boolean notificarTipoAvaliacao = cursor.getInt(cursor.getColumnIndex("T." + TipoAvaliacao.TIPO_AVALIACAO_NOTIFICAR)) == 1;
+                int antecedenciaNotificacaoTipoAvaliacao = cursor.getInt(cursor.getColumnIndex("T." + TipoAvaliacao.TIPO_AVALIACAO_ANTECEDENCIA_NOTIFICACAO));
+                String descricaoTipoAvaliacao = cursor.getString(cursor.getColumnIndex("T." + TipoAvaliacao.TIPO_AVALIACAO_DESCRICAO));
+                TipoAvaliacao tipoAvaliacao = new TipoAvaliacao(tipoAvaliacaoId, nomeTipoAvaliacao, notificarTipoAvaliacao, antecedenciaNotificacaoTipoAvaliacao, descricaoTipoAvaliacao);
 
                 Date dataAvaliacao = new Date(cursor.getLong(cursor.getColumnIndex("A." + Avaliacao.AVALIACAO_DATA)));
 
