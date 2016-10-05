@@ -8,9 +8,13 @@ public class TipoAvaliacao {
     public static final String TIPO_AVALIACAO = "TIPO_AVALIACAO";
     public static final String TIPO_AVALIACAO__ID = "TIPO_AVALIACAO__ID";
     public static final String TIPO_AVALIACAO_NOME = "TIPO_AVALIACAO_NOME";
+    public static final String TIPO_AVALIACAO_ANTECEDENCIA_NOTIFICACAO = "TIPO_AVALIACAO_ANTECEDENCIA_NOTIFICACAO";
+    public static final String TIPO_AVALIACAO_NOTIFICAR = "TIPO_AVALIACAO_NOTIFICAR";
 
     private int id;
     private String nome;
+    private int antecedenciaNotificacao;
+    private boolean notificar;
 
     public TipoAvaliacao(String nome){
         this.nome = nome;
@@ -39,5 +43,21 @@ public class TipoAvaliacao {
 
     public String toString(){
         return nome;
+    }
+
+    public int getAntecedenciaNotificacao() {
+        return antecedenciaNotificacao;
+    }
+
+    public void setAntecedenciaNotificacao(int antecedenciaNotificacao) {
+        this.antecedenciaNotificacao = antecedenciaNotificacao;
+    }
+
+    public boolean isNotificar() {
+        return notificar;
+    }
+
+    public void setNotificar(boolean notificar) {
+        this.notificar = notificar;
     }
 }
