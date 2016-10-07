@@ -10,7 +10,7 @@
     <item
         android:id="@+id/action_renomear_disciplina"
         android:orderInCategory="100"
-        android:icon="@drawable/ic_mode_edit_black_24dp"
+        android:icon="@drawable/ic_mode_edit_white_48dp"
         android:title="@string/action_renomear"
         app:showAsAction="always" />
 </menu>
