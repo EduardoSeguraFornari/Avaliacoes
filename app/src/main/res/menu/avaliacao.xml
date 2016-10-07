@@ -12,6 +12,6 @@
         android:id="@+id/action_salvar_avaliacao"
         android:orderInCategory="100"
         android:title="@string/action_salvar"
-        android:icon="@drawable/ic_save_black_24dp"
+        android:icon="@drawable/ic_save_white_48dp"
         app:showAsAction="always" />
 </menu>
