@@ -38,7 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/imageButton_addDisciplina"
-                android:src="@drawable/ic_check_black_24dp"
+                android:src="@drawable/ic_done_white_48dp"
                 android:layout_gravity="center_horizontal" />
         </LinearLayout>
 
@@ -52,7 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/imageButton_cancelarDisciplina"
-                android:src="@drawable/ic_clear_black_24dp"
+                android:src="@drawable/ic_clear_white_48dp"
                 android:layout_gravity="center_horizontal" />
         </LinearLayout>
     </LinearLayout>
