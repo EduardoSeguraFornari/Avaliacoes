@@ -4,6 +4,8 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -45,6 +47,7 @@ public class AvaliacaoActivity extends AppCompatActivity
     private int disciplinaId;
     private Avaliacao avaliacao;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +70,7 @@ public class AvaliacaoActivity extends AppCompatActivity
             if (bundle.containsKey("DISCIPLINA_ID")) {
                 disciplinaId = (int) bundle.getSerializable("DISCIPLINA_ID");
             }
+
             if (bundle.containsKey("AVALIACAO_ID")) {
                 int avaliacaoId = (int) bundle.getSerializable("AVALIACAO_ID");
                 AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(this);

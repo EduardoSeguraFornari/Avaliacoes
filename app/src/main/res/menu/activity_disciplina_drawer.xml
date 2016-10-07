@@ -4,12 +4,15 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_avaliacoes"
+            android:icon="@drawable/ic_view_list_black_48dp"
             android:title="Avaliações" />
         <item
             android:id="@+id/nav_disciplinas"
+            android:icon="@drawable/ic_view_list_black_48dp"
             android:title="Disciplinas" />
         <item
             android:id="@+id/nav_tipos_avaliacao"
+            android:icon="@drawable/ic_view_list_black_48dp"
             android:title="Tipos de Avaliação" />
     </group>
 
