@@ -24,7 +24,6 @@ import android.widget.Toast;
 
 import com.fornari.eduardo.avaliacoes.dao.AvaliacaoDAO;
 import com.fornari.eduardo.avaliacoes.dao.DisciplinaDAO;
-import com.fornari.eduardo.avaliacoes.dao.TipoAvaliacaoDAO;
 import com.fornari.eduardo.avaliacoes.database.DataBase;
 import com.fornari.eduardo.avaliacoes.model.Avaliacao;
 import com.fornari.eduardo.avaliacoes.model.Disciplina;
@@ -227,7 +226,7 @@ public class DisciplinaActivity extends AppCompatActivity
             intent = new Intent(DisciplinaActivity.this, DisciplinasActivity.class);
             startActivityForResult(intent, 0);
         } else if (id == R.id.nav_tipos_avaliacao) {
-            intent = new Intent(DisciplinaActivity.this, TiposDeAvaliacaoActivity.class);
+            intent = new Intent(DisciplinaActivity.this, TiposAvaliacaoActivity.class);
             startActivityForResult(intent, 0);
         }
 

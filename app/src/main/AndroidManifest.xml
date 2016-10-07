@@ -31,7 +31,7 @@
             android:label="@string/title_activity_avaliacao"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".TiposDeAvaliacaoActivity"
+            android:name=".TiposAvaliacaoActivity"
             android:label="@string/title_activity_tipos_de_avaliacao"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

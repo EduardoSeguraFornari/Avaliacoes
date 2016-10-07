@@ -4,8 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -218,7 +216,7 @@ public class AvaliacaoActivity extends AppCompatActivity
             intent = new Intent(AvaliacaoActivity.this, DisciplinasActivity.class);
             startActivityForResult(intent, 0);
         } else if (id == R.id.nav_tipos_avaliacao) {
-            intent = new Intent(AvaliacaoActivity.this, TiposDeAvaliacaoActivity.class);
+            intent = new Intent(AvaliacaoActivity.this, TiposAvaliacaoActivity.class);
             startActivityForResult(intent, 0);
         }
 
@@ -285,7 +283,7 @@ public class AvaliacaoActivity extends AppCompatActivity
 
     public List<TipoAvaliacao> carregaTiposAvaliacao() {
         TipoAvaliacaoDAO disciplinaDAO = new TipoAvaliacaoDAO(this);
-        List<TipoAvaliacao> tiposAvaliacao = disciplinaDAO.buscaTiposDeAvaliacao();
+        List<TipoAvaliacao> tiposAvaliacao = disciplinaDAO.buscaTiposAvaliacao();
         return tiposAvaliacao;
     }
 }

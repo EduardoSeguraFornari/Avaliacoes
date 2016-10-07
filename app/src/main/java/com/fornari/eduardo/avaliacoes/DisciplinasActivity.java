@@ -172,7 +172,7 @@ public class DisciplinasActivity extends AppCompatActivity
             finish();
             startActivityForResult(intent, 0);
         } else if (id == R.id.nav_tipos_avaliacao) {
-            intent = new Intent(DisciplinasActivity.this, TiposDeAvaliacaoActivity.class);
+            intent = new Intent(DisciplinasActivity.this, TiposAvaliacaoActivity.class);
             finish();
             startActivityForResult(intent, 0);
         }

@@ -17,36 +17,35 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.fornari.eduardo.avaliacoes.dao.TipoAvaliacaoDAO;
-import com.fornari.eduardo.avaliacoes.model.Avaliacao;
 import com.fornari.eduardo.avaliacoes.model.TipoAvaliacao;
 
 import java.util.Comparator;
 import java.util.List;
 
-public class TiposDeAvaliacaoActivity extends AppCompatActivity
+public class TiposAvaliacaoActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private ListView listViewTiposDeAvaliacao;
+    private ListView listViewTiposAvaliacao;
     private ArrayAdapter<TipoAvaliacao> arrayAdapterTiposAvaliacao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tipos_de_avaliacao);
+        setContentView(R.layout.activity_tipos_avaliacao);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        listViewTiposDeAvaliacao = (ListView) findViewById(R.id.listViewTiposDeAvaliacao);
+        listViewTiposAvaliacao = (ListView) findViewById(R.id.listViewTiposAvaliacao);
         preencheAdapterDisciplinas(carregaTiposAvaliacao());
-        sortArrayAdapterTiposDeAvaliacao(arrayAdapterTiposAvaliacao);
-        listViewTiposDeAvaliacao.setAdapter(arrayAdapterTiposAvaliacao);
+        sortArrayAdapterTiposAvaliacao(arrayAdapterTiposAvaliacao);
+        listViewTiposAvaliacao.setAdapter(arrayAdapterTiposAvaliacao);
 
-        listViewTiposDeAvaliacao.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listViewTiposAvaliacao.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
                 TipoAvaliacao tipoAvaliacao = arrayAdapterTiposAvaliacao.getItem(position);
-                Intent intent = new Intent(TiposDeAvaliacaoActivity.this, TipoAvaliacaoActivity.class);
+                Intent intent = new Intent(TiposAvaliacaoActivity.this, TipoAvaliacaoActivity.class);
                 intent.putExtra("TIPO_AVALIACAO_ID", tipoAvaliacao.getId());
                 finish();
                 startActivity(intent);
@@ -57,9 +56,9 @@ public class TiposDeAvaliacaoActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(TiposDeAvaliacaoActivity.this, TipoAvaliacaoActivity.class);
+                Intent intent = new Intent(TiposAvaliacaoActivity.this, TipoAvaliacaoActivity.class);
                 startActivityForResult(intent, 0);
-//                final Dialog dialog = new Dialog(TiposDeAvaliacaoActivity.this);
+//                final Dialog dialog = new Dialog(TiposAvaliacaoActivity.this);
 //                dialog.setContentView(R.layout.add_tipo_avaliacao);
 //
 //                dialog.setTitle("ADICIONAR DISCIPLINA");
@@ -79,22 +78,22 @@ public class TiposDeAvaliacaoActivity extends AppCompatActivity
 //                        EditText textViewNomeDisciplina = (EditText) dialog.findViewById(R.id.editTextNomeTipoAvaliacao);
 //                        String nomeDiciplina = textViewNomeDisciplina.getText().toString();
 //                        if (nomeDiciplina.trim().isEmpty()) {
-//                            Toast.makeText(TiposDeAvaliacaoActivity.this, "O nome do tipo de avaliação não pode ficar em branco!", Toast.LENGTH_LONG).show();
+//                            Toast.makeText(TiposAvaliacaoActivity.this, "O nome do tipo de avaliação não pode ficar em branco!", Toast.LENGTH_LONG).show();
 //                        } else {
-//                            DataBase dataBase = new DataBase(TiposDeAvaliacaoActivity.this);
+//                            DataBase dataBase = new DataBase(TiposAvaliacaoActivity.this);
 //                            SQLiteDatabase conn = dataBase.getReadableDatabase();
-//                            TipoAvaliacaoDAO tipoAvaliacaoDAO = new TipoAvaliacaoDAO(TiposDeAvaliacaoActivity.this);
+//                            TipoAvaliacaoDAO tipoAvaliacaoDAO = new TipoAvaliacaoDAO(TiposAvaliacaoActivity.this);
 //                            if (tipoAvaliacaoDAO.buscaTipoAvaliacaoPorNome(nomeDiciplina) == null) {
 //                                TipoAvaliacao tipoAvaliacao = new TipoAvaliacao(nomeDiciplina);
 //                                tipoAvaliacaoDAO.inserir(tipoAvaliacao);
 //                                arrayAdapterTiposAvaliacao.add(tipoAvaliacao);
 //
-//                                sortArrayAdapterTiposDeAvaliacao(arrayAdapterTiposAvaliacao);
+//                                sortArrayAdapterTiposAvaliacao(arrayAdapterTiposAvaliacao);
 //
-//                                listViewTiposDeAvaliacao.setAdapter(arrayAdapterTiposAvaliacao);
+//                                listViewTiposAvaliacao.setAdapter(arrayAdapterTiposAvaliacao);
 //                                dialog.cancel();
 //                            } else {
-//                                Toast.makeText(TiposDeAvaliacaoActivity.this, "Este tipo de avaliação ja existe!", Toast.LENGTH_LONG).show();
+//                                Toast.makeText(TiposAvaliacaoActivity.this, "Este tipo de avaliação ja existe!", Toast.LENGTH_LONG).show();
 //                            }
 //                        }
 //                    }
@@ -126,7 +125,7 @@ public class TiposDeAvaliacaoActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.tipos_de_avaliacao, menu);
+        getMenuInflater().inflate(R.menu.tipos_avaliacao, menu);
         return true;
     }
 
@@ -152,11 +151,11 @@ public class TiposDeAvaliacaoActivity extends AppCompatActivity
         int id = item.getItemId();
         Intent intent;
         if (id == R.id.nav_avaliacoes) {
-            intent = new Intent(TiposDeAvaliacaoActivity.this, AvaliacoesActivity.class);
+            intent = new Intent(TiposAvaliacaoActivity.this, AvaliacoesActivity.class);
             finish();
             startActivityForResult(intent, 0);
         } else if (id == R.id.nav_disciplinas) {
-            intent = new Intent(TiposDeAvaliacaoActivity.this, DisciplinasActivity.class);
+            intent = new Intent(TiposAvaliacaoActivity.this, DisciplinasActivity.class);
             finish();
             startActivityForResult(intent, 0);
         }
@@ -166,7 +165,7 @@ public class TiposDeAvaliacaoActivity extends AppCompatActivity
         return true;
     }
 
-    private void sortArrayAdapterTiposDeAvaliacao(ArrayAdapter<TipoAvaliacao> arrayAdapterDisciplinas) {
+    private void sortArrayAdapterTiposAvaliacao(ArrayAdapter<TipoAvaliacao> arrayAdapterDisciplinas) {
         Comparator<TipoAvaliacao> porNome = new Comparator<TipoAvaliacao>() {
             @Override
             public int compare(TipoAvaliacao o1, TipoAvaliacao o2) {
@@ -178,7 +177,7 @@ public class TiposDeAvaliacaoActivity extends AppCompatActivity
 
     public void preencheAdapterDisciplinas(List<TipoAvaliacao> tiposAvaliacao) {
         int layoutAdapter = android.R.layout.simple_list_item_1;
-        ArrayAdapter<TipoAvaliacao> adapter = new ArrayAdapter<TipoAvaliacao>(TiposDeAvaliacaoActivity.this, layoutAdapter);
+        ArrayAdapter<TipoAvaliacao> adapter = new ArrayAdapter<TipoAvaliacao>(TiposAvaliacaoActivity.this, layoutAdapter);
         for (int i = 0; i < tiposAvaliacao.size(); i++) {
             adapter.add(tiposAvaliacao.get(i));
         }
@@ -187,7 +186,7 @@ public class TiposDeAvaliacaoActivity extends AppCompatActivity
 
     public List<TipoAvaliacao> carregaTiposAvaliacao() {
         TipoAvaliacaoDAO disciplinaDAO = new TipoAvaliacaoDAO(this);
-        List<TipoAvaliacao> tiposAvaliacao = disciplinaDAO.buscaTiposDeAvaliacao();
+        List<TipoAvaliacao> tiposAvaliacao = disciplinaDAO.buscaTiposAvaliacao();
         return tiposAvaliacao;
     }
 }

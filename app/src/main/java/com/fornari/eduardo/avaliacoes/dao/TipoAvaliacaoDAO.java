@@ -42,7 +42,7 @@ public class TipoAvaliacaoDAO {
         return tipoAvaliacaoId;
     }
 
-    public List<TipoAvaliacao> buscaTiposDeAvaliacao() {
+    public List<TipoAvaliacao> buscaTiposAvaliacao() {
         DataBase dataBase = new DataBase(context);
         SQLiteDatabase connection = dataBase.getWritableDatabase();
 

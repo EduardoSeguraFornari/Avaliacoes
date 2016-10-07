@@ -3,8 +3,6 @@ package com.fornari.eduardo.avaliacoes;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -166,7 +164,7 @@ public class TipoAvaliacaoActivity extends AppCompatActivity
                             Toast.makeText(TipoAvaliacaoActivity.this, "São diferentes", Toast.LENGTH_LONG).show();
                         }
                     }
-                    Intent intent = new Intent(TipoAvaliacaoActivity.this, TiposDeAvaliacaoActivity.class);
+                    Intent intent = new Intent(TipoAvaliacaoActivity.this, TiposAvaliacaoActivity.class);
                     startActivityForResult(intent, 0);
                     finish();
                 }
@@ -198,7 +196,7 @@ public class TipoAvaliacaoActivity extends AppCompatActivity
                     TipoAvaliacaoDAO tipoAvaliacaoDAO = new TipoAvaliacaoDAO(TipoAvaliacaoActivity.this);
                     tipoAvaliacaoDAO.deletarTipoAvaliacaoId(tipoAvaliacao.getId());
 
-                    Intent intent = new Intent(TipoAvaliacaoActivity.this, TiposDeAvaliacaoActivity.class);
+                    Intent intent = new Intent(TipoAvaliacaoActivity.this, TiposAvaliacaoActivity.class);
                     startActivityForResult(intent, 0);
                     finish();
                 }
@@ -227,7 +225,7 @@ public class TipoAvaliacaoActivity extends AppCompatActivity
             finish();
             startActivityForResult(intent, 0);
         } else if (id == R.id.nav_tipos_avaliacao) {
-            intent = new Intent(TipoAvaliacaoActivity.this, TiposDeAvaliacaoActivity.class);
+            intent = new Intent(TipoAvaliacaoActivity.this, TiposAvaliacaoActivity.class);
             finish();
             startActivityForResult(intent, 0);
         }
