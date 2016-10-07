@@ -5,7 +5,7 @@
         android:id="@+id/action_deletar_avaliacao"
         android:orderInCategory="100"
         android:title="@string/action_deletar"
-        android:icon="@drawable/ic_delete_black_24dp"
+        android:icon="@drawable/ic_delete_forever_white_48dp"
         app:showAsAction="always" />
 
     <item
