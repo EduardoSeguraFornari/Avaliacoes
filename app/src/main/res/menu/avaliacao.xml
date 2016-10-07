@@ -2,14 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_salvar_avaliacao"
-        android:orderInCategory="100"
-        android:title="@string/action_salvar"
-        app:showAsAction="never" />
-
-    <item
         android:id="@+id/action_deletar_avaliacao"
         android:orderInCategory="100"
         android:title="@string/action_deletar"
-        app:showAsAction="never" />
+        android:icon="@drawable/ic_delete_black_24dp"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_salvar_avaliacao"
+        android:orderInCategory="100"
+        android:title="@string/action_salvar"
+        android:icon="@drawable/ic_save_black_24dp"
+        app:showAsAction="always" />
 </menu>

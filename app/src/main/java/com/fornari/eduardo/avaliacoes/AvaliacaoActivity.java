@@ -3,7 +3,6 @@ package com.fornari.eduardo.avaliacoes;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -26,7 +25,6 @@ import android.widget.Toast;
 
 import com.fornari.eduardo.avaliacoes.dao.AvaliacaoDAO;
 import com.fornari.eduardo.avaliacoes.dao.TipoAvaliacaoDAO;
-import com.fornari.eduardo.avaliacoes.database.DataBase;
 import com.fornari.eduardo.avaliacoes.model.Avaliacao;
 import com.fornari.eduardo.avaliacoes.model.TipoAvaliacao;
 
@@ -174,16 +172,20 @@ public class AvaliacaoActivity extends AppCompatActivity
 
                 Intent intent = new Intent(AvaliacaoActivity.this, DisciplinaActivity.class);
                 intent.putExtra("DISCIPLINA_ID", disciplinaId);
+                finish();
                 startActivityForResult(intent, 0);
             }
             return true;
         } else if (id == R.id.action_deletar_avaliacao) {
             final Dialog dialog = new Dialog(AvaliacaoActivity.this);
-            dialog.setContentView(R.layout.deletar_avaliacao);
+            dialog.setContentView(R.layout.deletar);
 
             dialog.setTitle("DELETAR AVALIAÇÃO");
 
-            ImageButton cancelar = (ImageButton) dialog.findViewById(R.id.imageButton_cancelarAvaliacao);
+            TextView textViewDeletar = (TextView) dialog.findViewById(R.id.textViewDeletar);
+            textViewDeletar.setText("Deletar esta avaliação?");
+
+            ImageButton cancelar = (ImageButton) dialog.findViewById(R.id.imageButton_cancelar_deletar);
             cancelar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -191,18 +193,16 @@ public class AvaliacaoActivity extends AppCompatActivity
                 }
             });
 
-            ImageButton adicionar = (ImageButton) dialog.findViewById(R.id.imageButton_deletarAvaliacao);
+            ImageButton adicionar = (ImageButton) dialog.findViewById(R.id.imageButton_confirmar_deletar);
             adicionar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    DataBase dataBase = new DataBase(AvaliacaoActivity.this);
-                    SQLiteDatabase connection = dataBase.getReadableDatabase();
                     AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(AvaliacaoActivity.this);
                     avaliacaoDAO.deletarAvaliacaoId(avaliacao.getId());
 
                     Intent intent = new Intent(AvaliacaoActivity.this, DisciplinaActivity.class);
                     intent.putExtra("DISCIPLINA_ID", disciplinaId);
+                    finish();
                     startActivityForResult(intent, 0);
                 }
             });

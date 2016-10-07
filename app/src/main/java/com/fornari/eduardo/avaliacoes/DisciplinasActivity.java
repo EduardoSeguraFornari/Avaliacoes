@@ -53,6 +53,7 @@ public class DisciplinasActivity extends AppCompatActivity
                 Disciplina disciplina = arrayAdapterDisciplinas.getItem(position);
                 Intent intent = new Intent(DisciplinasActivity.this, DisciplinaActivity.class);
                 intent.putExtra("DISCIPLINA_ID", disciplina.getId());
+                finish();
                 startActivity(intent);
             }
         });
@@ -168,9 +169,11 @@ public class DisciplinasActivity extends AppCompatActivity
 
         if (id == R.id.nav_avaliacoes) {
             intent = new Intent(DisciplinasActivity.this, AvaliacoesActivity.class);
+            finish();
             startActivityForResult(intent, 0);
         } else if (id == R.id.nav_tipos_avaliacao) {
             intent = new Intent(DisciplinasActivity.this, TiposDeAvaliacaoActivity.class);
+            finish();
             startActivityForResult(intent, 0);
         }
 

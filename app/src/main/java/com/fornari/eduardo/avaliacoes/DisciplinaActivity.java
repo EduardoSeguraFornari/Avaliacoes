@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.fornari.eduardo.avaliacoes.dao.AvaliacaoDAO;
 import com.fornari.eduardo.avaliacoes.dao.DisciplinaDAO;
+import com.fornari.eduardo.avaliacoes.dao.TipoAvaliacaoDAO;
 import com.fornari.eduardo.avaliacoes.database.DataBase;
 import com.fornari.eduardo.avaliacoes.model.Avaliacao;
 import com.fornari.eduardo.avaliacoes.model.Disciplina;
@@ -88,6 +89,7 @@ public class DisciplinaActivity extends AppCompatActivity
                 Intent intent = new Intent(DisciplinaActivity.this, AvaliacaoActivity.class);
                 intent.putExtra("AVALIACAO_ID", avaliacao.getId());
                 intent.putExtra("DISCIPLINA_ID", disciplina.getId());
+                finish();
                 startActivity(intent);
             }
         });
@@ -120,11 +122,14 @@ public class DisciplinaActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_deletar_disciplina) {
             final Dialog dialog = new Dialog(DisciplinaActivity.this);
-            dialog.setContentView(R.layout.deletar_disciplina);
+            dialog.setContentView(R.layout.deletar);
 
-            dialog.setTitle("DELETAR AVALIAÇÃO");
+            dialog.setTitle("DELETAR DISCIPLINA");
 
-            ImageButton cancelar = (ImageButton) dialog.findViewById(R.id.imageButton_deletarDisciplina);
+            TextView textViewDeletar = (TextView) dialog.findViewById(R.id.textViewDeletar);
+            textViewDeletar.setText("Deletar esta disciplina?");
+
+            ImageButton cancelar = (ImageButton) dialog.findViewById(R.id.imageButton_cancelar_deletar);
             cancelar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -132,14 +137,10 @@ public class DisciplinaActivity extends AppCompatActivity
                 }
             });
 
-            ImageButton adicionar = (ImageButton) dialog.findViewById(R.id.imageButton_deletarDisciplina);
+            ImageButton adicionar = (ImageButton) dialog.findViewById(R.id.imageButton_confirmar_deletar);
             adicionar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
-                    DataBase dataBase = new DataBase(DisciplinaActivity.this);
-                    SQLiteDatabase connection = dataBase.getReadableDatabase();
-
                     AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(DisciplinaActivity.this);
                     avaliacaoDAO.deletarAvaliacoesDisciplina(disciplina.getId());
 
@@ -148,9 +149,11 @@ public class DisciplinaActivity extends AppCompatActivity
 
                     Intent intent = new Intent(DisciplinaActivity.this, DisciplinasActivity.class);
                     startActivityForResult(intent, 0);
+                    finish();
                 }
             });
             dialog.show();
+
             return true;
         }
         else if(id == R.id.action_renomear_disciplina){
@@ -160,6 +163,12 @@ public class DisciplinaActivity extends AppCompatActivity
             dialog.setTitle("ADICIONAR DISCIPLINA");
 
             ImageButton cancelar = (ImageButton) dialog.findViewById(R.id.imageButton_cancelarRenomearDisciplina);
+            cancelar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.cancel();
+                }
+            });
             cancelar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

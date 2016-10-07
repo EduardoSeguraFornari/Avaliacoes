@@ -1,5 +1,6 @@
 package com.fornari.eduardo.avaliacoes;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,9 +16,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fornari.eduardo.avaliacoes.dao.TipoAvaliacaoDAO;
@@ -41,15 +44,6 @@ public class TipoAvaliacaoActivity extends AppCompatActivity
         setContentView(R.layout.activity_tipo_avaliacao);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -174,8 +168,42 @@ public class TipoAvaliacaoActivity extends AppCompatActivity
                     }
                     Intent intent = new Intent(TipoAvaliacaoActivity.this, TiposDeAvaliacaoActivity.class);
                     startActivityForResult(intent, 0);
+                    finish();
                 }
             }
+            return true;
+        }
+        if (id == R.id.action_deletar_tipo_avaliacao) {
+            final Dialog dialog = new Dialog(TipoAvaliacaoActivity.this);
+            dialog.setContentView(R.layout.deletar);
+
+            dialog.setTitle("DELETAR TIPO AVALIAÇÃO");
+
+            TextView textViewDeletar = (TextView) dialog.findViewById(R.id.textViewDeletar);
+            textViewDeletar.setText("Deletar este tipo de avaliação?");
+
+            ImageButton cancelar = (ImageButton) dialog.findViewById(R.id.imageButton_cancelar_deletar);
+            cancelar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.cancel();
+                }
+            });
+
+            ImageButton adicionar = (ImageButton) dialog.findViewById(R.id.imageButton_confirmar_deletar);
+            adicionar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    TipoAvaliacaoDAO tipoAvaliacaoDAO = new TipoAvaliacaoDAO(TipoAvaliacaoActivity.this);
+                    tipoAvaliacaoDAO.deletarTipoAvaliacaoId(tipoAvaliacao.getId());
+
+                    Intent intent = new Intent(TipoAvaliacaoActivity.this, TiposDeAvaliacaoActivity.class);
+                    startActivityForResult(intent, 0);
+                    finish();
+                }
+            });
+            dialog.show();
             return true;
         }
 
@@ -188,18 +216,20 @@ public class TipoAvaliacaoActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        Intent intent;
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_avaliacoes) {
+            intent = new Intent(TipoAvaliacaoActivity.this, AvaliacoesActivity.class);
+            finish();
+            startActivityForResult(intent, 0);
+        } else if (id == R.id.nav_disciplinas) {
+            intent = new Intent(TipoAvaliacaoActivity.this, DisciplinasActivity.class);
+            finish();
+            startActivityForResult(intent, 0);
+        } else if (id == R.id.nav_tipos_avaliacao) {
+            intent = new Intent(TipoAvaliacaoActivity.this, TiposDeAvaliacaoActivity.class);
+            finish();
+            startActivityForResult(intent, 0);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

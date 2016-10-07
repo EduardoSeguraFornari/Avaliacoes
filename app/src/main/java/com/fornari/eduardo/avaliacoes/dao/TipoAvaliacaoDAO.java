@@ -141,4 +141,13 @@ public class TipoAvaliacaoDAO {
 
         connection.close();
     }
+
+    public void deletarTipoAvaliacaoId(int id) {
+        DataBase dataBase = new DataBase(context);
+        SQLiteDatabase connection = dataBase.getWritableDatabase();
+
+        String where = TipoAvaliacao.TIPO_AVALIACAO__ID + "=" + id;
+        connection.delete(TipoAvaliacao.TIPO_AVALIACAO, where, null);
+        dataBase.close();
+    }
 }

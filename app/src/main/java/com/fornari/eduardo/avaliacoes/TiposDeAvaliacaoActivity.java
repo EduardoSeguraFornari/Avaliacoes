@@ -48,6 +48,7 @@ public class TiposDeAvaliacaoActivity extends AppCompatActivity
                 TipoAvaliacao tipoAvaliacao = arrayAdapterTiposAvaliacao.getItem(position);
                 Intent intent = new Intent(TiposDeAvaliacaoActivity.this, TipoAvaliacaoActivity.class);
                 intent.putExtra("TIPO_AVALIACAO_ID", tipoAvaliacao.getId());
+                finish();
                 startActivity(intent);
             }
         });
@@ -152,9 +153,11 @@ public class TiposDeAvaliacaoActivity extends AppCompatActivity
         Intent intent;
         if (id == R.id.nav_avaliacoes) {
             intent = new Intent(TiposDeAvaliacaoActivity.this, AvaliacoesActivity.class);
+            finish();
             startActivityForResult(intent, 0);
         } else if (id == R.id.nav_disciplinas) {
             intent = new Intent(TiposDeAvaliacaoActivity.this, DisciplinasActivity.class);
+            finish();
             startActivityForResult(intent, 0);
         }
 
