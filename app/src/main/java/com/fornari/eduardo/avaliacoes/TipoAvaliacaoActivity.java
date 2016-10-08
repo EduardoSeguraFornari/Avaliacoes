@@ -180,10 +180,10 @@ public class TipoAvaliacaoActivity extends AppCompatActivity
 
             dialog.setTitle("DELETAR TIPO AVALIAÇÃO");
 
-            TextView textViewDeletar = (TextView) dialog.findViewById(R.id.textViewDeletar);
+            TextView textViewDeletar = (TextView) dialog.findViewById(R.id.textViewDeletarDialog);
             textViewDeletar.setText("Deletar este tipo de avaliação?");
 
-            ImageButton cancelar = (ImageButton) dialog.findViewById(R.id.imageButton_cancelar_deletar);
+            ImageButton cancelar = (ImageButton) dialog.findViewById(R.id.imageButtonCancelDeletarDialog);
             cancelar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -191,7 +191,7 @@ public class TipoAvaliacaoActivity extends AppCompatActivity
                 }
             });
 
-            ImageButton adicionar = (ImageButton) dialog.findViewById(R.id.imageButton_confirmar_deletar);
+            ImageButton adicionar = (ImageButton) dialog.findViewById(R.id.imageButtonDoneDeletarDialog);
             adicionar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

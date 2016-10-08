@@ -124,19 +124,19 @@ public class DisciplinaActivity extends AppCompatActivity
 
             dialog.setTitle("DELETAR DISCIPLINA");
 
-            TextView textViewDeletar = (TextView) dialog.findViewById(R.id.textViewDeletar);
-            textViewDeletar.setText("Deletar esta disciplina?");
+            TextView textViewDeletarDialog = (TextView) dialog.findViewById(R.id.textViewDeletarDialog);
+            textViewDeletarDialog.setText("Deletar esta disciplina?");
 
-            ImageButton cancelar = (ImageButton) dialog.findViewById(R.id.imageButton_cancelar_deletar);
-            cancelar.setOnClickListener(new View.OnClickListener() {
+            ImageButton imageButtonCancelDeletarDialog = (ImageButton) dialog.findViewById(R.id.imageButtonCancelDeletarDialog);
+            imageButtonCancelDeletarDialog.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     dialog.cancel();
                 }
             });
 
-            ImageButton adicionar = (ImageButton) dialog.findViewById(R.id.imageButton_confirmar_deletar);
-            adicionar.setOnClickListener(new View.OnClickListener() {
+            ImageButton imageButtonDoneDeletarDialog = (ImageButton) dialog.findViewById(R.id.imageButtonDoneDeletarDialog);
+            imageButtonDoneDeletarDialog.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(DisciplinaActivity.this);
@@ -156,30 +156,27 @@ public class DisciplinaActivity extends AppCompatActivity
         }
         else if(id == R.id.action_renomear_disciplina){
             final Dialog dialog = new Dialog(DisciplinaActivity.this);
-            dialog.setContentView(R.layout.renomear_disciplina);
+            dialog.setContentView(R.layout.nome_disciplina);
 
             dialog.setTitle("ADICIONAR DISCIPLINA");
 
-            ImageButton cancelar = (ImageButton) dialog.findViewById(R.id.imageButton_cancelarRenomearDisciplina);
-            cancelar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialog.cancel();
-                }
-            });
-            cancelar.setOnClickListener(new View.OnClickListener() {
+            TextView textViewNomeDisciplinaDialog = (TextView) dialog.findViewById(R.id.textViewNomeDisciplinaDialog);
+            textViewNomeDisciplinaDialog.setText("Informe o novo nome da disciplina");
+
+            ImageButton imageButtonCancelNomeDisciplinaDialog = (ImageButton) dialog.findViewById(R.id.imageButtonCancelNomeDisciplinaDialog);
+            imageButtonCancelNomeDisciplinaDialog.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     dialog.cancel();
                 }
             });
 
-            ImageButton adicionar = (ImageButton) dialog.findViewById(R.id.imageButton_renomearDisciplina);
-            adicionar.setOnClickListener(new View.OnClickListener() {
+            ImageButton imageButtonDoneNomeDisciplinaDialog = (ImageButton) dialog.findViewById(R.id.imageButtonDoneNomeDisciplinaDialog);
+            imageButtonDoneNomeDisciplinaDialog.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    EditText editTextNomeDisciplina = (EditText) dialog.findViewById(R.id.editTextRenomearDiciplina);
-                    String nomeDiciplina = editTextNomeDisciplina.getText().toString();
+                    EditText editTextNomeDiciplinaDialog = (EditText) dialog.findViewById(R.id.editTextNomeDiciplinaDialog);
+                    String nomeDiciplina = editTextNomeDiciplinaDialog.getText().toString();
                     if (nomeDiciplina.trim().isEmpty()) {
                         Toast.makeText(DisciplinaActivity.this, "O nome da disciplina não pode ficar em branco!", Toast.LENGTH_LONG).show();
                     }

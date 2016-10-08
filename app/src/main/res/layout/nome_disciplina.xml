@@ -8,8 +8,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/label_renomear_disciplina"
-        android:id="@+id/textView"
+        android:text="Informe o nome da disciplina"
+        android:id="@+id/textViewNomeDisciplinaDialog"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="40px"
         android:layout_marginBottom="120px"
@@ -19,7 +19,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editTextRenomearDiciplina" />
+        android:id="@+id/editTextNomeDiciplinaDialog" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -37,9 +37,10 @@
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/imageButton_renomearDisciplina"
+                android:id="@+id/imageButtonDoneNomeDisciplinaDialog"
                 android:src="@drawable/ic_done_white_48dp"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal"
+                android:backgroundTint="#3f51b5" />
         </LinearLayout>
 
         <LinearLayout
@@ -51,9 +52,10 @@
             <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/imageButton_cancelarRenomearDisciplina"
+                android:id="@+id/imageButtonCancelNomeDisciplinaDialog"
                 android:src="@drawable/ic_clear_white_48dp"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal"
+                android:backgroundTint="#3f51b5" />
         </LinearLayout>
     </LinearLayout>
 

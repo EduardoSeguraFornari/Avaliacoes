@@ -19,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fornari.eduardo.avaliacoes.dao.DisciplinaDAO;
@@ -62,23 +63,26 @@ public class DisciplinasActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 final Dialog dialog = new Dialog(DisciplinasActivity.this);
-                dialog.setContentView(R.layout.add_disciplina);
+                dialog.setContentView(R.layout.nome_disciplina);
 
                 dialog.setTitle("ADICIONAR DISCIPLINA");
 
-                ImageButton cancelar = (ImageButton) dialog.findViewById(R.id.imageButton_cancelarDisciplina);
-                cancelar.setOnClickListener(new View.OnClickListener() {
+                TextView textViewNomeDisciplinaDialog = (TextView) dialog.findViewById(R.id.textViewNomeDisciplinaDialog);
+                textViewNomeDisciplinaDialog.setText("Informe o nome da disciplina");
+
+                ImageButton imageButtonCancelNomeDisciplinaDialog = (ImageButton) dialog.findViewById(R.id.imageButtonCancelNomeDisciplinaDialog);
+                imageButtonCancelNomeDisciplinaDialog.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         dialog.cancel();
                     }
                 });
 
-                ImageButton adicionar = (ImageButton) dialog.findViewById(R.id.imageButton_addDisciplina);
-                adicionar.setOnClickListener(new View.OnClickListener() {
+                ImageButton imageButtonDoneNomeDisciplinaDialog = (ImageButton) dialog.findViewById(R.id.imageButtonDoneNomeDisciplinaDialog);
+                imageButtonDoneNomeDisciplinaDialog.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        EditText editTextNomeDisciplina = (EditText) dialog.findViewById(R.id.editTextNomeDaDiciplina);
+                        EditText editTextNomeDisciplina = (EditText) dialog.findViewById(R.id.editTextNomeDiciplinaDialog);
                         String nomeDiciplina = editTextNomeDisciplina.getText().toString();
                         if (nomeDiciplina.trim().isEmpty()) {
                             Toast.makeText(DisciplinasActivity.this, "O nome da disciplina não pode ficar em branco!", Toast.LENGTH_LONG).show();
@@ -194,7 +198,7 @@ public class DisciplinasActivity extends AppCompatActivity
 
         if (requestCode == 1) {
 
-            if(resultCode == RESULT_OK){
+            if (resultCode == RESULT_OK) {
                 preencheAdapterDisciplinas(carregaDisciplinas());
                 sortArrayAdapterDisciplinas(arrayAdapterDisciplinas);
                 listViewDisciplinas.setAdapter(arrayAdapterDisciplinas);

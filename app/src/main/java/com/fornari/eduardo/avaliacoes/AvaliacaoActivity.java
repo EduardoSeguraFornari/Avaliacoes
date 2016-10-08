@@ -22,7 +22,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.fornari.eduardo.avaliacoes.dao.AvaliacaoDAO;
 import com.fornari.eduardo.avaliacoes.dao.TipoAvaliacaoDAO;
@@ -228,10 +227,10 @@ public class AvaliacaoActivity extends AppCompatActivity
 
             dialog.setTitle("DELETAR AVALIAÇÃO");
 
-            TextView textViewDeletar = (TextView) dialog.findViewById(R.id.textViewDeletar);
+            TextView textViewDeletar = (TextView) dialog.findViewById(R.id.textViewDeletarDialog);
             textViewDeletar.setText("Deletar esta avaliação?");
 
-            ImageButton cancelar = (ImageButton) dialog.findViewById(R.id.imageButton_cancelar_deletar);
+            ImageButton cancelar = (ImageButton) dialog.findViewById(R.id.imageButtonCancelDeletarDialog);
             cancelar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -239,7 +238,7 @@ public class AvaliacaoActivity extends AppCompatActivity
                 }
             });
 
-            ImageButton adicionar = (ImageButton) dialog.findViewById(R.id.imageButton_confirmar_deletar);
+            ImageButton adicionar = (ImageButton) dialog.findViewById(R.id.imageButtonDoneDeletarDialog);
             adicionar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
