@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.fornari.eduardo.avaliacoes.dao.TipoAvaliacaoDAO;
 import com.fornari.eduardo.avaliacoes.model.TipoAvaliacao;
@@ -72,12 +73,8 @@ public class TiposAvaliacaoActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+//        android.os.Process.killProcess(android.os.Process.myPid());
+//        super.onDestroy();
     }
 
     @Override
