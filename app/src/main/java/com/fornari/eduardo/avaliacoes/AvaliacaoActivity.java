@@ -98,7 +98,7 @@ public class AvaliacaoActivity extends AppCompatActivity
         spinnerTiposAvaliacao.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                                             @Override
                                                             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                                                podeSalvar();
+                                                                validaSalvar();
                                                             }
 
                                                             @Override
@@ -120,12 +120,12 @@ public class AvaliacaoActivity extends AppCompatActivity
 
             @Override
             public void afterTextChanged(Editable s) {
-                podeSalvar();
+                validaSalvar();
             }
         });
     }
 
-    private void podeSalvar() {
+    private void validaSalvar() {
         TipoAvaliacao tipoAvaliacao = arrayAdapterTiposAvaliacao.getItem(spinnerTiposAvaliacao.getSelectedItemPosition());
 
         String data = textViewDataAvaliacao.getText().toString();
@@ -134,8 +134,7 @@ public class AvaliacaoActivity extends AppCompatActivity
 
         if (tipoAvaliacao.getNome().equals("Selecionar") || data.equals("__ /__ /__")) {
             myMenu.findItem(R.id.action_salvar_avaliacao).setVisible(false);
-        }
-        else if (avaliacao != null) {
+        } else if (avaliacao != null) {
             DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT);
             String dataAvaliacao = dateFormat.format(avaliacao.getData().getTime());
 
@@ -143,12 +142,10 @@ public class AvaliacaoActivity extends AppCompatActivity
                     !data.equals(dataAvaliacao) ||
                     !observacao.equals(avaliacao.getObservacao())) {
                 myMenu.findItem(R.id.action_salvar_avaliacao).setVisible(true);
-            }
-            else{
+            } else {
                 myMenu.findItem(R.id.action_salvar_avaliacao).setVisible(false);
             }
-        }
-        else {
+        } else {
             myMenu.findItem(R.id.action_salvar_avaliacao).setVisible(true);
         }
     }
@@ -200,36 +197,30 @@ public class AvaliacaoActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_salvar_avaliacao) {
-            String tipoSelecionado = ((TipoAvaliacao) spinnerTiposAvaliacao.getSelectedItem()).getNome();
-            if (tipoSelecionado.equalsIgnoreCase("Selecionar")) {
-                Toast.makeText(AvaliacaoActivity.this, "Selecione um tipo de avaliação!", Toast.LENGTH_LONG).show();
-            } else if (textViewDataAvaliacao.getText().toString().equalsIgnoreCase("__ /__ /__")) {
-                Toast.makeText(AvaliacaoActivity.this, "Selecione uma data!", Toast.LENGTH_LONG).show();
-            } else {
-                Date data = new Date();
-                SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy");
-                try {
-                    data = df.parse(textViewDataAvaliacao.getText().toString());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                int tipoAvaliacaoId = arrayAdapterTiposAvaliacao.getItem(spinnerTiposAvaliacao.getSelectedItemPosition()).getId();
-
-                String observacao = editTextObservacao.getText().toString();
-
-                AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(this);
-
-                if (avaliacao != null) {
-                    Avaliacao avaliacaoAUX = new Avaliacao(avaliacao.getId(), tipoAvaliacaoId, data, observacao, disciplinaId);
-                    avaliacaoDAO.atualizaAvaliacao(avaliacaoAUX);
-                } else {
-                    Avaliacao avaliacaoAUX = new Avaliacao(tipoAvaliacaoId, data, observacao, disciplinaId);
-                    avaliacaoDAO.inserir(avaliacaoAUX);
-                }
-                Intent intent = new Intent();
-                setResult(RESULT_OK, intent);
-                finish();
+            Date data = new Date();
+            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy");
+            try {
+                data = df.parse(textViewDataAvaliacao.getText().toString());
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
+            int tipoAvaliacaoId = arrayAdapterTiposAvaliacao.getItem(spinnerTiposAvaliacao.getSelectedItemPosition()).getId();
+
+            String observacao = editTextObservacao.getText().toString();
+
+            AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(this);
+
+            if (avaliacao != null) {
+                Avaliacao avaliacaoAUX = new Avaliacao(avaliacao.getId(), tipoAvaliacaoId, data, observacao, disciplinaId);
+                avaliacaoDAO.atualizaAvaliacao(avaliacaoAUX);
+            } else {
+                Avaliacao avaliacaoAUX = new Avaliacao(tipoAvaliacaoId, data, observacao, disciplinaId);
+                avaliacaoDAO.inserir(avaliacaoAUX);
+            }
+
+            Intent intent = new Intent();
+            setResult(RESULT_OK, intent);
+            finish();
             return true;
         } else if (id == R.id.action_deletar_avaliacao) {
             final Dialog dialog = new Dialog(AvaliacaoActivity.this);
@@ -303,7 +294,7 @@ public class AvaliacaoActivity extends AppCompatActivity
             if (date.compareTo(new Date()) >= 0) {
                 textViewDataAvaliacao.setText(format);
             } else textViewDataAvaliacao.setText("__ /__ /__");
-            podeSalvar();
+            validaSalvar();
         }
     }
 
