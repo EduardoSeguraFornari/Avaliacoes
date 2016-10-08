@@ -59,7 +59,7 @@ public class DisciplinaActivity extends AppCompatActivity
             public void onClick(View view) {
                 Intent it = new Intent(DisciplinaActivity.this, AvaliacaoActivity.class);
                 it.putExtra("DISCIPLINA_ID", disciplina.getId());
-                startActivityForResult(it, 0);
+                startActivityForResult(it, 1);
             }
         });
 
@@ -88,8 +88,7 @@ public class DisciplinaActivity extends AppCompatActivity
                 Intent intent = new Intent(DisciplinaActivity.this, AvaliacaoActivity.class);
                 intent.putExtra("AVALIACAO_ID", avaliacao.getId());
                 intent.putExtra("DISCIPLINA_ID", disciplina.getId());
-                finish();
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         });
     }
@@ -146,8 +145,8 @@ public class DisciplinaActivity extends AppCompatActivity
                     DisciplinaDAO disciplinaDAO = new DisciplinaDAO(DisciplinaActivity.this);
                     disciplinaDAO.deletarDisciplinaId(disciplina.getId());
 
-                    Intent intent = new Intent(DisciplinaActivity.this, DisciplinasActivity.class);
-                    startActivityForResult(intent, 0);
+                    Intent intent = new Intent();
+                    setResult(RESULT_OK, intent);
                     finish();
                 }
             });
@@ -257,5 +256,21 @@ public class DisciplinaActivity extends AppCompatActivity
             }
         };
         arrayAdapterAvaliacoesDisciplina.sort(porNome);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+
+            if(resultCode == RESULT_OK){
+                preencheArrayAdapterAvaliacoesDisciplinas(carregaAvaliacoesDisciplina());
+                sortArrayAdapterAvaliacoesDisciplina(arrayAdapterAvaliacoesDisciplina);
+                listViewAvaliacoesDisciplina.setAdapter(arrayAdapterAvaliacoesDisciplina);
+            }
+            if (resultCode == RESULT_CANCELED) {
+                //Do nothing?
+            }
+        }
     }
 }

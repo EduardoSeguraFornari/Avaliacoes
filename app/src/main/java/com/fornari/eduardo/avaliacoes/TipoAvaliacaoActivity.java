@@ -131,6 +131,9 @@ public class TipoAvaliacaoActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.tipo_avaliacao, menu);
+        if(tipoAvaliacao==null){
+            menu.findItem(R.id.action_deletar_tipo_avaliacao).setVisible(false);
+        }
         return true;
     }
 
@@ -164,11 +167,11 @@ public class TipoAvaliacaoActivity extends AppCompatActivity
                             Toast.makeText(TipoAvaliacaoActivity.this, "São diferentes", Toast.LENGTH_LONG).show();
                         }
                     }
-                    Intent intent = new Intent(TipoAvaliacaoActivity.this, TiposAvaliacaoActivity.class);
-                    startActivityForResult(intent, 0);
-                    finish();
                 }
             }
+            Intent intent = new Intent();
+            setResult(RESULT_OK, intent);
+            finish();
             return true;
         }
         if (id == R.id.action_deletar_tipo_avaliacao) {
@@ -196,8 +199,8 @@ public class TipoAvaliacaoActivity extends AppCompatActivity
                     TipoAvaliacaoDAO tipoAvaliacaoDAO = new TipoAvaliacaoDAO(TipoAvaliacaoActivity.this);
                     tipoAvaliacaoDAO.deletarTipoAvaliacaoId(tipoAvaliacao.getId());
 
-                    Intent intent = new Intent(TipoAvaliacaoActivity.this, TiposAvaliacaoActivity.class);
-                    startActivityForResult(intent, 0);
+                    Intent intent = new Intent();
+                    setResult(RESULT_OK, intent);
                     finish();
                 }
             });

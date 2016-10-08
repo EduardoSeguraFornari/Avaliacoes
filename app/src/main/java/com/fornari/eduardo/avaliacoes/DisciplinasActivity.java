@@ -53,8 +53,7 @@ public class DisciplinasActivity extends AppCompatActivity
                 Disciplina disciplina = arrayAdapterDisciplinas.getItem(position);
                 Intent intent = new Intent(DisciplinasActivity.this, DisciplinaActivity.class);
                 intent.putExtra("DISCIPLINA_ID", disciplina.getId());
-                finish();
-                startActivity(intent);
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -193,6 +192,22 @@ public class DisciplinasActivity extends AppCompatActivity
         arrayAdapterDisciplinas = new ArrayAdapter<Disciplina>(DisciplinasActivity.this, layoutAdapter);
         for (int i = 0; i < disciplinas.size(); i++) {
             arrayAdapterDisciplinas.add(disciplinas.get(i));
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+
+            if(resultCode == RESULT_OK){
+                preencheAdapterDisciplinas(carregaDisciplinas());
+                sortArrayAdapterDisciplinas(arrayAdapterDisciplinas);
+                listViewDisciplinas.setAdapter(arrayAdapterDisciplinas);
+            }
+            if (resultCode == RESULT_CANCELED) {
+                //Do nothing?
+            }
         }
     }
 }

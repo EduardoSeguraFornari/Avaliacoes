@@ -4,8 +4,8 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuInflater;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -46,6 +47,8 @@ public class AvaliacaoActivity extends AppCompatActivity
 
     private int disciplinaId;
     private Avaliacao avaliacao;
+
+    private Menu myMenu;
 
 
     @Override
@@ -91,6 +94,63 @@ public class AvaliacaoActivity extends AppCompatActivity
         ExibeDataListener exibeDataListener = new ExibeDataListener();
         textViewDataAvaliacao.setOnClickListener(exibeDataListener);
         textViewDataAvaliacao.setOnFocusChangeListener(exibeDataListener);
+
+        spinnerTiposAvaliacao.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                                            @Override
+                                                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                                                podeSalvar();
+                                                            }
+
+                                                            @Override
+                                                            public void onNothingSelected(AdapterView<?> parent) {
+                                                            }
+                                                        }
+        );
+
+        editTextObservacao.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                podeSalvar();
+            }
+        });
+    }
+
+    private void podeSalvar() {
+        TipoAvaliacao tipoAvaliacao = arrayAdapterTiposAvaliacao.getItem(spinnerTiposAvaliacao.getSelectedItemPosition());
+
+        String data = textViewDataAvaliacao.getText().toString();
+
+        String observacao = editTextObservacao.getText().toString();
+
+        if (tipoAvaliacao.getNome().equals("Selecionar") || data.equals("__ /__ /__")) {
+            myMenu.findItem(R.id.action_salvar_avaliacao).setVisible(false);
+        }
+        else if (avaliacao != null) {
+            DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT);
+            String dataAvaliacao = dateFormat.format(avaliacao.getData().getTime());
+
+            if (tipoAvaliacao.getId() != avaliacao.getTipoAvaliacao().getId() ||
+                    !data.equals(dataAvaliacao) ||
+                    !observacao.equals(avaliacao.getObservacao())) {
+                myMenu.findItem(R.id.action_salvar_avaliacao).setVisible(true);
+            }
+            else{
+                myMenu.findItem(R.id.action_salvar_avaliacao).setVisible(false);
+            }
+        }
+        else {
+            myMenu.findItem(R.id.action_salvar_avaliacao).setVisible(true);
+        }
     }
 
     private void setAvaliacao(Avaliacao avaliacao) {
@@ -124,6 +184,10 @@ public class AvaliacaoActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.avaliacao, menu);
+        if (avaliacao == null) {
+            menu.findItem(R.id.action_deletar_avaliacao).setVisible(false);
+        }
+        myMenu = menu;
         return true;
     }
 
@@ -162,11 +226,9 @@ public class AvaliacaoActivity extends AppCompatActivity
                     Avaliacao avaliacaoAUX = new Avaliacao(tipoAvaliacaoId, data, observacao, disciplinaId);
                     avaliacaoDAO.inserir(avaliacaoAUX);
                 }
-
-                Intent intent = new Intent(AvaliacaoActivity.this, DisciplinaActivity.class);
-                intent.putExtra("DISCIPLINA_ID", disciplinaId);
+                Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
                 finish();
-                startActivityForResult(intent, 0);
             }
             return true;
         } else if (id == R.id.action_deletar_avaliacao) {
@@ -192,11 +254,9 @@ public class AvaliacaoActivity extends AppCompatActivity
                 public void onClick(View view) {
                     AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(AvaliacaoActivity.this);
                     avaliacaoDAO.deletarAvaliacaoId(avaliacao.getId());
-
-                    Intent intent = new Intent(AvaliacaoActivity.this, DisciplinaActivity.class);
-                    intent.putExtra("DISCIPLINA_ID", disciplinaId);
+                    Intent intent = new Intent();
+                    setResult(RESULT_OK, intent);
                     finish();
-                    startActivityForResult(intent, 0);
                 }
             });
             dialog.show();
@@ -216,12 +276,15 @@ public class AvaliacaoActivity extends AppCompatActivity
         if (id == R.id.nav_avaliacoes) {
             intent = new Intent(AvaliacaoActivity.this, AvaliacoesActivity.class);
             startActivityForResult(intent, 0);
+            finish();
         } else if (id == R.id.nav_disciplinas) {
             intent = new Intent(AvaliacaoActivity.this, DisciplinasActivity.class);
             startActivityForResult(intent, 0);
+            finish();
         } else if (id == R.id.nav_tipos_avaliacao) {
             intent = new Intent(AvaliacaoActivity.this, TiposAvaliacaoActivity.class);
             startActivityForResult(intent, 0);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -240,6 +303,7 @@ public class AvaliacaoActivity extends AppCompatActivity
             if (date.compareTo(new Date()) >= 0) {
                 textViewDataAvaliacao.setText(format);
             } else textViewDataAvaliacao.setText("__ /__ /__");
+            podeSalvar();
         }
     }
 
