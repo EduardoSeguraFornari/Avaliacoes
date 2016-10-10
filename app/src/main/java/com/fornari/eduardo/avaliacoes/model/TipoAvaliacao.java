@@ -91,9 +91,11 @@ public class TipoAvaliacao {
             return false;
         }
         TipoAvaliacao other = (TipoAvaliacao) obj;
-        if (!this.nome.equals(other.getNome()) || this.notificar!=other.isNotificar() || antecedenciaNotificacao!=other.getAntecedenciaNotificacao() || !this.descricao.equals(other.getDescricao())) {
+        if (!this.nome.equals(other.getNome()) || this.notificar != other.isNotificar() || antecedenciaNotificacao != other.getAntecedenciaNotificacao() || !this.descricao.equals(other.getDescricao())) {
             return false;
         }
         return true;
     }
+
+
 }

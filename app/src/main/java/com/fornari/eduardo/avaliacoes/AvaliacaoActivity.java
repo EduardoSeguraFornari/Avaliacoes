@@ -91,15 +91,15 @@ public class AvaliacaoActivity extends AppCompatActivity
         textViewDataAvaliacao.setOnFocusChangeListener(exibeDataListener);
 
         spinnerTiposAvaliacao.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    validaSalvar();
-                }
+                                                            @Override
+                                                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                                                validaOpcaoSalvar();
+                                                            }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-                }
-            }
+                                                            @Override
+                                                            public void onNothingSelected(AdapterView<?> parent) {
+                                                            }
+                                                        }
         );
 
         editTextObservacao.addTextChangedListener(new TextWatcher() {
@@ -115,7 +115,7 @@ public class AvaliacaoActivity extends AppCompatActivity
 
             @Override
             public void afterTextChanged(Editable s) {
-                validaSalvar();
+                validaOpcaoSalvar();
             }
         });
     }
@@ -125,7 +125,7 @@ public class AvaliacaoActivity extends AppCompatActivity
         spinnerTiposAvaliacao.setAdapter(arrayAdapterTiposAvaliacao);
     }
 
-    private void validaSalvar() {
+    private void validaOpcaoSalvar() {
         TipoAvaliacao tipoAvaliacao = arrayAdapterTiposAvaliacao.getItem(spinnerTiposAvaliacao.getSelectedItemPosition());
 
         String data = textViewDataAvaliacao.getText().toString();
@@ -235,7 +235,7 @@ public class AvaliacaoActivity extends AppCompatActivity
             if (date.compareTo(new Date()) >= 0) {
                 textViewDataAvaliacao.setText(format);
             } else textViewDataAvaliacao.setText("__ /__ /__");
-            validaSalvar();
+            validaOpcaoSalvar();
         }
     }
 
@@ -279,7 +279,9 @@ public class AvaliacaoActivity extends AppCompatActivity
         for (TipoAvaliacao tipoAvaliacao : tiposAvaliacao) {
             arrayAdapterTiposAvaliacao.add(tipoAvaliacao);
         }
-        arrayAdapterTiposAvaliacao.add(new TipoAvaliacao("Selecionar"));
+        TipoAvaliacao tipoAvaliacaoAUX = new TipoAvaliacao("Selecionar");
+        tipoAvaliacaoAUX.setId(-1);
+        arrayAdapterTiposAvaliacao.add(tipoAvaliacaoAUX);
         sortArrayAdapterTiposAvaliacao(arrayAdapterTiposAvaliacao);
     }
 
@@ -303,8 +305,8 @@ public class AvaliacaoActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.avaliacao, menu);
-        if (avaliacao == null) {
-            menu.findItem(R.id.action_deletar_avaliacao).setVisible(false);
+        if (avaliacao != null) {
+            menu.findItem(R.id.action_deletar_avaliacao).setVisible(true);
         }
         myMenu = menu;
         return true;

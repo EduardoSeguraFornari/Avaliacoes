@@ -150,7 +150,7 @@ public class TiposAvaliacaoActivity extends AppCompatActivity
 
         if (requestCode == 1) {
 
-            if(resultCode == RESULT_OK){
+            if (resultCode == RESULT_OK) {
                 preencheAdapterTiposAvaliacao(carregaTiposAvaliacao());
                 sortArrayAdapterTiposAvaliacao(arrayAdapterTiposAvaliacao);
                 listViewTiposAvaliacao.setAdapter(arrayAdapterTiposAvaliacao);

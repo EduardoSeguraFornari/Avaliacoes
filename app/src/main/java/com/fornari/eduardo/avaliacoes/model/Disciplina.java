@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by Eduardo Segura Fornari on 10/09/2016.
  */
-public class Disciplina implements Comparable<Disciplina>{
+public class Disciplina implements Comparable<Disciplina> {
     public static final String DISCIPLINA = "DISCIPLINA";
     public static final String DISCIPLINA_ID = "DISCIPLINA_ID";
     public static final String DISCIPLINA_NOME = "DISCIPLINA_NOME";
@@ -48,7 +48,7 @@ public class Disciplina implements Comparable<Disciplina>{
         this.avaliacoes = avaliacoes;
     }
 
-    public String toString(){
+    public String toString() {
         return nome;
     }
 

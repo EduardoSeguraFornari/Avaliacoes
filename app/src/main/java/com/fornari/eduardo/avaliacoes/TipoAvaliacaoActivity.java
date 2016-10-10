@@ -3,6 +3,8 @@ package com.fornari.eduardo.avaliacoes;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -35,6 +38,8 @@ public class TipoAvaliacaoActivity extends AppCompatActivity
     private EditText editTextDescricao;
 
     private TipoAvaliacao tipoAvaliacao;
+
+    Menu myMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +81,23 @@ public class TipoAvaliacaoActivity extends AppCompatActivity
             setTipoAvaliacao();
         }
 
+        editTextNome.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                validaOpcaoSalvar();
+            }
+        });
+
         switchNotificar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -84,6 +106,36 @@ public class TipoAvaliacaoActivity extends AppCompatActivity
                 } else {
                     linearLayoutAntecedenciaNotificacao.setVisibility(View.GONE);
                 }
+                validaOpcaoSalvar();
+            }
+        });
+
+        spinnerAntecedenciaNotificacao.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                                                                     @Override
+                                                                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                                                         validaOpcaoSalvar();
+                                                                     }
+
+                                                                     @Override
+                                                                     public void onNothingSelected(AdapterView<?> parent) {
+                                                                     }
+                                                                 }
+        );
+
+        editTextDescricao.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                validaOpcaoSalvar();
             }
         });
 
@@ -118,6 +170,26 @@ public class TipoAvaliacaoActivity extends AppCompatActivity
         }
     }
 
+    public void validaOpcaoSalvar() {
+        String nomeTipoAvaliacao = editTextNome.getText().toString();
+        if (nomeTipoAvaliacao.equals("")) {
+            myMenu.findItem(R.id.action_salvar_tipo_avaliacao).setVisible(false);
+        } else {
+            if (tipoAvaliacao != null) {
+                String dercricaoTipoAvaliacao = editTextDescricao.getText().toString();
+                boolean notificarTipoAvaliacao = switchNotificar.isChecked();
+                int antecedenciaNotificacao = arrayAdapterAntecedenciaNotificacao.getItem(spinnerAntecedenciaNotificacao.getSelectedItemPosition());
+                if (!nomeTipoAvaliacao.equals(tipoAvaliacao.getNome()) || notificarTipoAvaliacao != tipoAvaliacao.isNotificar() || (notificarTipoAvaliacao && tipoAvaliacao.getAntecedenciaNotificacao() != antecedenciaNotificacao) || !dercricaoTipoAvaliacao.equals(tipoAvaliacao.getDescricao())) {
+                    myMenu.findItem(R.id.action_salvar_tipo_avaliacao).setVisible(true);
+                } else {
+                    myMenu.findItem(R.id.action_salvar_tipo_avaliacao).setVisible(false);
+                }
+            } else {
+                myMenu.findItem(R.id.action_salvar_tipo_avaliacao).setVisible(true);
+            }
+        }
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -132,9 +204,10 @@ public class TipoAvaliacaoActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.tipo_avaliacao, menu);
-        if (tipoAvaliacao == null) {
-            menu.findItem(R.id.action_deletar_tipo_avaliacao).setVisible(false);
+        if (tipoAvaliacao != null) {
+            menu.findItem(R.id.action_deletar_tipo_avaliacao).setVisible(true);
         }
+        myMenu = menu;
         return true;
     }
 
@@ -148,31 +221,26 @@ public class TipoAvaliacaoActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_salvar_tipo_avaliacao) {
             String nome = editTextNome.getText().toString();
-            if (nome.isEmpty()) {
-                Toast.makeText(TipoAvaliacaoActivity.this, "O tipo de avaliação não pode ficar em branco!", Toast.LENGTH_LONG).show();
+            TipoAvaliacaoBO tipoAvaliacaoBO = new TipoAvaliacaoBO(this);
+            if (tipoAvaliacao != null && !nome.equals(tipoAvaliacao.getNome()) && tipoAvaliacaoBO.buscaTipoAvaliacaoPorNome(nome) != null) {
+                Toast.makeText(TipoAvaliacaoActivity.this, "Já existe um tipo de avaliação com este nome!", Toast.LENGTH_LONG).show();
             } else {
-                TipoAvaliacaoBO tipoAvaliacaoBO = new TipoAvaliacaoBO(this);
-                if ((tipoAvaliacao == null || !nome.equals(tipoAvaliacao.getNome())) && tipoAvaliacaoBO.buscaTipoAvaliacaoPorNome(nome) != null) {
-                    Toast.makeText(TipoAvaliacaoActivity.this, "Já existe um tipo de avaliação com este nome!", Toast.LENGTH_LONG).show();
+                boolean notificarTipoAvaliacao = switchNotificar.isChecked();
+                int antecedenciaNotificacaoTipoAvaliacao = (int) spinnerAntecedenciaNotificacao.getSelectedItem();
+                String descricaoTipoAvaliacao = editTextDescricao.getText().toString();
+
+                TipoAvaliacao tipoAvaliacaoAUX = new TipoAvaliacao(nome, notificarTipoAvaliacao, antecedenciaNotificacaoTipoAvaliacao, descricaoTipoAvaliacao);
+
+                if (tipoAvaliacao == null) {
+                    tipoAvaliacaoBO.inserir(tipoAvaliacaoAUX);
                 } else {
-                    boolean notificarTipoAvaliacao = switchNotificar.isChecked();
-                    int antecedenciaNotificacaoTipoAvaliacao = (int) spinnerAntecedenciaNotificacao.getSelectedItem();
-                    String descricaoTipoAvaliacao = editTextDescricao.getText().toString();
-                    if (tipoAvaliacao == null) {
-                        TipoAvaliacao tipoAvaliacaoAUX = new TipoAvaliacao(nome, notificarTipoAvaliacao, antecedenciaNotificacaoTipoAvaliacao, descricaoTipoAvaliacao);
-                        tipoAvaliacaoBO.inserir(tipoAvaliacaoAUX);
-                    } else {
-                        TipoAvaliacao tipoAvaliacaoAUX = new TipoAvaliacao(nome, notificarTipoAvaliacao, antecedenciaNotificacaoTipoAvaliacao, descricaoTipoAvaliacao);
-                        if (!tipoAvaliacaoAUX.equals(tipoAvaliacao)) {
-                            tipoAvaliacaoBO.atualizaTipoAvaliacao(tipoAvaliacao.getId(), tipoAvaliacaoAUX);
-                            Toast.makeText(TipoAvaliacaoActivity.this, "São diferentes", Toast.LENGTH_LONG).show();
-                        }
-                    }
+                    tipoAvaliacaoBO.atualizaTipoAvaliacao(tipoAvaliacao.getId(), tipoAvaliacaoAUX);
                 }
+                Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
+                finish();
             }
-            Intent intent = new Intent();
-            setResult(RESULT_OK, intent);
-            finish();
+
             return true;
         }
         if (id == R.id.action_deletar_tipo_avaliacao) {
