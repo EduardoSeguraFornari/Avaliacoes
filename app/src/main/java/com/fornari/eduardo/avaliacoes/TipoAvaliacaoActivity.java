@@ -21,7 +21,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fornari.eduardo.avaliacoes.dao.TipoAvaliacaoDAO;
+import com.fornari.eduardo.avaliacoes.bo.TipoAvaliacaoBO;
 import com.fornari.eduardo.avaliacoes.model.TipoAvaliacao;
 
 public class TipoAvaliacaoActivity extends AppCompatActivity
@@ -69,9 +69,9 @@ public class TipoAvaliacaoActivity extends AppCompatActivity
         if (bundle != null && bundle.containsKey("TIPO_AVALIACAO_ID")) {
             int tipo_avaliacao_id = (int) bundle.getSerializable("TIPO_AVALIACAO_ID");
 
-            TipoAvaliacaoDAO tipoAvaliacaoDAO = new TipoAvaliacaoDAO(this);
+            TipoAvaliacaoBO tipoAvaliacaoBO = new TipoAvaliacaoBO(this);
 
-            tipoAvaliacao = tipoAvaliacaoDAO.buscaTipoAvaliacaoId(tipo_avaliacao_id);
+            tipoAvaliacao = tipoAvaliacaoBO.buscaTipoAvaliacaoId(tipo_avaliacao_id);
 
             setTipoAvaliacao();
         }
@@ -98,7 +98,8 @@ public class TipoAvaliacaoActivity extends AppCompatActivity
             linearLayoutAntecedenciaNotificacao.setVisibility(View.GONE);
         }
         spinnerAntecedenciaNotificacao.setSelection(tipoAvaliacao.getAntecedenciaNotificacao() - 1);
-        editTextDescricao.setText(tipoAvaliacao.getDescricao());editTextNome.setText(tipoAvaliacao.getNome());
+        editTextDescricao.setText(tipoAvaliacao.getDescricao());
+        editTextNome.setText(tipoAvaliacao.getNome());
         switchNotificar.setChecked(tipoAvaliacao.isNotificar());
         if (tipoAvaliacao.isNotificar()) {
             linearLayoutAntecedenciaNotificacao.setVisibility(View.VISIBLE);
@@ -131,7 +132,7 @@ public class TipoAvaliacaoActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.tipo_avaliacao, menu);
-        if(tipoAvaliacao==null){
+        if (tipoAvaliacao == null) {
             menu.findItem(R.id.action_deletar_tipo_avaliacao).setVisible(false);
         }
         return true;
@@ -150,8 +151,8 @@ public class TipoAvaliacaoActivity extends AppCompatActivity
             if (nome.isEmpty()) {
                 Toast.makeText(TipoAvaliacaoActivity.this, "O tipo de avaliação não pode ficar em branco!", Toast.LENGTH_LONG).show();
             } else {
-                TipoAvaliacaoDAO tipoAvaliacaoDAO = new TipoAvaliacaoDAO(this);
-                if ((tipoAvaliacao == null || !nome.equals(tipoAvaliacao.getNome())) && tipoAvaliacaoDAO.buscaTipoAvaliacaoPorNome(nome) != null) {
+                TipoAvaliacaoBO tipoAvaliacaoBO = new TipoAvaliacaoBO(this);
+                if ((tipoAvaliacao == null || !nome.equals(tipoAvaliacao.getNome())) && tipoAvaliacaoBO.buscaTipoAvaliacaoPorNome(nome) != null) {
                     Toast.makeText(TipoAvaliacaoActivity.this, "Já existe um tipo de avaliação com este nome!", Toast.LENGTH_LONG).show();
                 } else {
                     boolean notificarTipoAvaliacao = switchNotificar.isChecked();
@@ -159,11 +160,11 @@ public class TipoAvaliacaoActivity extends AppCompatActivity
                     String descricaoTipoAvaliacao = editTextDescricao.getText().toString();
                     if (tipoAvaliacao == null) {
                         TipoAvaliacao tipoAvaliacaoAUX = new TipoAvaliacao(nome, notificarTipoAvaliacao, antecedenciaNotificacaoTipoAvaliacao, descricaoTipoAvaliacao);
-                        tipoAvaliacaoDAO.inserir(tipoAvaliacaoAUX);
+                        tipoAvaliacaoBO.inserir(tipoAvaliacaoAUX);
                     } else {
-                        TipoAvaliacao tipoAvaliacaoAUX = new TipoAvaliacao(tipoAvaliacao.getId(), nome, notificarTipoAvaliacao, antecedenciaNotificacaoTipoAvaliacao, descricaoTipoAvaliacao);
+                        TipoAvaliacao tipoAvaliacaoAUX = new TipoAvaliacao(nome, notificarTipoAvaliacao, antecedenciaNotificacaoTipoAvaliacao, descricaoTipoAvaliacao);
                         if (!tipoAvaliacaoAUX.equals(tipoAvaliacao)) {
-                            tipoAvaliacaoDAO.atualizaTipoAvaliacao(tipoAvaliacaoAUX);
+                            tipoAvaliacaoBO.atualizaTipoAvaliacao(tipoAvaliacao.getId(), tipoAvaliacaoAUX);
                             Toast.makeText(TipoAvaliacaoActivity.this, "São diferentes", Toast.LENGTH_LONG).show();
                         }
                     }
@@ -196,8 +197,8 @@ public class TipoAvaliacaoActivity extends AppCompatActivity
                 @Override
                 public void onClick(View view) {
 
-                    TipoAvaliacaoDAO tipoAvaliacaoDAO = new TipoAvaliacaoDAO(TipoAvaliacaoActivity.this);
-                    tipoAvaliacaoDAO.deletarTipoAvaliacaoId(tipoAvaliacao.getId());
+                    TipoAvaliacaoBO tipoAvaliacaoBO = new TipoAvaliacaoBO(TipoAvaliacaoActivity.this);
+                    tipoAvaliacaoBO.deletarTipoAvaliacaoId(tipoAvaliacao.getId());
 
                     Intent intent = new Intent();
                     setResult(RESULT_OK, intent);

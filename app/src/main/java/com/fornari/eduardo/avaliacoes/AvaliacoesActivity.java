@@ -13,7 +13,7 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.fornari.eduardo.avaliacoes.dao.AvaliacaoDAO;
+import com.fornari.eduardo.avaliacoes.bo.AvaliacaoBO;
 import com.fornari.eduardo.avaliacoes.model.Avaliacao;
 
 import java.util.Comparator;
@@ -42,10 +42,14 @@ public class AvaliacoesActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         listViewAvaliacoes = (ListView) findViewById(R.id.listViewAvaliacoes);
-        preencheArrayAdapterAvaliacoes(carregaAvaliacoes());
+        carregaAvaliacoes();
+
+    }
+
+    private void carregaAvaliacoes() {
+        preencheArrayAdapterAvaliacoes(buscaAvaliacoes());
         sortArrayAdapterAvaliacoes(arrayAdapterAvaliacoes);
         listViewAvaliacoes.setAdapter(arrayAdapterAvaliacoes);
-
     }
 
     public void preencheArrayAdapterAvaliacoes(List<Avaliacao> avaliacoes) {
@@ -56,9 +60,9 @@ public class AvaliacoesActivity extends AppCompatActivity
         }
     }
 
-    public List<Avaliacao> carregaAvaliacoes() {
-        AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(this);
-        List<Avaliacao> avaliacoes = avaliacaoDAO.buscaAvaliacoes();
+    public List<Avaliacao> buscaAvaliacoes() {
+        AvaliacaoBO avaliacaoBO = new AvaliacaoBO(this);
+        List<Avaliacao> avaliacoes = avaliacaoBO.buscaAvaliacoes();
         return avaliacoes;
     }
 

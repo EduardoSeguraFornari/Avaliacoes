@@ -42,7 +42,7 @@ public class DisciplinaDAO {
         return disciplinaId;
     }
 
-    public List<Disciplina> buscaDisciplinas(Context context) {
+    public List<Disciplina> buscaDisciplinas() {
         DataBase dataBase = new DataBase(context);
         SQLiteDatabase connection = dataBase.getWritableDatabase();
 
@@ -99,11 +99,11 @@ public class DisciplinaDAO {
         dataBase.close();
     }
 
-    public void atualizaDisciplina(Disciplina disciplina) {
+    public void atualizaDisciplina(int id, Disciplina disciplina) {
         DataBase dataBase = new DataBase(context);
         SQLiteDatabase connection = dataBase.getWritableDatabase();
 
-        String where = Disciplina.DISCIPLINA_ID + "=" + disciplina.getId();
+        String where = Disciplina.DISCIPLINA_ID + "=" + id;
 
         ContentValues valores = new ContentValues();
         valores.put(Disciplina.DISCIPLINA_NOME, disciplina.getNome());

@@ -22,7 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fornari.eduardo.avaliacoes.dao.DisciplinaDAO;
+import com.fornari.eduardo.avaliacoes.bo.DisciplinaBO;
 import com.fornari.eduardo.avaliacoes.database.DataBase;
 import com.fornari.eduardo.avaliacoes.model.Disciplina;
 
@@ -104,10 +104,10 @@ public class DisciplinasActivity extends AppCompatActivity
                 } else {
                     DataBase dataBase = new DataBase(DisciplinasActivity.this);
                     SQLiteDatabase connection = dataBase.getReadableDatabase();
-                    DisciplinaDAO disciplinaDAO = new DisciplinaDAO(DisciplinasActivity.this);
-                    if (disciplinaDAO.buscaDisciplinaPorNome(nomeDiciplina) == null) {
+                    DisciplinaBO disciplinaBO = new DisciplinaBO(DisciplinasActivity.this);
+                    if (disciplinaBO.buscaDisciplinaPorNome(nomeDiciplina) == null) {
                         Disciplina disciplina = new Disciplina(nomeDiciplina);
-                        int novaDisciplinaId = disciplinaDAO.inserir(disciplina);
+                        int novaDisciplinaId = disciplinaBO.inserir(disciplina);
                         disciplina.setId(novaDisciplinaId);
                         arrayAdapterDisciplinas.add(disciplina);
 
@@ -135,8 +135,8 @@ public class DisciplinasActivity extends AppCompatActivity
     }
 
     public List<Disciplina> carregaDisciplinas() {
-        DisciplinaDAO disciplinaDAO = new DisciplinaDAO(this);
-        List<Disciplina> disciplinas = disciplinaDAO.buscaDisciplinas(this);
+        DisciplinaBO disciplinaBO = new DisciplinaBO(this);
+        List<Disciplina> disciplinas = disciplinaBO.buscaDisciplinas();
         return disciplinas;
     }
 

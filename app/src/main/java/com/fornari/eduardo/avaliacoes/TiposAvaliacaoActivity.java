@@ -17,7 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.fornari.eduardo.avaliacoes.dao.TipoAvaliacaoDAO;
+import com.fornari.eduardo.avaliacoes.bo.TipoAvaliacaoBO;
 import com.fornari.eduardo.avaliacoes.model.TipoAvaliacao;
 
 import java.util.Comparator;
@@ -140,8 +140,8 @@ public class TiposAvaliacaoActivity extends AppCompatActivity
     }
 
     public List<TipoAvaliacao> carregaTiposAvaliacao() {
-        TipoAvaliacaoDAO disciplinaDAO = new TipoAvaliacaoDAO(this);
-        List<TipoAvaliacao> tiposAvaliacao = disciplinaDAO.buscaTiposAvaliacao();
+        TipoAvaliacaoBO tipoAvaliacaoBO = new TipoAvaliacaoBO(this);
+        List<TipoAvaliacao> tiposAvaliacao = tipoAvaliacaoBO.buscaTiposAvaliacao();
         return tiposAvaliacao;
     }
 

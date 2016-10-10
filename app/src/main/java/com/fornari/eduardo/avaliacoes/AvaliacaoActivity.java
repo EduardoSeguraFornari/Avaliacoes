@@ -23,8 +23,8 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.fornari.eduardo.avaliacoes.dao.AvaliacaoDAO;
-import com.fornari.eduardo.avaliacoes.dao.TipoAvaliacaoDAO;
+import com.fornari.eduardo.avaliacoes.bo.AvaliacaoBO;
+import com.fornari.eduardo.avaliacoes.bo.TipoAvaliacaoBO;
 import com.fornari.eduardo.avaliacoes.model.Avaliacao;
 import com.fornari.eduardo.avaliacoes.model.TipoAvaliacao;
 
@@ -49,7 +49,6 @@ public class AvaliacaoActivity extends AppCompatActivity
 
     private Menu myMenu;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,10 +61,7 @@ public class AvaliacaoActivity extends AppCompatActivity
         textViewDataAvaliacao = (TextView) findViewById(R.id.textViewDataAvaliacao);
 
         //Busca e mostra na tela os tipos de avaliações cadastrados no banco de dados em ordem alfabetica
-        preencheAdapterTiposAvaliacao(carregaTiposAvaliacao());
-        arrayAdapterTiposAvaliacao.add(new TipoAvaliacao("Selecionar"));
-        sortArrayAdapterTiposAvaliacao(arrayAdapterTiposAvaliacao);
-        spinnerTiposAvaliacao.setAdapter(arrayAdapterTiposAvaliacao);
+        carregaTiposAvaliacao();
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -75,8 +71,8 @@ public class AvaliacaoActivity extends AppCompatActivity
 
             if (bundle.containsKey("AVALIACAO_ID")) {
                 int avaliacaoId = (int) bundle.getSerializable("AVALIACAO_ID");
-                AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(this);
-                avaliacao = avaliacaoDAO.buscaAvaliacaoID(avaliacaoId);
+                AvaliacaoBO avaliacaoBO = new AvaliacaoBO(this);
+                avaliacao = avaliacaoBO.buscaAvaliacaoID(avaliacaoId);
                 setAvaliacao(avaliacao);
             }
         }
@@ -122,6 +118,11 @@ public class AvaliacaoActivity extends AppCompatActivity
                 validaSalvar();
             }
         });
+    }
+
+    private void carregaTiposAvaliacao() {
+        preencheAdapterTiposAvaliacao(buscaTiposAvaliacao());
+        spinnerTiposAvaliacao.setAdapter(arrayAdapterTiposAvaliacao);
     }
 
     private void validaSalvar() {
@@ -177,14 +178,13 @@ public class AvaliacaoActivity extends AppCompatActivity
 
         String observacao = editTextObservacao.getText().toString();
 
-        AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(this);
+        Avaliacao avaliacaoAUX = new Avaliacao(tipoAvaliacaoId, data, observacao, disciplinaId);
+        AvaliacaoBO avaliacaoBO = new AvaliacaoBO(this);
 
         if (avaliacao != null) {
-            Avaliacao avaliacaoAUX = new Avaliacao(avaliacao.getId(), tipoAvaliacaoId, data, observacao, avaliacao.getDisciplina().getId());
-            avaliacaoDAO.atualizaAvaliacao(avaliacaoAUX);
+            avaliacaoBO.atualizaAvaliacao(avaliacao.getId(), avaliacaoAUX);
         } else {
-            Avaliacao avaliacaoAUX = new Avaliacao(tipoAvaliacaoId, data, observacao, disciplinaId);
-            avaliacaoDAO.inserir(avaliacaoAUX);
+            avaliacaoBO.inserir(avaliacaoAUX);
         }
 
         Intent intent = new Intent();
@@ -201,20 +201,21 @@ public class AvaliacaoActivity extends AppCompatActivity
         TextView textViewDeletar = (TextView) dialog.findViewById(R.id.textViewDeletarDialog);
         textViewDeletar.setText("Deletar esta avaliação?");
 
-        ImageButton cancelar = (ImageButton) dialog.findViewById(R.id.imageButtonCancelDeletarDialog);
-        cancelar.setOnClickListener(new View.OnClickListener() {
+        ImageButton imageButtonCancelDeletarDialog = (ImageButton) dialog.findViewById(R.id.imageButtonCancelDeletarDialog);
+        imageButtonCancelDeletarDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog.cancel();
             }
         });
 
-        ImageButton adicionar = (ImageButton) dialog.findViewById(R.id.imageButtonDoneDeletarDialog);
-        adicionar.setOnClickListener(new View.OnClickListener() {
+        ImageButton imageButtonDoneDeletarDialog = (ImageButton) dialog.findViewById(R.id.imageButtonDoneDeletarDialog);
+        imageButtonDoneDeletarDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(AvaliacaoActivity.this);
-                avaliacaoDAO.deletarAvaliacaoId(avaliacao.getId());
+                AvaliacaoBO avaliacaoBO = new AvaliacaoBO(AvaliacaoActivity.this);
+                avaliacaoBO.deletarAvaliacaoId(avaliacao.getId());
+
                 Intent intent = new Intent();
                 setResult(RESULT_OK, intent);
                 finish();
@@ -278,11 +279,13 @@ public class AvaliacaoActivity extends AppCompatActivity
         for (TipoAvaliacao tipoAvaliacao : tiposAvaliacao) {
             arrayAdapterTiposAvaliacao.add(tipoAvaliacao);
         }
+        arrayAdapterTiposAvaliacao.add(new TipoAvaliacao("Selecionar"));
+        sortArrayAdapterTiposAvaliacao(arrayAdapterTiposAvaliacao);
     }
 
-    public List<TipoAvaliacao> carregaTiposAvaliacao() {
-        TipoAvaliacaoDAO disciplinaDAO = new TipoAvaliacaoDAO(this);
-        List<TipoAvaliacao> tiposAvaliacao = disciplinaDAO.buscaTiposAvaliacao();
+    public List<TipoAvaliacao> buscaTiposAvaliacao() {
+        TipoAvaliacaoBO tipoAvaliacaoBO = new TipoAvaliacaoBO(this);
+        List<TipoAvaliacao> tiposAvaliacao = tipoAvaliacaoBO.buscaTiposAvaliacao();
         return tiposAvaliacao;
     }
 

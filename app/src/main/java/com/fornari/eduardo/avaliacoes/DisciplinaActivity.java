@@ -22,8 +22,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.fornari.eduardo.avaliacoes.dao.AvaliacaoDAO;
-import com.fornari.eduardo.avaliacoes.dao.DisciplinaDAO;
+import com.fornari.eduardo.avaliacoes.bo.AvaliacaoBO;
+import com.fornari.eduardo.avaliacoes.bo.DisciplinaBO;
 import com.fornari.eduardo.avaliacoes.database.DataBase;
 import com.fornari.eduardo.avaliacoes.model.Avaliacao;
 import com.fornari.eduardo.avaliacoes.model.Disciplina;
@@ -49,8 +49,8 @@ public class DisciplinaActivity extends AppCompatActivity
         Bundle bundle = getIntent().getExtras();
         if (bundle != null && bundle.containsKey("DISCIPLINA_ID")) {
             int disciplinaId = (int) bundle.getSerializable("DISCIPLINA_ID");
-            DisciplinaDAO disciplinaDAO = new DisciplinaDAO(this);
-            disciplina = disciplinaDAO.buscaDisciplinaId(disciplinaId);
+            DisciplinaBO disciplinaBO = new DisciplinaBO(this);
+            disciplina = disciplinaBO.buscaDisciplinaId(disciplinaId);
         }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -123,10 +123,10 @@ public class DisciplinaActivity extends AppCompatActivity
                 } else {
                     DataBase dataBase = new DataBase(DisciplinaActivity.this);
                     SQLiteDatabase connection = dataBase.getReadableDatabase();
-                    DisciplinaDAO disciplinaDAO = new DisciplinaDAO(DisciplinaActivity.this);
-                    if (disciplinaDAO.buscaDisciplinaPorNome(nomeDiciplina) == null) {
-                        Disciplina disciplinaAUX = new Disciplina(disciplina.getId(), nomeDiciplina);
-                        disciplinaDAO.atualizaDisciplina(disciplinaAUX);
+                    DisciplinaBO disciplinaBO = new DisciplinaBO(DisciplinaActivity.this);
+                    if (disciplinaBO.buscaDisciplinaPorNome(nomeDiciplina) == null) {
+                        Disciplina disciplinaAUX = new Disciplina(nomeDiciplina);
+                        disciplinaBO.atualizaDisciplina(disciplina.getId(), disciplinaAUX);
 
                         disciplina.setNome(nomeDiciplina);
                         textViewNomeDisciplina.setText(nomeDiciplina);
@@ -162,11 +162,8 @@ public class DisciplinaActivity extends AppCompatActivity
         imageButtonDoneDeletarDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(DisciplinaActivity.this);
-                avaliacaoDAO.deletarAvaliacoesDisciplina(disciplina.getId());
-
-                DisciplinaDAO disciplinaDAO = new DisciplinaDAO(DisciplinaActivity.this);
-                disciplinaDAO.deletarDisciplinaId(disciplina.getId());
+                DisciplinaBO disciplinaBO = new DisciplinaBO(DisciplinaActivity.this);
+                disciplinaBO.deletarDisciplinaId(disciplina.getId());
 
                 Intent intent = new Intent();
                 setResult(RESULT_OK, intent);
@@ -185,8 +182,8 @@ public class DisciplinaActivity extends AppCompatActivity
     }
 
     public List<Avaliacao> carregaAvaliacoesDisciplina() {
-        AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(this);
-        List<Avaliacao> avaliacoes = avaliacaoDAO.buscaAvaliacoesDisciplina(disciplina.getId());
+        AvaliacaoBO avaliacaoBO = new AvaliacaoBO(this);
+        List<Avaliacao> avaliacoes = avaliacaoBO.buscaAvaliacoesDisciplina(disciplina.getId());
         return avaliacoes;
     }
 

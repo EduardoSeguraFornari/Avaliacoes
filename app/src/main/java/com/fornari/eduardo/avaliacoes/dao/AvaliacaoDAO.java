@@ -139,11 +139,11 @@ public class AvaliacaoDAO {
         return avaliacao;
     }
 
-    public void atualizaAvaliacao(Avaliacao avaliacao) {
+    public void atualizaAvaliacao(int id, Avaliacao avaliacao) {
         DataBase dataBase = new DataBase(context);
         SQLiteDatabase connection = dataBase.getWritableDatabase();
 
-        String where = Avaliacao.AVALIACAO_ID + "=" + avaliacao.getId();
+        String where = Avaliacao.AVALIACAO_ID + "=" + id;
 
         ContentValues valores = new ContentValues();
         valores.put(Avaliacao.AVALIACAO_TIPO_AVALIACAO__ID, avaliacao.getTipoAvaliacaoId());
@@ -214,11 +214,20 @@ public class AvaliacaoDAO {
         dataBase.close();
     }
 
-    public void deletarAvaliacoesDisciplina(int id) {
+    public void deletarAvaliacoesDisciplina(int disciplinaId) {
         DataBase dataBase = new DataBase(context);
         SQLiteDatabase connection = dataBase.getWritableDatabase();
 
-        String where = Avaliacao.AVALIACAO_DISCIPLINA__ID + "=" + id;
+        String where = Avaliacao.AVALIACAO_DISCIPLINA__ID + "=" + disciplinaId;
+        connection.delete(Avaliacao.AVALIACAO, where, null);
+        dataBase.close();
+    }
+
+    public void deletarAvaliacoesTipoAvaliacao(int tipoAvaliacaoId) {
+        DataBase dataBase = new DataBase(context);
+        SQLiteDatabase connection = dataBase.getWritableDatabase();
+
+        String where = Avaliacao.AVALIACAO_TIPO_AVALIACAO__ID + "=" + tipoAvaliacaoId;
         connection.delete(Avaliacao.AVALIACAO, where, null);
         dataBase.close();
     }
