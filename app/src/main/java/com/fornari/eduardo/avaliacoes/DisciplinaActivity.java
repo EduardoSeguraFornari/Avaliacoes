@@ -93,6 +93,113 @@ public class DisciplinaActivity extends AppCompatActivity
         });
     }
 
+    private void mostraDialogRenomearDisciplina() {
+        final Dialog dialog = new Dialog(DisciplinaActivity.this);
+        dialog.setContentView(R.layout.nome_disciplina);
+
+        dialog.setTitle("ADICIONAR DISCIPLINA");
+
+        TextView textViewNomeDisciplinaDialog = (TextView) dialog.findViewById(R.id.textViewNomeDisciplinaDialog);
+        textViewNomeDisciplinaDialog.setText("Informe o novo nome da disciplina");
+
+        ImageButton imageButtonCancelNomeDisciplinaDialog = (ImageButton) dialog.findViewById(R.id.imageButtonCancelNomeDisciplinaDialog);
+        imageButtonCancelNomeDisciplinaDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+            }
+        });
+
+        ImageButton imageButtonDoneNomeDisciplinaDialog = (ImageButton) dialog.findViewById(R.id.imageButtonDoneNomeDisciplinaDialog);
+        imageButtonDoneNomeDisciplinaDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditText editTextNomeDiciplinaDialog = (EditText) dialog.findViewById(R.id.editTextNomeDiciplinaDialog);
+                String nomeDiciplina = editTextNomeDiciplinaDialog.getText().toString();
+                if (nomeDiciplina.trim().isEmpty()) {
+                    Toast.makeText(DisciplinaActivity.this, "O nome da disciplina não pode ficar em branco!", Toast.LENGTH_LONG).show();
+                } else if (nomeDiciplina.equals(disciplina.getNome())) {
+                    dialog.cancel();
+                } else {
+                    DataBase dataBase = new DataBase(DisciplinaActivity.this);
+                    SQLiteDatabase connection = dataBase.getReadableDatabase();
+                    DisciplinaDAO disciplinaDAO = new DisciplinaDAO(DisciplinaActivity.this);
+                    if (disciplinaDAO.buscaDisciplinaPorNome(nomeDiciplina) == null) {
+                        Disciplina disciplinaAUX = new Disciplina(disciplina.getId(), nomeDiciplina);
+                        disciplinaDAO.atualizaDisciplina(disciplinaAUX);
+
+                        disciplina.setNome(nomeDiciplina);
+                        textViewNomeDisciplina.setText(nomeDiciplina);
+
+                        dialog.cancel();
+                    } else {
+                        Toast.makeText(DisciplinaActivity.this, "Está disciplina ja existe!", Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+        });
+        dialog.show();
+    }
+
+    private void mostraDialogDeletarDisciplina() {
+        final Dialog dialog = new Dialog(DisciplinaActivity.this);
+        dialog.setContentView(R.layout.deletar);
+
+        dialog.setTitle("DELETAR DISCIPLINA");
+
+        TextView textViewDeletarDialog = (TextView) dialog.findViewById(R.id.textViewDeletarDialog);
+        textViewDeletarDialog.setText("Deletar esta disciplina?");
+
+        ImageButton imageButtonCancelDeletarDialog = (ImageButton) dialog.findViewById(R.id.imageButtonCancelDeletarDialog);
+        imageButtonCancelDeletarDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+            }
+        });
+
+        ImageButton imageButtonDoneDeletarDialog = (ImageButton) dialog.findViewById(R.id.imageButtonDoneDeletarDialog);
+        imageButtonDoneDeletarDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(DisciplinaActivity.this);
+                avaliacaoDAO.deletarAvaliacoesDisciplina(disciplina.getId());
+
+                DisciplinaDAO disciplinaDAO = new DisciplinaDAO(DisciplinaActivity.this);
+                disciplinaDAO.deletarDisciplinaId(disciplina.getId());
+
+                Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
+        dialog.show();
+    }
+
+    public void preencheArrayAdapterAvaliacoesDisciplinas(List<Avaliacao> avaliacoes) {
+        int layoutAdapter = android.R.layout.simple_list_item_1;
+        arrayAdapterAvaliacoesDisciplina = new ArrayAdapter<Avaliacao>(DisciplinaActivity.this, layoutAdapter);
+        for (int i = 0; i < avaliacoes.size(); i++) {
+            arrayAdapterAvaliacoesDisciplina.add(avaliacoes.get(i));
+        }
+    }
+
+    public List<Avaliacao> carregaAvaliacoesDisciplina() {
+        AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(this);
+        List<Avaliacao> avaliacoes = avaliacaoDAO.buscaAvaliacoesDisciplina(disciplina.getId());
+        return avaliacoes;
+    }
+
+    private void sortArrayAdapterAvaliacoesDisciplina(ArrayAdapter<Avaliacao> arrayAdapterAvaliacoesDisciplina) {
+        Comparator<Avaliacao> porNome = new Comparator<Avaliacao>() {
+            @Override
+            public int compare(Avaliacao avaliacao1, Avaliacao avaliacao2) {
+                return avaliacao1.getData().compareTo(avaliacao2.getData());
+            }
+        };
+        arrayAdapterAvaliacoesDisciplina.sort(porNome);
+    }
+
     @Override
     public void onBackPressed() {
         Intent intent = new Intent();
@@ -116,89 +223,11 @@ public class DisciplinaActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_deletar_disciplina) {
-            final Dialog dialog = new Dialog(DisciplinaActivity.this);
-            dialog.setContentView(R.layout.deletar);
-
-            dialog.setTitle("DELETAR DISCIPLINA");
-
-            TextView textViewDeletarDialog = (TextView) dialog.findViewById(R.id.textViewDeletarDialog);
-            textViewDeletarDialog.setText("Deletar esta disciplina?");
-
-            ImageButton imageButtonCancelDeletarDialog = (ImageButton) dialog.findViewById(R.id.imageButtonCancelDeletarDialog);
-            imageButtonCancelDeletarDialog.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialog.cancel();
-                }
-            });
-
-            ImageButton imageButtonDoneDeletarDialog = (ImageButton) dialog.findViewById(R.id.imageButtonDoneDeletarDialog);
-            imageButtonDoneDeletarDialog.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(DisciplinaActivity.this);
-                    avaliacaoDAO.deletarAvaliacoesDisciplina(disciplina.getId());
-
-                    DisciplinaDAO disciplinaDAO = new DisciplinaDAO(DisciplinaActivity.this);
-                    disciplinaDAO.deletarDisciplinaId(disciplina.getId());
-
-                    Intent intent = new Intent();
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }
-            });
-            dialog.show();
-
+            mostraDialogDeletarDisciplina();
             return true;
-        }
-        else if(id == R.id.action_renomear_disciplina){
-            final Dialog dialog = new Dialog(DisciplinaActivity.this);
-            dialog.setContentView(R.layout.nome_disciplina);
-
-            dialog.setTitle("ADICIONAR DISCIPLINA");
-
-            TextView textViewNomeDisciplinaDialog = (TextView) dialog.findViewById(R.id.textViewNomeDisciplinaDialog);
-            textViewNomeDisciplinaDialog.setText("Informe o novo nome da disciplina");
-
-            ImageButton imageButtonCancelNomeDisciplinaDialog = (ImageButton) dialog.findViewById(R.id.imageButtonCancelNomeDisciplinaDialog);
-            imageButtonCancelNomeDisciplinaDialog.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialog.cancel();
-                }
-            });
-
-            ImageButton imageButtonDoneNomeDisciplinaDialog = (ImageButton) dialog.findViewById(R.id.imageButtonDoneNomeDisciplinaDialog);
-            imageButtonDoneNomeDisciplinaDialog.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    EditText editTextNomeDiciplinaDialog = (EditText) dialog.findViewById(R.id.editTextNomeDiciplinaDialog);
-                    String nomeDiciplina = editTextNomeDiciplinaDialog.getText().toString();
-                    if (nomeDiciplina.trim().isEmpty()) {
-                        Toast.makeText(DisciplinaActivity.this, "O nome da disciplina não pode ficar em branco!", Toast.LENGTH_LONG).show();
-                    }
-                    else if(nomeDiciplina.equals(disciplina.getNome())){
-                        dialog.cancel();
-                    }
-                    else {
-                        DataBase dataBase = new DataBase(DisciplinaActivity.this);
-                        SQLiteDatabase connection = dataBase.getReadableDatabase();
-                        DisciplinaDAO disciplinaDAO = new DisciplinaDAO(DisciplinaActivity.this);
-                        if (disciplinaDAO.buscaDisciplinaPorNome(nomeDiciplina) == null) {
-                            Disciplina disciplinaAUX = new Disciplina(disciplina.getId(),nomeDiciplina);
-                            disciplinaDAO.atualizaDisciplina(disciplinaAUX);
-
-                            disciplina.setNome(nomeDiciplina);
-                            textViewNomeDisciplina.setText(nomeDiciplina);
-
-                            dialog.cancel();
-                        } else {
-                            Toast.makeText(DisciplinaActivity.this, "Está disciplina ja existe!", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                }
-            });
-            dialog.show();
+        } else if (id == R.id.action_renomear_disciplina) {
+            mostraDialogRenomearDisciplina();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -228,36 +257,12 @@ public class DisciplinaActivity extends AppCompatActivity
         return true;
     }
 
-    public void preencheArrayAdapterAvaliacoesDisciplinas(List<Avaliacao> avaliacoes) {
-        int layoutAdapter = android.R.layout.simple_list_item_1;
-        arrayAdapterAvaliacoesDisciplina = new ArrayAdapter<Avaliacao>(DisciplinaActivity.this, layoutAdapter);
-        for (int i = 0; i < avaliacoes.size(); i++) {
-            arrayAdapterAvaliacoesDisciplina.add(avaliacoes.get(i));
-        }
-    }
-
-    public List<Avaliacao> carregaAvaliacoesDisciplina() {
-        AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(this);
-        List<Avaliacao> avaliacoes = avaliacaoDAO.buscaAvaliacoesDisciplina(disciplina.getId());
-        return avaliacoes;
-    }
-
-    private void sortArrayAdapterAvaliacoesDisciplina(ArrayAdapter<Avaliacao> arrayAdapterAvaliacoesDisciplina) {
-        Comparator<Avaliacao> porNome = new Comparator<Avaliacao>() {
-            @Override
-            public int compare(Avaliacao avaliacao1, Avaliacao avaliacao2) {
-                return avaliacao1.getData().compareTo(avaliacao2.getData());
-            }
-        };
-        arrayAdapterAvaliacoesDisciplina.sort(porNome);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (requestCode == 1) {
 
-            if(resultCode == RESULT_OK){
+            if (resultCode == RESULT_OK) {
                 preencheArrayAdapterAvaliacoesDisciplinas(carregaAvaliacoesDisciplina());
                 sortArrayAdapterAvaliacoesDisciplina(arrayAdapterAvaliacoesDisciplina);
                 listViewAvaliacoesDisciplina.setAdapter(arrayAdapterAvaliacoesDisciplina);

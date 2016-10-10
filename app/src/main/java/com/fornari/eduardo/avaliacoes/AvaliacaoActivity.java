@@ -44,7 +44,7 @@ public class AvaliacaoActivity extends AppCompatActivity
     private Spinner spinnerTiposAvaliacao;
     private ArrayAdapter<TipoAvaliacao> arrayAdapterTiposAvaliacao;
 
-    private int disciplinaId;
+    private Integer disciplinaId = null;
     private Avaliacao avaliacao;
 
     private Menu myMenu;
@@ -95,15 +95,15 @@ public class AvaliacaoActivity extends AppCompatActivity
         textViewDataAvaliacao.setOnFocusChangeListener(exibeDataListener);
 
         spinnerTiposAvaliacao.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                                            @Override
-                                                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                                                validaSalvar();
-                                                            }
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    validaSalvar();
+                }
 
-                                                            @Override
-                                                            public void onNothingSelected(AdapterView<?> parent) {
-                                                            }
-                                                        }
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            }
         );
 
         editTextObservacao.addTextChangedListener(new TextWatcher() {
@@ -137,9 +137,7 @@ public class AvaliacaoActivity extends AppCompatActivity
             DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT);
             String dataAvaliacao = dateFormat.format(avaliacao.getData().getTime());
 
-            if (tipoAvaliacao.getId() != avaliacao.getTipoAvaliacao().getId() ||
-                    !data.equals(dataAvaliacao) ||
-                    !observacao.equals(avaliacao.getObservacao())) {
+            if (tipoAvaliacao.getId() != avaliacao.getTipoAvaliacao().getId() || !data.equals(dataAvaliacao) || !observacao.equals(avaliacao.getObservacao())) {
                 myMenu.findItem(R.id.action_salvar_avaliacao).setVisible(true);
             } else {
                 myMenu.findItem(R.id.action_salvar_avaliacao).setVisible(false);
@@ -166,119 +164,63 @@ public class AvaliacaoActivity extends AppCompatActivity
         editTextObservacao.setText(avaliacao.getObservacao());
     }
 
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+    private void salvar() {
+        int tipoAvaliacaoId = arrayAdapterTiposAvaliacao.getItem(spinnerTiposAvaliacao.getSelectedItemPosition()).getId();
+
+        Date data = new Date();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy");
+        try {
+            data = df.parse(textViewDataAvaliacao.getText().toString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        String observacao = editTextObservacao.getText().toString();
+
+        AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(this);
+
+        if (avaliacao != null) {
+            Avaliacao avaliacaoAUX = new Avaliacao(avaliacao.getId(), tipoAvaliacaoId, data, observacao, avaliacao.getDisciplina().getId());
+            avaliacaoDAO.atualizaAvaliacao(avaliacaoAUX);
         } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.avaliacao, menu);
-        if (avaliacao == null) {
-            menu.findItem(R.id.action_deletar_avaliacao).setVisible(false);
-        }
-        myMenu = menu;
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_salvar_avaliacao) {
-            Date data = new Date();
-            SimpleDateFormat df = new SimpleDateFormat("dd/MM/yy");
-            try {
-                data = df.parse(textViewDataAvaliacao.getText().toString());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            int tipoAvaliacaoId = arrayAdapterTiposAvaliacao.getItem(spinnerTiposAvaliacao.getSelectedItemPosition()).getId();
-
-            String observacao = editTextObservacao.getText().toString();
-
-            AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(this);
-
-            if (avaliacao != null) {
-                Avaliacao avaliacaoAUX = new Avaliacao(avaliacao.getId(), tipoAvaliacaoId, data, observacao, disciplinaId);
-                avaliacaoDAO.atualizaAvaliacao(avaliacaoAUX);
-            } else {
-                Avaliacao avaliacaoAUX = new Avaliacao(tipoAvaliacaoId, data, observacao, disciplinaId);
-                avaliacaoDAO.inserir(avaliacaoAUX);
-            }
-
-            Intent intent = new Intent();
-            setResult(RESULT_OK, intent);
-            finish();
-            return true;
-        } else if (id == R.id.action_deletar_avaliacao) {
-            final Dialog dialog = new Dialog(AvaliacaoActivity.this);
-            dialog.setContentView(R.layout.deletar);
-
-            dialog.setTitle("DELETAR AVALIAÇÃO");
-
-            TextView textViewDeletar = (TextView) dialog.findViewById(R.id.textViewDeletarDialog);
-            textViewDeletar.setText("Deletar esta avaliação?");
-
-            ImageButton cancelar = (ImageButton) dialog.findViewById(R.id.imageButtonCancelDeletarDialog);
-            cancelar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialog.cancel();
-                }
-            });
-
-            ImageButton adicionar = (ImageButton) dialog.findViewById(R.id.imageButtonDoneDeletarDialog);
-            adicionar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(AvaliacaoActivity.this);
-                    avaliacaoDAO.deletarAvaliacaoId(avaliacao.getId());
-                    Intent intent = new Intent();
-                    setResult(RESULT_OK, intent);
-                    finish();
-                }
-            });
-            dialog.show();
+            Avaliacao avaliacaoAUX = new Avaliacao(tipoAvaliacaoId, data, observacao, disciplinaId);
+            avaliacaoDAO.inserir(avaliacaoAUX);
         }
 
-        return super.onOptionsItemSelected(item);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        Intent intent;
-
-        if (id == R.id.nav_avaliacoes) {
-            intent = new Intent(AvaliacaoActivity.this, AvaliacoesActivity.class);
-            startActivityForResult(intent, 0);
-        } else if (id == R.id.nav_disciplinas) {
-            intent = new Intent(AvaliacaoActivity.this, DisciplinasActivity.class);
-            startActivityForResult(intent, 0);
-        } else if (id == R.id.nav_tipos_avaliacao) {
-            intent = new Intent(AvaliacaoActivity.this, TiposAvaliacaoActivity.class);
-            startActivityForResult(intent, 0);
-        }
-
+        Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
         finish();
+    }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
+    private void mostraDialogDeletarAvaliacao() {
+        final Dialog dialog = new Dialog(AvaliacaoActivity.this);
+        dialog.setContentView(R.layout.deletar);
+
+        dialog.setTitle("DELETAR AVALIAÇÃO");
+
+        TextView textViewDeletar = (TextView) dialog.findViewById(R.id.textViewDeletarDialog);
+        textViewDeletar.setText("Deletar esta avaliação?");
+
+        ImageButton cancelar = (ImageButton) dialog.findViewById(R.id.imageButtonCancelDeletarDialog);
+        cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+            }
+        });
+
+        ImageButton adicionar = (ImageButton) dialog.findViewById(R.id.imageButtonDoneDeletarDialog);
+        adicionar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AvaliacaoDAO avaliacaoDAO = new AvaliacaoDAO(AvaliacaoActivity.this);
+                avaliacaoDAO.deletarAvaliacaoId(avaliacao.getId());
+                Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
+        dialog.show();
     }
 
     private class SelecionaDataListener implements DatePickerDialog.OnDateSetListener {
@@ -342,5 +284,71 @@ public class AvaliacaoActivity extends AppCompatActivity
         TipoAvaliacaoDAO disciplinaDAO = new TipoAvaliacaoDAO(this);
         List<TipoAvaliacao> tiposAvaliacao = disciplinaDAO.buscaTiposAvaliacao();
         return tiposAvaliacao;
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.avaliacao, menu);
+        if (avaliacao == null) {
+            menu.findItem(R.id.action_deletar_avaliacao).setVisible(false);
+        }
+        myMenu = menu;
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_salvar_avaliacao) {
+            salvar();
+            return true;
+        } else if (id == R.id.action_deletar_avaliacao) {
+            mostraDialogDeletarAvaliacao();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        Intent intent;
+
+        if (id == R.id.nav_avaliacoes) {
+            intent = new Intent(AvaliacaoActivity.this, AvaliacoesActivity.class);
+            startActivityForResult(intent, 0);
+        } else if (id == R.id.nav_disciplinas) {
+            intent = new Intent(AvaliacaoActivity.this, DisciplinasActivity.class);
+            startActivityForResult(intent, 0);
+        } else if (id == R.id.nav_tipos_avaliacao) {
+            intent = new Intent(AvaliacaoActivity.this, TiposAvaliacaoActivity.class);
+            startActivityForResult(intent, 0);
+        }
+
+        finish();
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 }
