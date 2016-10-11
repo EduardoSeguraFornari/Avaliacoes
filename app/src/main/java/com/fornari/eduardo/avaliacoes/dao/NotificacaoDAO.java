@@ -73,4 +73,22 @@ public class NotificacaoDAO {
 
         return notificacao;
     }
+
+    public void atualizaNotificacao(Notificacao notificacao) {
+        DataBase dataBase = new DataBase(context);
+        SQLiteDatabase connection = dataBase.getWritableDatabase();
+
+        String where = Notificacao.NOTIFICACAO_ID + "=" + notificacao.getId();
+
+        ContentValues valores = new ContentValues();
+        valores.put(Notificacao.NOTIFICACAO_ID, notificacao.getId());
+        valores.put(Notificacao.NOTIFICACAO_NOTIFICAR, notificacao.isNotificar() ? 1 : 0);
+        valores.put(Notificacao.NOTIFICACAO_SOM, notificacao.isSom() ? 1 : 0);
+        valores.put(Notificacao.NOTIFICACAO_VIBRACAO, notificacao.isVibracao() ? 1 : 0);
+        valores.put(Notificacao.NOTIFICACAO_HORARIO, notificacao.getHorario().getTime());
+
+        connection.update(Notificacao.NOTIFICACAO, valores, where, null);
+
+        connection.close();
+    }
 }

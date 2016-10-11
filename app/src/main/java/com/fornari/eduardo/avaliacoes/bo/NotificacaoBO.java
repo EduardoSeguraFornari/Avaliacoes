@@ -19,11 +19,16 @@ public class NotificacaoBO {
         NotificacaoDAO notificacaoDAO = new NotificacaoDAO(context);
         Notificacao notificacao = notificacaoDAO.buscaNotificacao();
 
-        if(notificacao==null){
+        if (notificacao == null) {
             notificacaoDAO.inserirNotificacaoDefault();
             notificacao = notificacaoDAO.buscaNotificacao();
         }
 
         return notificacao;
+    }
+
+    public void atualizaNotificacao(Notificacao notificacao) {
+        NotificacaoDAO notificacaoDAO = new NotificacaoDAO(context);
+        notificacaoDAO.atualizaNotificacao(notificacao);
     }
 }

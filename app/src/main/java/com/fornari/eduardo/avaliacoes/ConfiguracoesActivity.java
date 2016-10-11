@@ -64,6 +64,21 @@ public class ConfiguracoesActivity extends AppCompatActivity
                 } else {
                     lynearLayoutNoficacao.setVisibility(View.GONE);
                 }
+                atualizaNotificacao();
+            }
+        });
+
+        switchSom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                atualizaNotificacao();
+            }
+        });
+
+        switchVibracao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                atualizaNotificacao();
             }
         });
 
@@ -76,6 +91,28 @@ public class ConfiguracoesActivity extends AppCompatActivity
 
         carregaNotificacao();
 
+    }
+
+    private void atualizaNotificacao(){
+        boolean notificar = switchAtivarNotificacoes.isChecked();
+
+        boolean som = switchSom.isChecked();
+
+        boolean vibracao = switchVibracao.isChecked();
+
+        String horario [] = textViewHorarioNotificacoes.getText().toString().split(":");
+        int horas = Integer.parseInt(horario[0]);
+        int minutos = Integer.parseInt(horario[1]);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(1, 1, 1, horas, minutos);
+
+        notificacao.setNotificar(notificar);
+        notificacao.setSom(som);
+        notificacao.setVibracao(vibracao);
+        notificacao.setHorario(calendar.getTime());
+
+        NotificacaoBO notificacaoBO = new NotificacaoBO(this);
+        notificacaoBO.atualizaNotificacao(notificacao);
     }
 
     private void carregaNotificacao() {
@@ -132,8 +169,12 @@ public class ConfiguracoesActivity extends AppCompatActivity
     private class SelecionaTimeListener implements TimePickerDialog.OnTimeSetListener {
         @Override
         public void onTimeSet(TimePicker timePicker, int i, int i2) {
-            String hora = ((i <= 9) ? "0" + i : i) + ":" + ((i2 <= 9) ? "0" + i2 : i2);
-            textViewHorarioNotificacoes.setText(hora);
+            StringBuilder hora = new StringBuilder();
+            hora.append(((i <= 9) ? "0" + i : i));
+            hora.append(":");
+            hora.append(((i2 <= 9) ? "0" + i2 : i2));
+            textViewHorarioNotificacoes.setText(hora.toString());
+            atualizaNotificacao();
         }
     }
 
@@ -181,10 +222,6 @@ public class ConfiguracoesActivity extends AppCompatActivity
             startActivityForResult(intent, 0);
         } else if (id == R.id.nav_tipos_avaliacao) {
             intent = new Intent(ConfiguracoesActivity.this, TiposAvaliacaoActivity.class);
-            finish();
-            startActivityForResult(intent, 0);
-        } else if (id == R.id.nav_configuracoes) {
-            intent = new Intent(ConfiguracoesActivity.this, ConfiguracoesActivity.class);
             finish();
             startActivityForResult(intent, 0);
         }
