@@ -10,6 +10,8 @@
     <string name="title_activity_avaliacao">Avaliação</string>
     <string name="title_activity_tipos_de_avaliacao">Tipos de Avaliação</string>
     <string name="title_activity_tipo_avaliacao">Tipo De Avaliacao</string>
+    <string name="title_activity_configuracoes">Configurações</string>
+
 
     <string name="action_renomear">Renomear</string>
     <string name="action_salvar">Salvar</string>

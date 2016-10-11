@@ -240,12 +240,19 @@ public class DisciplinaActivity extends AppCompatActivity
 
         if (id == R.id.nav_avaliacoes) {
             intent = new Intent(DisciplinaActivity.this, AvaliacoesActivity.class);
+            finish();
             startActivityForResult(intent, 0);
         } else if (id == R.id.nav_disciplinas) {
             intent = new Intent(DisciplinaActivity.this, DisciplinasActivity.class);
+            finish();
             startActivityForResult(intent, 0);
         } else if (id == R.id.nav_tipos_avaliacao) {
             intent = new Intent(DisciplinaActivity.this, TiposAvaliacaoActivity.class);
+            finish();
+            startActivityForResult(intent, 0);
+        } else if (id == R.id.nav_configuracoes) {
+            intent = new Intent(DisciplinaActivity.this, ConfiguracoesActivity.class);
+            finish();
             startActivityForResult(intent, 0);
         }
 

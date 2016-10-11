@@ -190,6 +190,10 @@ public class DisciplinasActivity extends AppCompatActivity
             intent = new Intent(DisciplinasActivity.this, TiposAvaliacaoActivity.class);
             finish();
             startActivityForResult(intent, 0);
+        } else if (id == R.id.nav_configuracoes) {
+            intent = new Intent(DisciplinasActivity.this, ConfiguracoesActivity.class);
+            finish();
+            startActivityForResult(intent, 0);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -30,14 +30,6 @@ public class TipoAvaliacao {
         this.descricao = descricao;
     }
 
-    public TipoAvaliacao(int id, String nome, boolean notificar, int antecedenciaNotificacao, String descricao) {
-        this.id = id;
-        this.nome = nome;
-        this.notificar = notificar;
-        this.antecedenciaNotificacao = antecedenciaNotificacao;
-        this.descricao = descricao;
-    }
-
     public int getId() {
         return id;
     }

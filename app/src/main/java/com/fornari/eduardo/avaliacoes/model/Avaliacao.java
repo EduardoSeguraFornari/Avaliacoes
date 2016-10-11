@@ -28,14 +28,6 @@ public class Avaliacao {
     private int tipoAvaliacaoId;
     private int disciplinaId;
 
-    public Avaliacao(int id, int tipoAvaliacaoId, Date data, String observacao, int disciplinaId) {
-        this.id = id;
-        this.tipoAvaliacaoId = tipoAvaliacaoId;
-        this.data = data;
-        this.observacao = observacao;
-        this.disciplinaId = disciplinaId;
-    }
-
     public Avaliacao(int tipoAvaliacaoId, Date data, String observacao, int disciplinaId) {
         this.tipoAvaliacaoId = tipoAvaliacaoId;
         this.data = data;

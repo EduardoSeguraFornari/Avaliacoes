@@ -19,11 +19,6 @@ public class Disciplina implements Comparable<Disciplina> {
         this.nome = nome;
     }
 
-    public Disciplina(int id, String nome) {
-        this.id = id;
-        this.nome = nome;
-    }
-
     public int getId() {
         return id;
     }

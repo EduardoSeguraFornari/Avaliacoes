@@ -69,12 +69,14 @@ public class AvaliacaoDAO {
                 boolean notificarTipoAvaliacao = cursor.getInt(cursor.getColumnIndex("T." + TipoAvaliacao.TIPO_AVALIACAO_NOTIFICAR)) == 1;
                 int antecedenciaNotificacaoTipoAvaliacao = cursor.getInt(cursor.getColumnIndex("T." + TipoAvaliacao.TIPO_AVALIACAO_ANTECEDENCIA_NOTIFICACAO));
                 String descricaoTipoAvaliacao = cursor.getString(cursor.getColumnIndex("T." + TipoAvaliacao.TIPO_AVALIACAO_DESCRICAO));
-                TipoAvaliacao tipoAvaliacao = new TipoAvaliacao(tipoAvaliacaoId, nomeTipoAvaliacao, notificarTipoAvaliacao, antecedenciaNotificacaoTipoAvaliacao, descricaoTipoAvaliacao);
+                TipoAvaliacao tipoAvaliacao = new TipoAvaliacao(nomeTipoAvaliacao, notificarTipoAvaliacao, antecedenciaNotificacaoTipoAvaliacao, descricaoTipoAvaliacao);
+                tipoAvaliacao.setId(tipoAvaliacaoId);
 
                 Date dataAvaliacao = new Date(cursor.getLong(cursor.getColumnIndex("A." + Avaliacao.AVALIACAO_DATA)));
 
                 String nomeDisciplina = cursor.getString(cursor.getColumnIndex("D." + Disciplina.DISCIPLINA_NOME));
-                Disciplina disciplina = new Disciplina(disciplinaId, nomeDisciplina);
+                Disciplina disciplina = new Disciplina(nomeDisciplina);
+                disciplina.setId(disciplinaId);
 
                 int avaliacaoId = cursor.getInt(cursor.getColumnIndex("A." + Avaliacao.AVALIACAO_ID));
 
@@ -121,13 +123,15 @@ public class AvaliacaoDAO {
             boolean notificarTipoAvaliacao = cursor.getInt(cursor.getColumnIndex("T." + TipoAvaliacao.TIPO_AVALIACAO_NOTIFICAR)) == 1;
             int antecedenciaNotificacaoTipoAvaliacao = cursor.getInt(cursor.getColumnIndex("T." + TipoAvaliacao.TIPO_AVALIACAO_ANTECEDENCIA_NOTIFICACAO));
             String descricaoTipoAvaliacao = cursor.getString(cursor.getColumnIndex("T." + TipoAvaliacao.TIPO_AVALIACAO_DESCRICAO));
-            TipoAvaliacao tipoAvaliacao = new TipoAvaliacao(tipoAvaliacaoId, nomeTipoAvaliacao, notificarTipoAvaliacao, antecedenciaNotificacaoTipoAvaliacao, descricaoTipoAvaliacao);
+            TipoAvaliacao tipoAvaliacao = new TipoAvaliacao(nomeTipoAvaliacao, notificarTipoAvaliacao, antecedenciaNotificacaoTipoAvaliacao, descricaoTipoAvaliacao);
+            tipoAvaliacao.setId(tipoAvaliacaoId);
 
             Date dataAvaliacao = new Date(cursor.getLong(cursor.getColumnIndex("A." + Avaliacao.AVALIACAO_DATA)));
 
             String nomeDisciplina = cursor.getString(cursor.getColumnIndex("D." + Disciplina.DISCIPLINA_NOME));
             int disciplinaId = cursor.getInt(cursor.getColumnIndex("D." + Disciplina.DISCIPLINA_ID));
-            Disciplina disciplina = new Disciplina(disciplinaId, nomeDisciplina);
+            Disciplina disciplina = new Disciplina(nomeDisciplina);
+            disciplina.setId(disciplinaId);
 
             String avaliacaoObservacao = cursor.getString(cursor.getColumnIndex("A." + Avaliacao.AVALIACAO_OBSERVACAO));
 
@@ -182,13 +186,15 @@ public class AvaliacaoDAO {
                 boolean notificarTipoAvaliacao = cursor.getInt(cursor.getColumnIndex("T." + TipoAvaliacao.TIPO_AVALIACAO_NOTIFICAR)) == 1;
                 int antecedenciaNotificacaoTipoAvaliacao = cursor.getInt(cursor.getColumnIndex("T." + TipoAvaliacao.TIPO_AVALIACAO_ANTECEDENCIA_NOTIFICACAO));
                 String descricaoTipoAvaliacao = cursor.getString(cursor.getColumnIndex("T." + TipoAvaliacao.TIPO_AVALIACAO_DESCRICAO));
-                TipoAvaliacao tipoAvaliacao = new TipoAvaliacao(tipoAvaliacaoId, nomeTipoAvaliacao, notificarTipoAvaliacao, antecedenciaNotificacaoTipoAvaliacao, descricaoTipoAvaliacao);
+                TipoAvaliacao tipoAvaliacao = new TipoAvaliacao(nomeTipoAvaliacao, notificarTipoAvaliacao, antecedenciaNotificacaoTipoAvaliacao, descricaoTipoAvaliacao);
+                tipoAvaliacao.setId(tipoAvaliacaoId);
 
                 Date dataAvaliacao = new Date(cursor.getLong(cursor.getColumnIndex("A." + Avaliacao.AVALIACAO_DATA)));
 
                 String nomeDisciplina = cursor.getString(cursor.getColumnIndex("D." + Disciplina.DISCIPLINA_NOME));
                 int disciplinaId = cursor.getInt(cursor.getColumnIndex("D." + Disciplina.DISCIPLINA_ID));
-                Disciplina disciplina = new Disciplina(disciplinaId, nomeDisciplina);
+                Disciplina disciplina = new Disciplina(nomeDisciplina);
+                disciplina.setId(disciplinaId);
 
                 int avaliacaoId = cursor.getInt(cursor.getColumnIndex("A." + Avaliacao.AVALIACAO_ID));
 

@@ -55,12 +55,12 @@ public class TipoAvaliacaoDAO {
             do {
 
                 TipoAvaliacao tipoAvaliacao = new TipoAvaliacao(
-                        cursor.getInt(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO__ID)),
                         cursor.getString(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO_NOME)),
                         cursor.getInt(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO_NOTIFICAR)) == 1,
                         cursor.getInt(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO_ANTECEDENCIA_NOTIFICACAO)),
                         cursor.getString(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO_DESCRICAO))
                 );
+                tipoAvaliacao.setId(cursor.getInt(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO__ID)));
                 tipoAvaliacoes.add(tipoAvaliacao);
             } while (cursor.moveToNext());
         }
@@ -84,12 +84,12 @@ public class TipoAvaliacaoDAO {
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             tipoAvaliacao = new TipoAvaliacao(
-                    cursor.getInt(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO__ID)),
                     cursor.getString(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO_NOME)),
                     cursor.getInt(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO_NOTIFICAR)) == 1,
                     cursor.getInt(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO_ANTECEDENCIA_NOTIFICACAO)),
                     cursor.getString(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO_DESCRICAO))
             );
+            tipoAvaliacao.setId(cursor.getInt(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO__ID)));
         }
 
         connection.close();
@@ -111,12 +111,12 @@ public class TipoAvaliacaoDAO {
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             tipoAvaliacao = new TipoAvaliacao(
-                    cursor.getInt(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO__ID)),
                     cursor.getString(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO_NOME)),
                     cursor.getInt(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO_NOTIFICAR)) == 1,
                     cursor.getInt(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO_ANTECEDENCIA_NOTIFICACAO)),
                     cursor.getString(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO_DESCRICAO))
             );
+            tipoAvaliacao.setId(cursor.getInt(cursor.getColumnIndex(TipoAvaliacao.TIPO_AVALIACAO__ID)));
         }
 
         connection.close();

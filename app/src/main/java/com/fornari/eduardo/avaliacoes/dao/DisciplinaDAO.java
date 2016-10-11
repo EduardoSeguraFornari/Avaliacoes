@@ -54,9 +54,9 @@ public class DisciplinaDAO {
             cursor.moveToFirst();
             do {
                 Disciplina disciplina = new Disciplina(
-                        cursor.getInt(cursor.getColumnIndex(Disciplina.DISCIPLINA_ID)),
                         cursor.getString(cursor.getColumnIndex(Disciplina.DISCIPLINA_NOME))
                 );
+                disciplina.setId(cursor.getInt(cursor.getColumnIndex(Disciplina.DISCIPLINA_ID)));
                 disciplinas.add(disciplina);
             } while (cursor.moveToNext());
         }
@@ -80,9 +80,9 @@ public class DisciplinaDAO {
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             disciplina = new Disciplina(
-                    cursor.getInt(cursor.getColumnIndex(Disciplina.DISCIPLINA_ID)),
                     cursor.getString(cursor.getColumnIndex(Disciplina.DISCIPLINA_NOME))
             );
+            disciplina.setId(cursor.getInt(cursor.getColumnIndex(Disciplina.DISCIPLINA_ID)));
         }
 
         connection.close();
@@ -127,9 +127,9 @@ public class DisciplinaDAO {
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             disciplina = new Disciplina(
-                    cursor.getInt(cursor.getColumnIndex(Disciplina.DISCIPLINA_ID)),
                     cursor.getString(cursor.getColumnIndex(Disciplina.DISCIPLINA_NOME))
             );
+            disciplina.setId(cursor.getInt(cursor.getColumnIndex(Disciplina.DISCIPLINA_ID)));
         }
 
         connection.close();

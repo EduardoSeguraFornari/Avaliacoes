@@ -341,16 +341,17 @@ public class AvaliacaoActivity extends AppCompatActivity
 
         if (id == R.id.nav_avaliacoes) {
             intent = new Intent(AvaliacaoActivity.this, AvaliacoesActivity.class);
+            finish();
             startActivityForResult(intent, 0);
         } else if (id == R.id.nav_disciplinas) {
             intent = new Intent(AvaliacaoActivity.this, DisciplinasActivity.class);
+            finish();
             startActivityForResult(intent, 0);
         } else if (id == R.id.nav_tipos_avaliacao) {
             intent = new Intent(AvaliacaoActivity.this, TiposAvaliacaoActivity.class);
+            finish();
             startActivityForResult(intent, 0);
         }
-
-        finish();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

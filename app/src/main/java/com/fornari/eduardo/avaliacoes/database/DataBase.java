@@ -10,8 +10,8 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class DataBase extends SQLiteOpenHelper {
 
-    public DataBase(Context context){
-        super(context, "AVALIACOES",null,1);
+    public DataBase(Context context) {
+        super(context, "AVALIACOES", null, 1);
     }
 
     @Override
@@ -19,6 +19,8 @@ public class DataBase extends SQLiteOpenHelper {
         db.execSQL(ScriptSQL.createTableDisciplina());
         db.execSQL(ScriptSQL.createTableTipoAvaliacao());
         db.execSQL(ScriptSQL.createTableAvaliacao());
+        db.execSQL(ScriptSQL.createTableNotificacao());
+//        db.execSQL(ScriptSQL.insertNotificacaoPadrao());
     }
 
     @Override

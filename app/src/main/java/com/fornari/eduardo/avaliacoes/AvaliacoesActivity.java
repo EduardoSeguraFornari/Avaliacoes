@@ -108,14 +108,20 @@ public class AvaliacoesActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        Intent intent;
+
         if (id == R.id.nav_disciplinas) {
-            Intent it = new Intent(AvaliacoesActivity.this, DisciplinasActivity.class);
+            intent = new Intent(AvaliacoesActivity.this, DisciplinasActivity.class);
             finish();
-            startActivityForResult(it, 0);
+            startActivityForResult(intent, 0);
         } else if (id == R.id.nav_tipos_avaliacao) {
-            Intent it = new Intent(AvaliacoesActivity.this, TiposAvaliacaoActivity.class);
+            intent = new Intent(AvaliacoesActivity.this, TiposAvaliacaoActivity.class);
             finish();
-            startActivityForResult(it, 0);
+            startActivityForResult(intent, 0);
+        } else if (id == R.id.nav_configuracoes) {
+            intent = new Intent(AvaliacoesActivity.this, ConfiguracoesActivity.class);
+            finish();
+            startActivityForResult(intent, 0);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
