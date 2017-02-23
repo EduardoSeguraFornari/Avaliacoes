@@ -1,9 +1,16 @@
 package com.fornari.eduardo.avaliacoes;
 
+import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -31,6 +38,7 @@ public class ConfiguracoesActivity extends AppCompatActivity
     private Switch switchVibracao;
     private TextView textViewHorarioNotificacoes;
     private LinearLayout lynearLayoutNoficacao;
+    private int horas, minutos;
 
     Notificacao notificacao;
 
@@ -91,16 +99,32 @@ public class ConfiguracoesActivity extends AppCompatActivity
 
         carregaNotificacao();
 
+        // Set the alarm to start at approximately 09:21 p.m.
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, horas);
+        calendar.set(Calendar.MINUTE, minutos);
+
+        // With setInexactRepeating(), you have to use one of the AlarmManager interval
+        // constants--in this case, AlarmManager.INTERVAL_DAY.
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(ALARM_SERVICE);
+
+        Intent intent = new Intent(ConfiguracoesActivity.this, Receiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(ConfiguracoesActivity.this, 1, intent, 0);
+
+        alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, pendingIntent);
+
     }
 
-    private void atualizaNotificacao(){
+    private void atualizaNotificacao() {
         boolean notificar = switchAtivarNotificacoes.isChecked();
 
         boolean som = switchSom.isChecked();
 
         boolean vibracao = switchVibracao.isChecked();
 
-        String horario [] = textViewHorarioNotificacoes.getText().toString().split(":");
+        String horario[] = textViewHorarioNotificacoes.getText().toString().split(":");
         int horas = Integer.parseInt(horario[0]);
         int minutos = Integer.parseInt(horario[1]);
         Calendar calendar = Calendar.getInstance();
@@ -118,16 +142,16 @@ public class ConfiguracoesActivity extends AppCompatActivity
     private void carregaNotificacao() {
         buscaNotificacao();
 
-        if(notificacao.isNotificar()){
+        if (notificacao.isNotificar()) {
             switchAtivarNotificacoes.setChecked(true);
             lynearLayoutNoficacao.setVisibility(View.VISIBLE);
         }
 
-        if(notificacao.isSom()){
+        if (notificacao.isSom()) {
             switchSom.setChecked(true);
         }
 
-        if(notificacao.isVibracao()){
+        if (notificacao.isVibracao()) {
             switchVibracao.setChecked(true);
         }
 
@@ -138,13 +162,13 @@ public class ConfiguracoesActivity extends AppCompatActivity
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(notificacaoHorario);
 
-        int horas = calendar.get(Calendar.HOUR_OF_DAY);
-        int minutos = calendar.get(Calendar.MINUTE);
+        horas = calendar.get(Calendar.HOUR_OF_DAY);
+        minutos = calendar.get(Calendar.MINUTE);
 
         StringBuilder horario = new StringBuilder();
-        horario.append(horas<=9?"0"+horas:horas);
+        horario.append(horas <= 9 ? "0" + horas : horas);
         horario.append(":");
-        horario.append(minutos<=9?"0"+minutos:minutos);
+        horario.append(minutos <= 9 ? "0" + minutos : minutos);
 
         textViewHorarioNotificacoes.setText(horario.toString());
     }

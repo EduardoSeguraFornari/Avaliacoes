@@ -8,6 +8,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <receiver android:name="com.fornari.eduardo.avaliacoes.Receiver"></receiver>
         <activity
             android:name=".AvaliacoesActivity"
             android:label="@string/title_activity_avaliacoes"
